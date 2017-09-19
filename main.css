@@ -1,3 +1,10 @@
+/* General CSS */
+* {
+  -webkit-box-sizing: border-box;
+  -mox-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  box-sizing: border-box;
+}
 body{
   text-align: center;
   color: black;
@@ -40,6 +47,29 @@ section{
   display: flex;
   align-items: center;
   justify-content: center;
+}
+section#calculator #display{
+  width: 248px;
+  background-color: lightgray;
+  padding: 0;
+  margin: 4px;
+}
+section#calculator #display #history{
+  height: 20px;
+  font-size: 0.8em;
+}
+section#calculator #display #result{
+  height: 30px;
+  font-size: 1.2em;
+}
+section#calculator button{
+  width: 50px;
+  height: 40px;
+  padding: 10px 20px 10px 20px;
+  margin: 4px;
+}
+section#calculator button#ac{
+  width: 113px;
 }
 footer{
   margin: 10px;
