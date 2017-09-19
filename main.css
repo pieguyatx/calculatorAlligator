@@ -8,10 +8,10 @@ body{
 }
 a {
   text-decoration: none;
-  color: #007207;
+  color: #007207; /* dark green */
 }
 a:hover{
-  color: #02cc0e;
+  color: #02cc0e;  /* light green */
 }
 header{
   margin: 0;
@@ -28,6 +28,12 @@ header h1{
 header h2{
   font-size: 1.4em;
   margin-top: -0.4em;
+}
+header svg path{
+  fill: black;
+}
+header svg path:hover{
+  fill: #007207;
 }
 section{
   margin: 10px;
