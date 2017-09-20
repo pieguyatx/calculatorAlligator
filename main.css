@@ -55,11 +55,12 @@ section{
 }
 section#calculator .container{
   padding: 4px;
-  border: solid black 2px;
+  border: solid gray 1px;
+  background-color: lightgray;
 }
 section#calculator #display{
-  width: 248px;
-  background-color: lightgray;
+  width: 236px;
+  background-color: white;
   padding: 0;
   margin: 4px;
 }
