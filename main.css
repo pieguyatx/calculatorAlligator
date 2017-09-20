@@ -35,6 +35,11 @@ header h1{
 header h2{
   font-size: 1.4em;
   margin-top: -0.4em;
+  margin-bottom: 0;
+}
+header svg{
+  width: 300px;
+  height: 200px;
 }
 header svg path{
   fill: black;
@@ -48,6 +53,10 @@ section{
   align-items: center;
   justify-content: center;
 }
+section#calculator .container{
+  padding: 4px;
+  border: solid black 2px;
+}
 section#calculator #display{
   width: 248px;
   background-color: lightgray;
@@ -57,10 +66,13 @@ section#calculator #display{
 section#calculator #display #history{
   height: 20px;
   font-size: 0.8em;
+  padding: 4px;
 }
 section#calculator #display #result{
   height: 30px;
   font-size: 1.2em;
+  text-align: right;
+  padding: 4px;
 }
 section#calculator button{
   width: 50px;
@@ -68,7 +80,7 @@ section#calculator button{
   padding: 10px 20px 10px 20px;
   margin: 4px;
 }
-section#calculator button#ac{
+section#calculator button#clear{
   width: 113px;
 }
 footer{
