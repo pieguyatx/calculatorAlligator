@@ -3,30 +3,14 @@ $(document).ready(function(){
   var operatorExists = false; // status of operator in history
   var equalsExists = false; // status of equals sign in history
 
+  // Read in button presses (types: clear, square/operator, number, dec, sign, equals)
   // Listen for signal: CLEAR
   listenForClear();
+  // Listen for signal: number 0-9
+  listenForNumber();
 
-  // Read in button presses (types: clear, square/operator, number, dec, sign, equals)
-  // If button is (clear), run the CLEAR function
-  // If button is a number 0-9
-    // If there is NOT a 1st operator in the history already...
-      // If current number = (0) without decimal point
-        // put digit in display replacing 0
-      // else if current number != (0),
-        // add digit to number on right-hand side
-    // If there IS a 1st operator in the history already AND NO (equals) in history...
-      // If current number = "0" without decimal point
-        // put in display replacing 0
-      // else if current number is empty, add in digit
-      // else if current number != "0" and not empty,
-        // add digit to number on right-hand side
-    // If there's already an (equals) in the history and no (ansHistory)...
-      // If current number = empty or (0) without decimal point
-        // add the current (ans) on display to the history...
-        // put digit in display replacing 0
-      // else if current number != (0),
-        // add digit to (display) number on right-hand side
   // If button is (decimal)...
+    // if there is a decimal in the display number already, output an error
     // If current display number is (0), (0.), or empty,
       // replace display with (0.)
     // If current display number is != (0), (0.) or empty
@@ -98,11 +82,14 @@ $(document).ready(function(){
 
 });
 
+// note: key codes reference: https://www.cambiaresearch.com/articles/15/javascript-char-codes-key-codes
+// TO DO: will need to visually denote button presses somehow when keyboard is used
+
 function listenForClear(){
   // keyboard: ESC keyboard
   $(document).on('keyup', function(event){
     if (event.keyCode===27){
-      console.log("Keyboard ESC key pressed: " + event.keyCode + ", CLEAR"); // debug
+      console.log("Key pressed (ESC): CLEAR"); // debug
       clear();
     }
   });
@@ -118,3 +105,42 @@ function clear(){
   $("#result").html("0");   // clear history
   return 0;
 }
+
+function listenForNumber(){
+  // keyboard: ESC keyboard
+  $(document).on('keyup', function(event){
+    if (event.keyCode>=48 && event.keyCode<=57){
+      console.log("Keyboard pressed (digit): " + (event.keyCode-48)); // debug
+      numberPressed();
+    }
+  });
+  // mouse click
+  $(".digit").on('click', function(){
+    var digit = this.value;
+    console.log("Button pressed (digit): " + digit); // debug
+    numberPressed(digit);
+  });
+}
+
+function numberPressed(){
+
+};
+
+// If button is a number 0-9
+  // If there is NOT a 1st operator in the history already...
+    // If current number = (0) without decimal point
+      // put digit in display replacing 0
+    // else if current number != (0),
+      // add digit to number on right-hand side
+  // If there IS a 1st operator in the history already AND NO (equals) in history...
+    // If current number = "0" without decimal point
+      // put in display replacing 0
+    // else if current number is empty, add in digit
+    // else if current number != "0" and not empty,
+      // add digit to number on right-hand side
+  // If there's already an (equals) in the history and no (ansHistory)...
+    // If current number = empty or (0) without decimal point
+      // add the current (ans) on display to the history...
+      // put digit in display replacing 0
+    // else if current number != (0),
+      // add digit to (display) number on right-hand side
