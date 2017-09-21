@@ -3,9 +3,9 @@ $(document).ready(function(){
   var operatorExists = false; // status of operator in history
   var equalsExists = false; // status of equals sign in history
 
-    // run CLEAR function (see below)
-      // clear history
-      // assume displayed number is 0; then set state to "number"
+  // Listen for signal: CLEAR
+  listenForClear();
+
   // Read in button presses (types: clear, square/operator, number, dec, sign, equals)
   // If button is (clear), run the CLEAR function
   // If button is a number 0-9
@@ -97,3 +97,24 @@ $(document).ready(function(){
   // clear on click
 
 });
+
+function listenForClear(){
+  // keyboard: ESC keyboard
+  $(document).on('keyup', function(event){
+    if (event.keyCode===27){
+      console.log("Keyboard ESC key pressed: " + event.keyCode + ", CLEAR"); // debug
+      clear();
+    }
+  });
+  // mouse click
+  $("#clear").on('click', function(){
+    console.log("Button pressed: CLEAR"); // debug
+    clear();
+  });
+}
+
+function clear(){
+  $("#history").html("");   // clear history
+  $("#result").html("0");   // clear history
+  return 0;
+}
