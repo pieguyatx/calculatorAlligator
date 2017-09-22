@@ -81,7 +81,7 @@ function clear(){
 function listenForNumber(){
   // keyboard: ESC keyboard
   $(document).on('keyup', function(event){
-    if (event.keyCode>=48 && event.keyCode<=57){
+    if (event.keyCode>=48 && event.keyCode<=57 && event.shiftKey===false){
       console.log("Keyboard pressed (digit): " + (event.keyCode-48)); // debug
       numberPressed();
     }
@@ -121,7 +121,7 @@ function numberPressed(digit){
 function listenForDecimal(){
   // keyboard: ESC keyboard
   $(document).on('keyup', function(event){
-    if (event.keyCode===190){
+    if ((event.keyCode===190 && event.shiftKey===false) || event.keyCode===110){
       console.log("Key pressed (.): DECIMAL POINT"); // debug
       decimalPoint();
     }
@@ -146,22 +146,33 @@ function decimalPoint(){
 
 // operators: +-*/==============================================================
 function listenForOperator(){
+  var operator;
   // keyboard: +-*/
   $(document).on('keyup', function(event){
-    if (event.keyCode>=48 && event.keyCode<=57){
-      console.log("Keyboard pressed (digit): " + (event.keyCode-48)); // debug
-      numberPressed();
+    if ((event.keyCode===187 && event.shiftKey===true) || event.keyCode===107){
+      operator = "add";
+    } else if ((event.keyCode===189 && event.shiftKey===false) || event.keyCode===109){
+      operator = "subtract"
+    } else if ((event.keyCode===56 && event.shiftKey===true) || event.keyCode===106){
+      operator = "multiply"
+    } else if ((event.keyCode===191 && event.shiftKey===false) || event.keyCode===111){
+      operator = "divide"
+    }
+    if(operator){
+      console.log("Keyboard pressed (operator): " + operator); // debug
+      operatorPressed(operator);
+      operator = NaN;
     }
   });
   // mouse click
   $(".operator").on('click', function(){
-    var operator = this.value;
+    operator = this.value;
     console.log("Button pressed (operator): " + operator); // debug
-    numberPressed(operator);
+    operatorPressed(operator);
   });
 }
 
-function numberPressed(digit){
+function operatorPressed(operator){
 
 };
 
