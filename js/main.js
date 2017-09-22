@@ -59,8 +59,13 @@ function listenForNumber(){
   $(document).on('keyup', function(event){
     var charCode = (typeof event.which == "number") ? event.which : event.keyCode;
     if (charCode>=48 && charCode<=57 && event.shiftKey===false){
-      console.log("Keyboard pressed (digit): " + (charCode-48)); // debug
       var digit = charCode-48;
+      console.log("Keyboard pressed (digit): " + digit); // debug
+      numberPressed(digit);
+      digit = NaN;
+    } else if(charCode>=96 && charCode<=105){ // numpad
+      var digit = charCode-96;
+      console.log("Keyboard pressed (digit, numpad): " + digit); // debug
       numberPressed(digit);
       digit = NaN;
     }
