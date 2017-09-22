@@ -149,19 +149,21 @@ function listenForOperator(){
   var operator;
   // keyboard: +-*/
   $(document).on('keyup', function(event){
-    if ((event.keyCode===187 && event.shiftKey===true) || event.keyCode===107){
+    var charCode = (typeof event.which == "number") ? event.which : event.keyCode
+    // console.log(charCode + ", " + event.which + ", " + event.keyCode) // debug
+    if ((charCode===187 && event.shiftKey===true) || charCode===107){
       operator = "add";
-    } else if ((event.keyCode===189 && event.shiftKey===false) || event.keyCode===109){
+    } else if ((charCode===189 && event.shiftKey===false) || charCode===109){
       operator = "subtract"
-    } else if ((event.keyCode===56 && event.shiftKey===true) || event.keyCode===106){
+    } else if ((charCode===56 && event.shiftKey===true) || charCode===106){
       operator = "multiply"
-    } else if ((event.keyCode===191 && event.shiftKey===false) || event.keyCode===111){
+    } else if ((charCode===191 && event.shiftKey===false) || charCode===111){
       operator = "divide"
     }
     if(operator){
       console.log("Keyboard pressed (operator): " + operator); // debug
       operatorPressed(operator);
-      operator = NaN;
+      operator = NaN; // clear var so as not to trigger anything later
     }
   });
   // mouse click
@@ -169,6 +171,7 @@ function listenForOperator(){
     operator = this.value;
     console.log("Button pressed (operator): " + operator); // debug
     operatorPressed(operator);
+    operator = NaN; // clear var so as not to trigger anything later
   });
 }
 
