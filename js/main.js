@@ -14,36 +14,11 @@ $(document).ready(function(){
   listenForOperator();
   // Listen for signal: SIGN
   listenForSign();
+  // Listen for signal: EQUALS
+  listenForEquals();
+  // Listen for signal: SQUARED
+  listenForSquared();
 
-  // If button is (equals)
-    // If (operatorExists) is false && (equalsExists) is false
-    // OR if (equalsExists) in history already
-      // do nothing; or just do some silly animation? "Are you calculating something?"
-    // If (operatorExists) is true && (equalsExists) is false...
-      // If display is empty
-        // do nothing; ir have gator say "I need a number" or something
-      // If display is not empty (displayNum) exists/has value
-        // Assume (1st num) = the one in the history already
-        // Assume (2nd num) = number on display
-        // Calculate (1st num) (operator) (2nd num); store as (ans)
-        // Replace history with (1st num) (operator) (2nd num) =
-          // if any number is negative (<0), put it in parentheses
-        // Replace display with (ans)
-        // store status of "operatorExists" to true
-        // store status of "equalsExists" to true
-  // If button is (squared),
-    // If display empty,
-      // If (operatorExists) = true AND (equalsExists) = false
-        // do not calculate
-        // give "error", e.g. "Can't square a multiplication sign!"
-      // Else if both false (empty history)
-        // do nothing "need a number"
-    // If display !empty,
-      // calculate (displayNum)^2 = (ans)
-      // Set display to (ans)
-      // set history to (displayNum)^2 =
-      // store status of "operatorExists" to false
-      // store status of "equalsExists" to true
   // display result
 
   // clear on click
@@ -238,3 +213,76 @@ function sign(){
     // if (displayNum) is (0) or (0.) or empty, do nothing
     // if (displayNum) is != (0) or (0.)
       // flip displayNum to opposite sign
+
+// EQUALS ======================================================================
+function listenForEquals(){
+  // keyboard: = keyboard or ENTER key
+  $(document).on('keyup', function(event){
+    var charCode = (typeof event.which == "number") ? event.which : event.keyCode;
+    if ((charCode===187 && event.shiftKey===false) || charCode===13){
+      console.log("Key pressed (=): EQUALS"); // debug
+      sign();
+    }
+  });
+  // mouse click
+  $("#equals").on('click', function(){
+    console.log("Button pressed: EQUALS"); // debug
+    equals();
+  });
+}
+
+function equals(){
+
+}
+
+  // If button is (equals)
+    // If (operatorExists) is false && (equalsExists) is false
+    // OR if (equalsExists) in history already
+      // do nothing; or just do some silly animation? "Are you calculating something?"
+    // If (operatorExists) is true && (equalsExists) is false...
+      // If display is empty
+        // do nothing; ir have gator say "I need a number" or something
+      // If display is not empty (displayNum) exists/has value
+        // Assume (1st num) = the one in the history already
+        // Assume (2nd num) = number on display
+        // Calculate (1st num) (operator) (2nd num); store as (ans)
+        // Replace history with (1st num) (operator) (2nd num) =
+          // if any number is negative (<0), put it in parentheses
+        // Replace display with (ans)
+        // store status of "operatorExists" to true
+        // store status of "equalsExists" to true
+
+// SQUARED =====================================================================
+function listenForSquared(){
+  // keyboard: ^ keyboard
+  $(document).on('keyup', function(event){
+    var charCode = (typeof event.which == "number") ? event.which : event.keyCode;
+    if (charCode===54 && event.shiftKey===true){
+      console.log("Key pressed (^): SQUARED"); // debug
+      sign();
+    }
+  });
+  // mouse click
+  $("#squared").on('click', function(){
+    console.log("Button pressed: SQUARED"); // debug
+    squared();
+  });
+}
+
+function squared(){
+
+}
+
+  // If button is (squared),
+    // If display empty,
+      // If (operatorExists) = true AND (equalsExists) = false
+        // do not calculate
+        // give "error", e.g. "Can't square a multiplication sign!"
+      // Else if both false (empty history)
+        // do nothing "need a number"
+    // If display !empty,
+      // calculate (displayNum)^2 = (ans)
+      // Set display to (ans)
+      // set history to (displayNum)^2 =
+      // store status of "operatorExists" to false
+      // store status of "equalsExists" to true
