@@ -221,10 +221,10 @@ function sign(){
 
 // EQUALS ======================================================================
 function listenForEquals(){
-  // keyboard: = keyboard or ENTER key
+  // keyboard: = keyboard
   $(document).on('keyup', function(event){
     var charCode = (typeof event.which == "number") ? event.which : event.keyCode;
-    if ((charCode===187 && event.shiftKey===false) || charCode===13){
+    if (charCode===187 && event.shiftKey===false){
       console.log("Key pressed (=): EQUALS"); // debug
       sign();
     }
