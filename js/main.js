@@ -8,13 +8,9 @@ $(document).ready(function(){
   listenForClear();
   // Listen for signal: number 0-9
   listenForNumber();
+  // Listen for signal: DECIMAL
+  listenForDecimal();
 
-  // If button is (decimal)...
-    // if there is a decimal in the display number already, output an error
-    // If current display number is (0), (0.), or empty,
-      // replace display with (0.)
-    // If current display number is != (0), (0.) or empty
-      // add decimal to number on right-hand side
   // If button is an operator (add, subtract, multiply divide),
     // If there is NO 1st operator in the history already (and no equals?)...
       // assume (1st num) = number on display (stored in string?)
@@ -85,6 +81,7 @@ $(document).ready(function(){
 // note: key codes reference: https://www.cambiaresearch.com/articles/15/javascript-char-codes-key-codes
 // TO DO: will need to visually denote button presses somehow when keyboard is used
 
+// CLEAR =======================================================================
 function listenForClear(){
   // keyboard: ESC keyboard
   $(document).on('keyup', function(event){
@@ -106,6 +103,7 @@ function clear(){
   return 0;
 }
 
+// NUMBER ======================================================================
 function listenForNumber(){
   // keyboard: ESC keyboard
   $(document).on('keyup', function(event){
@@ -122,7 +120,7 @@ function listenForNumber(){
   });
 }
 
-function numberPressed(){
+function numberPressed(digit){
 
 };
 
@@ -144,3 +142,30 @@ function numberPressed(){
       // put digit in display replacing 0
     // else if current number != (0),
       // add digit to (display) number on right-hand side
+
+// DECIMAL =====================================================================
+function listenForDecimal(){
+  // keyboard: ESC keyboard
+  $(document).on('keyup', function(event){
+    if (event.keyCode===190){
+      console.log("Key pressed (.): DECIMAL POINT"); // debug
+      decimalPoint();
+    }
+  });
+  // mouse click
+  $("#decimal").on('click', function(){
+    console.log("Button pressed: DECIMAL POINT"); // debug
+    decimalPoint();
+  });
+}
+
+function decimalPoint(){
+
+}
+
+      // If button is (decimal)...
+        // if there is a decimal in the display number already, output an error
+        // If current display number is (0), (0.), or empty,
+          // replace display with (0.)
+        // If current display number is != (0), (0.) or empty
+          // add decimal to number on right-hand side
