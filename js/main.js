@@ -12,11 +12,9 @@ $(document).ready(function(){
   listenForDecimal();
   // Listen for signal: operator +-*/
   listenForOperator();
+  // Listen for signal: SIGN
+  listenForSign();
 
-  // If button is (sign), run SIGN function
-    // if (displayNum) is (0) or (0.) do nothing
-    // if (displayNum) is != (0) or (0.)
-      // flip displayNum to opposite sign
   // If button is (equals)
     // If (operatorExists) is false && (equalsExists) is false
     // OR if (equalsExists) in history already
@@ -214,3 +212,29 @@ function operatorPressed(operator){
     // Empty the display
     // store status of "operatorExists" to true
     // store status of "equalsExists" to false
+
+// SIGN ========================================================================
+function listenForSign(){
+  // keyboard: ~ keyboard
+  $(document).on('keyup', function(event){
+    var charCode = (typeof event.which == "number") ? event.which : event.keyCode;
+    if (charCode===192 && event.shiftKey===true){
+      console.log("Key pressed (~): SIGN"); // debug
+      sign();
+    }
+  });
+  // mouse click
+  $("#sign").on('click', function(){
+    console.log("Button pressed: SIGN"); // debug
+    sign();
+  });
+}
+
+function sign(){
+
+}
+
+  // If button is (sign), run SIGN function
+    // if (displayNum) is (0) or (0.) or empty, do nothing
+    // if (displayNum) is != (0) or (0.)
+      // flip displayNum to opposite sign
