@@ -10,35 +10,9 @@ $(document).ready(function(){
   listenForNumber();
   // Listen for signal: DECIMAL
   listenForDecimal();
+  // Listen for signal: operator +-*/
+  listenForOperator();
 
-  // If button is an operator (add, subtract, multiply divide),
-    // If there is NO 1st operator in the history already (and no equals?)...
-      // assume (1st num) = number on display (stored in string?)
-      // set history as (1st num) (operator)
-        // if any number is negative (<0), put it in parentheses
-      // clear display results (empty)
-      // store status of "operatorExists" to true
-      // store status of "equalsExists" to false
-    // If there IS a 1st operator in the history already, and NO equals sign...
-      // ...and if the number on display is empty...
-        // Replace the 1st operator in the history with the new operator
-      // ...and if the number on display exists/not empty...
-        // Assume (1st num) = the one in the history already
-        // Assume (2nd num) = number on display
-        // Calculate (1st num) (operator) (2nd num); store as (ans)
-        // Replace history with (1st num) (operator) (2nd num) =
-          // if any number is negative (<0), put it in parentheses
-        // Replace display with (ans)
-        // store status of "operatorExists" to true
-        // store status of "equalsExists" to true
-    // If there IS a 1st operator in the history already AND an equals sign...
-      // assuming display is NOT empty (otherwise there would be no equals)...
-      // Assume (displayNum) = (1st num)
-      // Replace history with (1st num) (new operator)
-        // if any number is negative (<0), put it in parentheses
-      // Empty the display
-      // store status of "operatorExists" to true
-      // store status of "equalsExists" to false
   // If button is (sign), run SIGN function
     // if (displayNum) is (0) or (0.) do nothing
     // if (displayNum) is != (0) or (0.)
@@ -169,3 +143,53 @@ function decimalPoint(){
           // replace display with (0.)
         // If current display number is != (0), (0.) or empty
           // add decimal to number on right-hand side
+
+// operators: +-*/==============================================================
+function listenForOperator(){
+  // keyboard: +-*/
+  $(document).on('keyup', function(event){
+    if (event.keyCode>=48 && event.keyCode<=57){
+      console.log("Keyboard pressed (digit): " + (event.keyCode-48)); // debug
+      numberPressed();
+    }
+  });
+  // mouse click
+  $(".operator").on('click', function(){
+    var operator = this.value;
+    console.log("Button pressed (operator): " + operator); // debug
+    numberPressed(operator);
+  });
+}
+
+function numberPressed(digit){
+
+};
+
+// If button is an operator (add, subtract, multiply divide),
+  // If there is NO 1st operator in the history already (and no equals?)...
+    // assume (1st num) = number on display (stored in string?)
+    // set history as (1st num) (operator)
+      // if any number is negative (<0), put it in parentheses
+    // clear display results (empty)
+    // store status of "operatorExists" to true
+    // store status of "equalsExists" to false
+  // If there IS a 1st operator in the history already, and NO equals sign...
+    // ...and if the number on display is empty...
+      // Replace the 1st operator in the history with the new operator
+    // ...and if the number on display exists/not empty...
+      // Assume (1st num) = the one in the history already
+      // Assume (2nd num) = number on display
+      // Calculate (1st num) (operator) (2nd num); store as (ans)
+      // Replace history with (1st num) (operator) (2nd num) =
+        // if any number is negative (<0), put it in parentheses
+      // Replace display with (ans)
+      // store status of "operatorExists" to true
+      // store status of "equalsExists" to true
+  // If there IS a 1st operator in the history already AND an equals sign...
+    // assuming display is NOT empty (otherwise there would be no equals)...
+    // Assume (displayNum) = (1st num)
+    // Replace history with (1st num) (new operator)
+      // if any number is negative (<0), put it in parentheses
+    // Empty the display
+    // store status of "operatorExists" to true
+    // store status of "equalsExists" to false
