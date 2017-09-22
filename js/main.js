@@ -54,12 +54,15 @@ $(document).ready(function(){
 
 // note: key codes reference: https://www.cambiaresearch.com/articles/15/javascript-char-codes-key-codes
 // TO DO: will need to visually denote button presses somehow when keyboard is used
+// TO DO: Add visualizations..
+// TO DO: Add notes/popups? with tips, like ESC will also reset
 
 // CLEAR =======================================================================
 function listenForClear(){
   // keyboard: ESC keyboard
   $(document).on('keyup', function(event){
-    if (event.keyCode===27){
+    var charCode = (typeof event.which == "number") ? event.which : event.keyCode;
+    if (charCode===27){
       console.log("Key pressed (ESC): CLEAR"); // debug
       clear();
     }
@@ -81,9 +84,12 @@ function clear(){
 function listenForNumber(){
   // keyboard: ESC keyboard
   $(document).on('keyup', function(event){
-    if (event.keyCode>=48 && event.keyCode<=57 && event.shiftKey===false){
-      console.log("Keyboard pressed (digit): " + (event.keyCode-48)); // debug
-      numberPressed();
+    var charCode = (typeof event.which == "number") ? event.which : event.keyCode;
+    if (charCode>=48 && charCode<=57 && event.shiftKey===false){
+      console.log("Keyboard pressed (digit): " + (charCode-48)); // debug
+      var digit = charCode-48;
+      numberPressed(digit);
+      digit = NaN;
     }
   });
   // mouse click
@@ -91,6 +97,7 @@ function listenForNumber(){
     var digit = this.value;
     console.log("Button pressed (digit): " + digit); // debug
     numberPressed(digit);
+    digit = NaN;
   });
 }
 
@@ -121,7 +128,8 @@ function numberPressed(digit){
 function listenForDecimal(){
   // keyboard: ESC keyboard
   $(document).on('keyup', function(event){
-    if ((event.keyCode===190 && event.shiftKey===false) || event.keyCode===110){
+    var charCode = (typeof event.which == "number") ? event.which : event.keyCode;
+    if ((charCode===190 && event.shiftKey===false) || charCode===110){
       console.log("Key pressed (.): DECIMAL POINT"); // debug
       decimalPoint();
     }
@@ -149,8 +157,7 @@ function listenForOperator(){
   var operator;
   // keyboard: +-*/
   $(document).on('keyup', function(event){
-    var charCode = (typeof event.which == "number") ? event.which : event.keyCode
-    // console.log(charCode + ", " + event.which + ", " + event.keyCode) // debug
+    var charCode = (typeof event.which == "number") ? event.which : event.keyCode;
     if ((charCode===187 && event.shiftKey===true) || charCode===107){
       operator = "add";
     } else if ((charCode===189 && event.shiftKey===false) || charCode===109){
