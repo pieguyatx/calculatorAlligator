@@ -220,10 +220,6 @@ function listenForOperator(){
 }
 
 function operatorPressed(operator){
-
-};
-
-// If button is an operator (add, subtract, multiply divide),
   // If there is NO 1st operator in the history already (and no equals?)...
     // assume (1st num) = number on result (stored in string?)
     // set history as (1st num) (operator)
@@ -251,6 +247,7 @@ function operatorPressed(operator){
     // Empty the result
     // store status of "operatorExists" to true
     // store status of "equalsExists" to false
+};
 
 // SIGN ========================================================================
 function listenForSign(){
