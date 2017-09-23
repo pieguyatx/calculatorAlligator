@@ -3,7 +3,12 @@ $(document).ready(function(){
   var state = {};
   state.operatorExists = false; // status of operator in history
   state.equalsExists = false; // status of equals sign in history
-  state.history = "";
+  state.history = {
+    "numFirst": undefined,
+    "operator": undefined,
+    "numSecond": undefined,
+    "text": ""
+  };
   state.result = "0";
 
   // Read in button presses (types: clear, square/operator, number, dec, sign, equals)
@@ -14,7 +19,7 @@ $(document).ready(function(){
   // Listen for signal: DECIMAL
   listenForDecimal(state);
   // Listen for signal: operator +-*/
-  listenForOperator();
+  listenForOperator(state);
   // Listen for signal: SIGN
   listenForSign();
   // Listen for signal: EQUALS
@@ -51,8 +56,8 @@ function listenForClear(state){
 }
 
 function clear(state){
-  state.history = "";
-  $("#history").html(state.history);   // clear history
+  state.history = {"numFirst": undefined, "operator": undefined, "numSecond": undefined, "text": ""};
+  $("#history").html(state.history.text);   // clear history
   state.result = "0";
   $("#result").html(state.result); // clear result
   $("#helpText").html("Feed me more numbers!");
@@ -125,8 +130,8 @@ function numberPressed(digit,state){
     state.result = digit;
     $("#result").html(state.result);
     // clear history
-    state.history = "";
-    $("#history").html(state.history);
+    state.history = {"numFirst": undefined, "operator": undefined, "numSecond": undefined, "text": ""};
+    $("#history").html(state.history.text);
     // update help text
     $("#helpText").html("OK. That number looks tasty.");
   }
@@ -179,8 +184,8 @@ function decimalPoint(state){
   }
   // if there is an EQUALS already in the history, then start a new number...
   else if(state.equalsExists===true){
-    state.history="";
-    $("#history").html(state.history);
+    state.history = {"numFirst": undefined, "operator": undefined, "numSecond": undefined, "text": ""};
+    $("#history").html(state.history.text);
     // replace result with (0.)
     state.result = "0.";
     $("#result").html(state.result);
@@ -190,7 +195,7 @@ function decimalPoint(state){
 }
 
 // operators: +-*/==============================================================
-function listenForOperator(){
+function listenForOperator(state){
   var operator;
   // keyboard: +-*/
   $(document).on('keyup', function(event){
@@ -206,7 +211,7 @@ function listenForOperator(){
     }
     if(operator){
       console.log("Keyboard pressed (operator): " + operator); // debug
-      operatorPressed(operator);
+      operatorPressed(operator,state);
       operator = NaN; // clear var so as not to trigger anything later
     }
   });
@@ -214,19 +219,22 @@ function listenForOperator(){
   $(".operator").on('click', function(){
     operator = this.value;
     console.log("Button pressed (operator): " + operator); // debug
-    operatorPressed(operator);
+    operatorPressed(operator,state);
     operator = NaN; // clear var so as not to trigger anything later
   });
 }
 
-function operatorPressed(operator){
+function operatorPressed(operator,state){
   // If there is NO 1st operator in the history already (and no equals?)...
+  if(state.operatorExists===false && state.equalsExists===false){
     // assume (1st num) = number on result (stored in string?)
+    state.history.firstNum = state.result;
     // set history as (1st num) (operator)
       // if any number is negative (<0), put it in parentheses
     // clear result results (empty)
     // store status of "operatorExists" to true
     // store status of "equalsExists" to false
+  }
   // If there IS a 1st operator in the history already, and NO equals sign...
     // ...and if the number on result is empty...
       // Replace the 1st operator in the history with the new operator
