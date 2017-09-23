@@ -228,12 +228,24 @@ function operatorPressed(operator,state){
   // If there is NO 1st operator in the history already (and no equals?)...
   if(state.operatorExists===false && state.equalsExists===false){
     // assume (1st num) = number on result (stored in string?)
-    state.history.firstNum = state.result;
+    state.history.numFirst = state.result;
     // set history as (1st num) (operator)
+    state.history.operator = operator;
+    var symbol;
+    if(operator==="add"){symbol="+";}
+    else if(operator==="subtract"){symbol="&minus;";}
+    else if(operator==="multiply"){symbol="&times;";}
+    else if(operator==="multiply"){symbol="&divide;";}
+    state.history.text = state.history.numFirst.concat(" " + symbol);
+    $("#history").html(state.history.text);
       // if any number is negative (<0), put it in parentheses
     // clear result results (empty)
+    state.result = "";
+    $("#result").html(state.result);
     // store status of "operatorExists" to true
+    state.operatorExists = true;
     // store status of "equalsExists" to false
+    state.equalsExists = false;
   }
   // If there IS a 1st operator in the history already, and NO equals sign...
     // ...and if the number on result is empty...
