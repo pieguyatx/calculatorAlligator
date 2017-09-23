@@ -94,7 +94,11 @@ function numberPressed(digit,state){
       $("#result").html(state.display);
     }
     // else if current number != (0),
+    else if(state.display!="0" && state.display!="error"){
       // add digit to number on right-hand side
+      state.display = state.display + digit;
+      $("#result").html(state.display);
+    }
   }
   else if(state.operatorExists===true && state.equalsExists===false){
     // If there IS a 1st operator in the history already AND NO (equals) in history...
