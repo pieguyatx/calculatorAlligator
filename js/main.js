@@ -146,7 +146,7 @@ function decimalPoint(state){
   if(state.result.indexOf(".")>0){
     state.result = "error";
     $("#result").html(state.result);
-    $("#helpText").html("Too many decimals!");
+    $("#helpText").html("Too many decimal points!");
   }
   // If current result number is (0), (0.), or empty,
   else if(state.result=="0" || state.result=="0." || state.result==""){
