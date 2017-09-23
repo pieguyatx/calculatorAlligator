@@ -130,7 +130,6 @@ function numberPressed(digit,state){
     // update help text
     $("#helpText").html("OK. That number looks tasty.");
   }
-
 };
 
 // DECIMAL =====================================================================
@@ -155,25 +154,38 @@ function listenForDecimal(state){
 }
 
 function decimalPoint(state){
-  // if there is an EQUALS already in the history, then start a new number...
-
-  // if there is a decimal in the result number already, output an error
-  if(state.result.indexOf(".")>0){
-    state.result = "error";
-    $("#result").html(state.result);
-    $("#helpText").html("Too many decimal points!");
+  // if there is not an EQUALS already in the history, modify result number
+  if(state.equalsExists===false){
+    // if there is a decimal in the result number already, output an error
+    if(state.result.indexOf(".")>0){
+      state.result = "error";
+      $("#result").html(state.result);
+      $("#helpText").html("Too many decimal points!");
+    }
+    // If current result number is (0), (0.), or empty,
+    else if(state.result=="0" || state.result=="0." || state.result==""){
+      // replace result with (0.)
+      state.result = "0.";
+      $("#result").html(state.result);
+      // update help text
+      $("#helpText").html("Such a teensy number!");
+    }
+    // If current result number is != (0), (0.) or empty
+    else{
+      // add decimal to number on right-hand side
+      state.result = state.result.concat(".");
+      $("#result").html(state.result);
+    }
   }
-  // If current result number is (0), (0.), or empty,
-  else if(state.result=="0" || state.result=="0." || state.result==""){
+  // if there is an EQUALS already in the history, then start a new number...
+  else if(state.equalsExists===true){
+    state.history="";
+    $("#history").html(state.history);
     // replace result with (0.)
     state.result = "0.";
     $("#result").html(state.result);
-  }
-  // If current result number is != (0), (0.) or empty
-  else{
-    // add decimal to number on right-hand side
-    state.result = state.result.concat(".");
-    $("#result").html(state.result);
+    // update help text
+    $("#helpText").html("Making a small number again, eh?");
   }
 }
 
