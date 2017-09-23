@@ -55,7 +55,7 @@ function clear(state){
   $("#history").html(state.history);   // clear history
   state.result = "0";
   $("#result").html(state.result); // clear result
-  return 0;
+  $("#helpText").html("Feed me more numbers!");
 }
 
 // NUMBER ======================================================================
@@ -125,13 +125,17 @@ function listenForDecimal(state){
     var charCode = (typeof event.which == "number") ? event.which : event.keyCode;
     if ((charCode===190 && event.shiftKey===false) || charCode===110){
       console.log("Key pressed (.): DECIMAL POINT"); // debug
-      decimalPoint(state);
+      if(state.result!="error"){
+        decimalPoint(state);
+      }
     }
   });
   // mouse click
   $("#decimal").on('click', function(){
     console.log("Button pressed: DECIMAL POINT"); // debug
-    decimalPoint(state);
+    if(state.result!="error"){
+      decimalPoint(state);
+    }
   });
 }
 
@@ -139,9 +143,10 @@ function decimalPoint(state){
   // if there is an EQUALS already in the history, then start a new number...
 
   // if there is a decimal in the result number already, output an error
-  if(state.result.match(".")!=null){
+  if(state.result.indexOf(".")>0){
     state.result = "error";
     $("#result").html(state.result);
+    $("#helpText").html("Too many decimals!");
   }
   // If current result number is (0), (0.), or empty,
   else if(state.result=="0" || state.result=="0." || state.result==""){

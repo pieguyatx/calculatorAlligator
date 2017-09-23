@@ -37,6 +37,15 @@ header h2{
   margin-top: -0.4em;
   margin-bottom: 0;
 }
+header #mainChar{
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Patrick Hand SC', cursive;
+  font-size: 29px;
+  line-height: 17px;
+}
 header svg{
   width: 300px;
   height: 200px;
@@ -46,6 +55,21 @@ header svg path{
 }
 header svg path:hover{
   fill: #007207;
+}
+#help{
+  width: 240px;
+  position: relative;
+  top: -47px;
+  right: -5px;
+  padding: 0;
+  margin: 0;
+  color: #555;
+  display: flex;
+  align-items: center;
+}
+#helpText{
+  text-align: left;
+  padding: 5px;
 }
 section{
   margin: 10px;
