@@ -64,12 +64,12 @@ function listenForNumber(state){
   $(document).on('keyup', function(event){
     var charCode = (typeof event.which == "number") ? event.which : event.keyCode;
     if (charCode>=48 && charCode<=57 && event.shiftKey===false){
-      var digit = charCode-48;
+      var digit = (charCode-48).toString();
       console.log("Keyboard pressed (digit): " + digit); // debug
       numberPressed(digit,state);
       digit = NaN;
     } else if(charCode>=96 && charCode<=105){ // numpad
-      var digit = charCode-96;
+      var digit = (charCode-96).toString();
       console.log("Keyboard pressed (digit, numpad): " + digit); // debug
       numberPressed(digit,state);
       digit = NaN;
@@ -77,7 +77,7 @@ function listenForNumber(state){
   });
   // mouse click
   $(".digit").on('click', function(){
-    var digit = this.value;
+    var digit = this.value.toString();
     console.log("Button pressed (digit): " + digit); // debug
     numberPressed(digit,state);
     digit = NaN;
@@ -96,7 +96,7 @@ function numberPressed(digit,state){
     // else if current number != (0),
     else if(state.result!="0" && state.result!="error"){
       // add digit to number on right-hand side
-      state.result = state.result + digit;
+      state.result = state.result.concat(digit);
       $("#result").html(state.result);
     }
   }
@@ -136,11 +136,25 @@ function listenForDecimal(state){
 }
 
 function decimalPoint(state){
+  // if there is an EQUALS already in the history, then start a new number...
+
   // if there is a decimal in the result number already, output an error
+  if(state.result.match(".")!=null){
+    state.result = "error";
+    $("#result").html(state.result);
+  }
   // If current result number is (0), (0.), or empty,
+  else if(state.result=="0" || state.result=="0." || state.result==""){
     // replace result with (0.)
+    state.result = "0.";
+    $("#result").html(state.result);
+  }
   // If current result number is != (0), (0.) or empty
+  else{
     // add decimal to number on right-hand side
+    state.result = state.result.concat(".");
+    $("#result").html(state.result);
+  }
 }
 
 // operators: +-*/==============================================================
