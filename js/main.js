@@ -1,13 +1,16 @@
 $(document).ready(function(){
   // initialize common variables
-  var operatorExists = false; // status of operator in history
-  var equalsExists = false; // status of equals sign in history
+  var state = {};
+  state.operatorExists = false; // status of operator in history
+  state.equalsExists = false; // status of equals sign in history
+  state.history = "";
+  state.display = "0";
 
   // Read in button presses (types: clear, square/operator, number, dec, sign, equals)
   // Listen for signal: CLEAR
   listenForClear();
   // Listen for signal: number 0-9
-  listenForNumber();
+  listenForNumber(state);
   // Listen for signal: DECIMAL
   listenForDecimal();
   // Listen for signal: operator +-*/
@@ -54,19 +57,19 @@ function clear(){
 }
 
 // NUMBER ======================================================================
-function listenForNumber(){
+function listenForNumber(state){
   // keyboard: ESC keyboard
   $(document).on('keyup', function(event){
     var charCode = (typeof event.which == "number") ? event.which : event.keyCode;
     if (charCode>=48 && charCode<=57 && event.shiftKey===false){
       var digit = charCode-48;
       console.log("Keyboard pressed (digit): " + digit); // debug
-      numberPressed(digit);
+      numberPressed(digit,state);
       digit = NaN;
     } else if(charCode>=96 && charCode<=105){ // numpad
       var digit = charCode-96;
       console.log("Keyboard pressed (digit, numpad): " + digit); // debug
-      numberPressed(digit);
+      numberPressed(digit,state);
       digit = NaN;
     }
   });
@@ -74,33 +77,39 @@ function listenForNumber(){
   $(".digit").on('click', function(){
     var digit = this.value;
     console.log("Button pressed (digit): " + digit); // debug
-    numberPressed(digit);
+    numberPressed(digit,state);
     digit = NaN;
   });
 }
 
-function numberPressed(digit){
-
-};
-
-// If button is a number 0-9
+function numberPressed(digit,state){
   // If there is NOT a 1st operator in the history already...
-    // If current number = (0) without decimal point
+  if(state.operatorExists===false){
+    // If display number = (0) without decimal point
+    if(state.display==0){ // string or number is fine
       // put digit in display replacing 0
+
+    }
     // else if current number != (0),
       // add digit to number on right-hand side
-  // If there IS a 1st operator in the history already AND NO (equals) in history...
-    // If current number = "0" without decimal point
-      // put in display replacing 0
-    // else if current number is empty, add in digit
-    // else if current number != "0" and not empty,
-      // add digit to number on right-hand side
-  // If there's already an (equals) in the history and no (ansHistory)...
-    // If current number = empty or (0) without decimal point
-      // add the current (ans) on display to the history...
-      // put digit in display replacing 0
-    // else if current number != (0),
-      // add digit to (display) number on right-hand side
+  }
+  else if(state.operatorExists===true && state.equalsExists===false){
+    // If there IS a 1st operator in the history already AND NO (equals) in history...
+      // If current number = "0" without decimal point
+        // put in display replacing 0
+      // else if current number is empty, add in digit
+      // else if current number != "0" and not empty,
+        // add digit to number on right-hand side
+  }
+  else if(state.operatorExists===true && state.equalsExists===false){
+    // If there's already an (equals) in the history and no (ansHistory)...
+      // If current number = empty or (0) without decimal point
+        // add the current (ans) on display to the history...
+        // put digit in display replacing 0
+      // else if current number != (0),
+        // add digit to (display) number on right-hand side
+  }
+};
 
 // DECIMAL =====================================================================
 function listenForDecimal(){
