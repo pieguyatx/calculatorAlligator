@@ -8,7 +8,7 @@ $(document).ready(function(){
 
   // Read in button presses (types: clear, square/operator, number, dec, sign, equals)
   // Listen for signal: CLEAR
-  listenForClear();
+  listenForClear(state);
   // Listen for signal: number 0-9
   listenForNumber(state);
   // Listen for signal: DECIMAL
@@ -34,25 +34,27 @@ $(document).ready(function(){
 // TO DO: Add notes/popups? with tips, like ESC will also reset
 
 // CLEAR =======================================================================
-function listenForClear(){
+function listenForClear(state){
   // keyboard: ESC keyboard
   $(document).on('keyup', function(event){
     var charCode = (typeof event.which == "number") ? event.which : event.keyCode;
     if (charCode===27){
       console.log("Key pressed (ESC): CLEAR"); // debug
-      clear();
+      clear(state);
     }
   });
   // mouse click
   $("#clear").on('click', function(){
     console.log("Button pressed: CLEAR"); // debug
-    clear();
+    clear(state);
   });
 }
 
-function clear(){
-  $("#history").html("");   // clear history
-  $("#result").html("0");   // clear history
+function clear(state){
+  state.history = "";
+  $("#history").html(state.history);   // clear history
+  state.display = "0";
+  $("#result").html(state.display); // clear result
   return 0;
 }
 
@@ -86,9 +88,10 @@ function numberPressed(digit,state){
   // If there is NOT a 1st operator in the history already...
   if(state.operatorExists===false){
     // If display number = (0) without decimal point
-    if(state.display==0){ // string or number is fine
-      // put digit in display replacing 0
-
+    if(state.display=="0"){ // string or number is fine
+      // put digit in results, replacing 0
+      state.display = digit;
+      $("#result").html(state.display);
     }
     // else if current number != (0),
       // add digit to number on right-hand side
