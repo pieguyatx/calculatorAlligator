@@ -85,37 +85,52 @@ function listenForNumber(state){
 }
 
 function numberPressed(digit,state){
-  // If there is NOT a 1st operator in the history already...
-  if(state.operatorExists===false){
-    // If result number = (0) without decimal point
-    if(state.result=="0"){ // string or number is fine
-      // put digit in results, replacing 0
-      state.result = digit;
-      $("#result").html(state.result);
-    }
-    // else if current number != (0),
-    else if(state.result!="0" && state.result!="error"){
-      // add digit to number on right-hand side
-      state.result = state.result.concat(digit);
-      $("#result").html(state.result);
-    }
-  }
-  else if(state.operatorExists===true && state.equalsExists===false){
-    // If there IS a 1st operator in the history already AND NO (equals) in history...
-      // If current number = "0" without decimal point
-        // put in result replacing 0
-      // else if current number is empty, add in digit
-      // else if current number != "0" and not empty,
-        // add digit to number on right-hand side
-  }
-  else if(state.operatorExists===true && state.equalsExists===false){
-    // If there's already an (equals) in the history and no (ansHistory)...
-      // If current number = empty or (0) without decimal point
-        // add the current (ans) on result to the history...
-        // put digit in result replacing 0
+  // If Result has no error:
+  if(state.result!="error"){
+    // If there is NOT a 1st operator in the history already...
+    if(state.operatorExists===false){
+      // If result number = (0) without decimal point
+      if(state.result=="0"){ // string or number is fine
+        // put digit in results, replacing 0
+        state.result = digit;
+        $("#result").html(state.result);
+      }
       // else if current number != (0),
-        // add digit to (result) number on right-hand side
+      else if(state.result!="0" && state.result!="error"){
+        // add digit to number on right-hand side
+        state.result = state.result.concat(digit);
+        $("#result").html(state.result);
+      }
+    }
+    else if(state.operatorExists===true && state.equalsExists===false){
+      // If there IS a 1st operator in the history already AND NO (equals) in history...
+        // If current number = "0" without decimal point
+          // put in result replacing 0
+        // else if current number is empty, add in digit
+        // else if current number != "0" and not empty,
+          // add digit to number on right-hand side
+    }
+    else if(state.operatorExists===true && state.equalsExists===false){
+      // If there's already an (equals) in the history and no (ansHistory)...
+        // If current number = empty or (0) without decimal point
+          // add the current (ans) on result to the history...
+          // put digit in result replacing 0
+        // else if current number != (0),
+          // add digit to (result) number on right-hand side
+    }
   }
+  // if result is "error"
+  else{
+    // put digit in results, replacing 0
+    state.result = digit;
+    $("#result").html(state.result);
+    // clear history
+    state.history = "";
+    $("#history").html(state.history);
+    // update help text
+    $("#helpText").html("OK. That number looks tasty.");
+  }
+
 };
 
 // DECIMAL =====================================================================
