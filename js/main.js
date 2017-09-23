@@ -56,6 +56,8 @@ function listenForClear(state){
 }
 
 function clear(state){
+  state.operatorExists = false;
+  state.equalsExists = false;
   state.history = {"numFirst": undefined, "operator": undefined, "numSecond": undefined, "text": ""};
   $("#history").html(state.history.text);   // clear history
   state.result = "0";
@@ -93,9 +95,9 @@ function numberPressed(digit,state){
   // If Result has no error:
   if(state.result!="error"){
     // If there is NOT a 1st operator in the history already...
-    if(state.operatorExists===false){
+    if(state.equalsExists===false){
       // If result number = (0) without decimal point
-      if(state.result=="0"){ // string or number is fine
+      if(state.result=="0" || state.result==""){ // string or number is fine
         // put digit in results, replacing 0
         state.result = digit;
         $("#result").html(state.result);
@@ -107,15 +109,15 @@ function numberPressed(digit,state){
         $("#result").html(state.result);
       }
     }
-    else if(state.operatorExists===true && state.equalsExists===false){
+//    else if(state.operatorExists===true && state.equalsExists===false){
       // If there IS a 1st operator in the history already AND NO (equals) in history...
         // If current number = "0" without decimal point
           // put in result replacing 0
         // else if current number is empty, add in digit
         // else if current number != "0" and not empty,
           // add digit to number on right-hand side
-    }
-    else if(state.operatorExists===true && state.equalsExists===false){
+//    }
+    else if(state.operatorExists===true && state.equalsExists===true){
       // If there's already an (equals) in the history and no (ansHistory)...
         // If current number = empty or (0) without decimal point
           // add the current (ans) on result to the history...
@@ -225,6 +227,7 @@ function listenForOperator(state){
 }
 
 function operatorPressed(operator,state){
+  console.log(state); // debug
   // If there is NO 1st operator in the history already (and no equals?)...
   if(state.operatorExists===false && state.equalsExists===false){
     // assume (1st num) = number on result (stored in string?)
