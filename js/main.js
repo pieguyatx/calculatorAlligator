@@ -165,19 +165,19 @@ function listenForDecimal(state){
 function decimalPoint(state){
   // if there is not an EQUALS already in the history, modify result number
   if(state.equalsExists===false){
-    // if there is a decimal in the result number already, output an error
-    if(state.result.indexOf(".")>0){
-      state.result = "error";
-      $("#result").html(state.result);
-      $("#helpText").html("Too many decimal points!");
-    }
     // If current result number is (0), (0.), or empty,
-    else if(state.result=="0" || state.result=="0." || state.result==""){
+    if(state.result=="0" || state.result=="0." || state.result==""){
       // replace result with (0.)
       state.result = "0.";
       $("#result").html(state.result);
       // update help text
       $("#helpText").html("Such a teensy number!");
+    }
+    // if there is a decimal in the result number already, output an error
+    else if(state.result.indexOf(".")>0){
+      state.result = "error";
+      $("#result").html(state.result);
+      $("#helpText").html("Too many decimal points!");
     }
     // If current result number is != (0), (0.) or empty
     else{
