@@ -240,7 +240,7 @@ function operatorPressed(operator,state){
     if(operator==="add"){symbol="+";}
     else if(operator==="subtract"){symbol="&minus;";}
     else if(operator==="multiply"){symbol="&times;";}
-    else if(operator==="multiply"){symbol="&divide;";}
+    else if(operator==="divide"){symbol="&divide;";}
     state.history.text = state.history.numFirst.concat(" " + symbol);
     $("#history").html(state.history.text);
       // if any number is negative (<0), put it in parentheses
