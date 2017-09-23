@@ -42,9 +42,6 @@ header #mainChar{
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: 'Patrick Hand SC', cursive;
-  font-size: 29px;
-  line-height: 17px;
 }
 header svg{
   width: 300px;
@@ -70,6 +67,9 @@ header svg path:hover{
 #helpText{
   text-align: left;
   padding: 5px;
+  font-family: 'Patrick Hand SC', cursive;
+  font-size: 29px;
+  line-height: 21px;  
 }
 section{
   margin: 10px;
