@@ -132,6 +132,8 @@ function numberPressed(digit,state){
     state.result = digit;
     $("#result").html(state.result);
     // clear history
+    state.operatorExists = false;
+    state.equalsExists = false;
     state.history = {"numFirst": undefined, "operator": undefined, "numSecond": undefined, "text": ""};
     $("#history").html(state.history.text);
     // update help text
