@@ -4,7 +4,7 @@ $(document).ready(function(){
   state.operatorExists = false; // status of operator in history
   state.equalsExists = false; // status of equals sign in history
   state.history = "";
-  state.display = "0";
+  state.result = "0";
 
   // Read in button presses (types: clear, square/operator, number, dec, sign, equals)
   // Listen for signal: CLEAR
@@ -12,7 +12,7 @@ $(document).ready(function(){
   // Listen for signal: number 0-9
   listenForNumber(state);
   // Listen for signal: DECIMAL
-  listenForDecimal();
+  listenForDecimal(state);
   // Listen for signal: operator +-*/
   listenForOperator();
   // Listen for signal: SIGN
@@ -22,7 +22,7 @@ $(document).ready(function(){
   // Listen for signal: SQUARED
   listenForSquared();
 
-  // display result
+  // result result
 
   // clear on click
 
@@ -53,8 +53,8 @@ function listenForClear(state){
 function clear(state){
   state.history = "";
   $("#history").html(state.history);   // clear history
-  state.display = "0";
-  $("#result").html(state.display); // clear result
+  state.result = "0";
+  $("#result").html(state.result); // clear result
   return 0;
 }
 
@@ -87,23 +87,23 @@ function listenForNumber(state){
 function numberPressed(digit,state){
   // If there is NOT a 1st operator in the history already...
   if(state.operatorExists===false){
-    // If display number = (0) without decimal point
-    if(state.display=="0"){ // string or number is fine
+    // If result number = (0) without decimal point
+    if(state.result=="0"){ // string or number is fine
       // put digit in results, replacing 0
-      state.display = digit;
-      $("#result").html(state.display);
+      state.result = digit;
+      $("#result").html(state.result);
     }
     // else if current number != (0),
-    else if(state.display!="0" && state.display!="error"){
+    else if(state.result!="0" && state.result!="error"){
       // add digit to number on right-hand side
-      state.display = state.display + digit;
-      $("#result").html(state.display);
+      state.result = state.result + digit;
+      $("#result").html(state.result);
     }
   }
   else if(state.operatorExists===true && state.equalsExists===false){
     // If there IS a 1st operator in the history already AND NO (equals) in history...
       // If current number = "0" without decimal point
-        // put in display replacing 0
+        // put in result replacing 0
       // else if current number is empty, add in digit
       // else if current number != "0" and not empty,
         // add digit to number on right-hand side
@@ -111,40 +111,37 @@ function numberPressed(digit,state){
   else if(state.operatorExists===true && state.equalsExists===false){
     // If there's already an (equals) in the history and no (ansHistory)...
       // If current number = empty or (0) without decimal point
-        // add the current (ans) on display to the history...
-        // put digit in display replacing 0
+        // add the current (ans) on result to the history...
+        // put digit in result replacing 0
       // else if current number != (0),
-        // add digit to (display) number on right-hand side
+        // add digit to (result) number on right-hand side
   }
 };
 
 // DECIMAL =====================================================================
-function listenForDecimal(){
+function listenForDecimal(state){
   // keyboard: ESC keyboard
   $(document).on('keyup', function(event){
     var charCode = (typeof event.which == "number") ? event.which : event.keyCode;
     if ((charCode===190 && event.shiftKey===false) || charCode===110){
       console.log("Key pressed (.): DECIMAL POINT"); // debug
-      decimalPoint();
+      decimalPoint(state);
     }
   });
   // mouse click
   $("#decimal").on('click', function(){
     console.log("Button pressed: DECIMAL POINT"); // debug
-    decimalPoint();
+    decimalPoint(state);
   });
 }
 
-function decimalPoint(){
-
+function decimalPoint(state){
+  // if there is a decimal in the result number already, output an error
+  // If current result number is (0), (0.), or empty,
+    // replace result with (0.)
+  // If current result number is != (0), (0.) or empty
+    // add decimal to number on right-hand side
 }
-
-      // If button is (decimal)...
-        // if there is a decimal in the display number already, output an error
-        // If current display number is (0), (0.), or empty,
-          // replace display with (0.)
-        // If current display number is != (0), (0.) or empty
-          // add decimal to number on right-hand side
 
 // operators: +-*/==============================================================
 function listenForOperator(){
@@ -182,30 +179,30 @@ function operatorPressed(operator){
 
 // If button is an operator (add, subtract, multiply divide),
   // If there is NO 1st operator in the history already (and no equals?)...
-    // assume (1st num) = number on display (stored in string?)
+    // assume (1st num) = number on result (stored in string?)
     // set history as (1st num) (operator)
       // if any number is negative (<0), put it in parentheses
-    // clear display results (empty)
+    // clear result results (empty)
     // store status of "operatorExists" to true
     // store status of "equalsExists" to false
   // If there IS a 1st operator in the history already, and NO equals sign...
-    // ...and if the number on display is empty...
+    // ...and if the number on result is empty...
       // Replace the 1st operator in the history with the new operator
-    // ...and if the number on display exists/not empty...
+    // ...and if the number on result exists/not empty...
       // Assume (1st num) = the one in the history already
-      // Assume (2nd num) = number on display
+      // Assume (2nd num) = number on result
       // Calculate (1st num) (operator) (2nd num); store as (ans)
       // Replace history with (1st num) (operator) (2nd num) =
         // if any number is negative (<0), put it in parentheses
-      // Replace display with (ans)
+      // Replace result with (ans)
       // store status of "operatorExists" to true
       // store status of "equalsExists" to true
   // If there IS a 1st operator in the history already AND an equals sign...
-    // assuming display is NOT empty (otherwise there would be no equals)...
-    // Assume (displayNum) = (1st num)
+    // assuming result is NOT empty (otherwise there would be no equals)...
+    // Assume (resultNum) = (1st num)
     // Replace history with (1st num) (new operator)
       // if any number is negative (<0), put it in parentheses
-    // Empty the display
+    // Empty the result
     // store status of "operatorExists" to true
     // store status of "equalsExists" to false
 
@@ -231,9 +228,9 @@ function sign(){
 }
 
   // If button is (sign), run SIGN function
-    // if (displayNum) is (0) or (0.) or empty, do nothing
-    // if (displayNum) is != (0) or (0.)
-      // flip displayNum to opposite sign
+    // if (resultNum) is (0) or (0.) or empty, do nothing
+    // if (resultNum) is != (0) or (0.)
+      // flip resultNum to opposite sign
 
 // EQUALS ======================================================================
 function listenForEquals(){
@@ -261,15 +258,15 @@ function equals(){
     // OR if (equalsExists) in history already
       // do nothing; or just do some silly animation? "Are you calculating something?"
     // If (operatorExists) is true && (equalsExists) is false...
-      // If display is empty
+      // If result is empty
         // do nothing; ir have gator say "I need a number" or something
-      // If display is not empty (displayNum) exists/has value
+      // If result is not empty (resultNum) exists/has value
         // Assume (1st num) = the one in the history already
-        // Assume (2nd num) = number on display
+        // Assume (2nd num) = number on result
         // Calculate (1st num) (operator) (2nd num); store as (ans)
         // Replace history with (1st num) (operator) (2nd num) =
           // if any number is negative (<0), put it in parentheses
-        // Replace display with (ans)
+        // Replace result with (ans)
         // store status of "operatorExists" to true
         // store status of "equalsExists" to true
 
@@ -295,15 +292,15 @@ function squared(){
 }
 
   // If button is (squared),
-    // If display empty,
+    // If result empty,
       // If (operatorExists) = true AND (equalsExists) = false
         // do not calculate
         // give "error", e.g. "Can't square a multiplication sign!"
       // Else if both false (empty history)
         // do nothing "need a number"
-    // If display !empty,
-      // calculate (displayNum)^2 = (ans)
-      // Set display to (ans)
-      // set history to (displayNum)^2 =
+    // If result !empty,
+      // calculate (resultNum)^2 = (ans)
+      // Set result to (ans)
+      // set history to (resultNum)^2 =
       // store status of "operatorExists" to false
       // store status of "equalsExists" to true
