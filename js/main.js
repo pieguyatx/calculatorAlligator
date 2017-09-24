@@ -94,9 +94,9 @@ function listenForNumber(state){
 function numberPressed(digit,state){
   // If Result has no error:
   if(state.result!="error"){
-    // If there is NOT a 1st operator in the history already...
+    // If there is NOT an EQUALS in the history already...
     if(state.equalsExists===false){
-      // If result number = (0) without decimal point
+      // If result number = (0) without decimal point or empty
       if(state.result=="0" || state.result==""){ // string or number is fine
         // put digit in results, replacing 0
         state.result = digit;
@@ -107,6 +107,10 @@ function numberPressed(digit,state){
         // add digit to number on right-hand side
         state.result = state.result.concat(digit);
         $("#result").html(state.result);
+        // if it's a 2nd number, division, and divisor>1, output "divisor" msg
+        if(state.history.numFirst!=undefined && state.history.operator==="divide" && parseInt(state.result)>1){
+          $("#helpText").html("That DIVISOR looks delectable.");
+        }
       }
     }
 //    else if(state.operatorExists===true && state.equalsExists===false){
@@ -238,23 +242,8 @@ function operatorPressed(operator,state){
 
     // set history as (1st num) (operator)
     state.history.operator = operator;
-    var symbol;
-    if(operator==="add"){
-      symbol="+";
-      $("#helpText").html("ADD some good ingredients.");
-    }
-    else if(operator==="subtract"){
-      symbol="&minus;";
-      $("#helpText").html("Don't SUBTRACT too much flavor...");
-    }
-    else if(operator==="multiply"){
-      symbol="&times;";
-      $("#helpText").html("MULTIPLY the portion size!");
-    }
-    else if(operator==="divide"){
-      symbol="&divide;";
-      $("#helpText").html("That DIVISOR looks delicious.");
-    }
+    let symbol;
+    symbol = getSymbol(operator);
     state.history.text = state.history.numFirst.concat(" " + symbol);
     $("#history").html(state.history.text);
     // clear result results (empty)
@@ -267,9 +256,14 @@ function operatorPressed(operator,state){
   }
   // If there IS a 1st operator in the history already, and NO equals sign...
   else if(state.operatorExists===true && state.equalsExists===false){
-
-    // ...and if the number on result is empty...
+    // ...and if the number in result is empty...
+    if(state.result===""){
       // Replace the 1st operator in the history with the new operator
+      let symbol;
+      symbol = getSymbol(operator);
+      state.history.text = state.history.numFirst.concat(" " + symbol);
+      $("#history").html(state.history.text);
+    }
     // ...and if the number on result exists/not empty...
       // Assume (1st num) = the one in the history already
       // Assume (2nd num) = number on result
@@ -291,6 +285,26 @@ function operatorPressed(operator,state){
     // store status of "equalsExists" to false
   }
 };
+
+function getSymbol(operator){
+  if(operator==="add"){
+    symbol="+";
+    $("#helpText").html("ADD some good ingredients.");
+  }
+  else if(operator==="subtract"){
+    symbol="&minus;";
+    $("#helpText").html("Don't SUBTRACT too much flavor...");
+  }
+  else if(operator==="multiply"){
+    symbol="&times;";
+    $("#helpText").html("MULTIPLY the portion size!");
+  }
+  else if(operator==="divide"){
+    symbol="&divide;";
+    $("#helpText").html("That DIVIDEND looks delicious.");
+  }
+  return symbol;
+}
 
 // SIGN ========================================================================
 function listenForSign(){
