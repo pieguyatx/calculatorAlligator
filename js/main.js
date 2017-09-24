@@ -338,12 +338,22 @@ function listenForSign(state){
 }
 
 function sign(state){
-  // if (resultNum) is (0) or (0.) or empty, do nothing
   // if (resultNum) is != (0) or (0.)
   if(state.result!="0" || state.result!="0."){
     // flip resultNum to opposite sign
     state.result = (-parseFloat(state.result)).toString();
     $("#result").html(state.result);
+    // output appropriate message
+    if(parseFloat(state.result)>0){
+      $("#helpText").html("I am POSITIVE I want to eat that.");
+    }
+    else{
+      $("#helpText").html("Neat number! No NEGATIVE attitude from me!");
+    }
+  }
+  // if (resultNum) is (0) or (0.) or empty, do nothing
+  else{
+    $("#helpText").html("Zero food? That has no SIGN.");
   }
 }
 
@@ -408,6 +418,10 @@ function equals(state){
       // Replace result with (ans)
       state.result = calc.toString();
       $("#result").html(state.result);
+      // if result is zero, make a comment
+      if(state.result==="0"){
+        $("#helpText").html("Nothing to eat?");
+      }
       // if second number is negative (<0), put it in parentheses
       var numSecondString = state.history.numSecond.toString();
       if(parseFloat(state.history.numSecond)<0){
