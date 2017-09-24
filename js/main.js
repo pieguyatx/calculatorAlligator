@@ -262,6 +262,7 @@ function operatorPressed(operator,state){
       // ...and if the number in result is empty...
       if(state.result===""){
         // Replace the 1st operator in the history with the new operator
+        state.history.operator = operator;
         let symbol;
         symbol = getSymbol(operator);
         state.history.text = state.history.numFirst.concat(" " + symbol);
