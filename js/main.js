@@ -481,7 +481,11 @@ function squared(state){
         equals(state);
         // show the full calculation in the history
         let symbol = getSymbol(state.history.operator);
-        state.history.text = "(" + state.history.numFirst + " " + symbol + " " + state.history.numSecond + ")&sup2; =" ;
+        let secondNumber = state.history.numSecond;
+        if(parseFloat(secondNumber)<0){
+          secondNumber = "(" + secondNumber + ")";
+        }
+        state.history.text = "(" + state.history.numFirst + " " + symbol + " " + secondNumber + ")&sup2; =" ;
         $("#history").html(state.history.text);
         // now square the new result of the first operation
         state.result = Math.pow(parseFloat(state.result),2).toString();
@@ -493,8 +497,8 @@ function squared(state){
         state.operatorExists = true;
         state.equalsExists = true;
       }
-      // If there is BOTH an operator and EQUALS in the history or just empy
-      if(state.history.text==="" || (state.operatorExists===true && state.equalsExists===true)){
+      // but if there is BOTH an operator and EQUALS in the history or just empy
+      else if(state.history.text==="" || (state.operatorExists===true && state.equalsExists===true)){
         // update history
         if(parseFloat(state.result)<0){
           state.history.text = "(" + state.result + ")&sup2; =" ;
