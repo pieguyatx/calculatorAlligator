@@ -121,13 +121,11 @@ function numberPressed(digit,state){
         // else if current number != "0" and not empty,
           // add digit to number on right-hand side
 //    }
-    else if(state.operatorExists===true && state.equalsExists===true){
-      // If there's already an (equals) in the history and no (ansHistory)...
-        // If current number = empty or (0) without decimal point
-          // add the current (ans) on result to the history...
-          // put digit in result replacing 0
-        // else if current number != (0),
-          // add digit to (result) number on right-hand side
+    // If there's already an (equals) in the history
+    else if(state.equalsExists===true){
+      clear(state);
+      state.result = digit;
+      $("#result").html(state.result);
     }
   }
   // if result is "error"
@@ -192,13 +190,12 @@ function decimalPoint(state){
   }
   // if there is an EQUALS already in the history, then start a new number...
   else if(state.equalsExists===true){
-    state.history = {"numFirst": undefined, "operator": undefined, "numSecond": undefined, "text": ""};
-    $("#history").html(state.history.text);
+    clear(state);
     // replace result with (0.)
     state.result = "0.";
     $("#result").html(state.result);
     // update help text
-    $("#helpText").html("Making a small number again, eh?");
+    $("#helpText").html("Making a small number, eh?");
   }
 }
 
