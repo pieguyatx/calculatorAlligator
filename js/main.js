@@ -12,6 +12,7 @@ $(document).ready(function(){
   state.result = "0";
 
   // Read in button presses (types: clear, square/operator, number, dec, sign, equals)
+  listenToKeyboard(state); // listen for all keys
   // Listen for signal: CLEAR
   listenForClear(state);
   // Listen for signal: number 0-9
@@ -36,18 +37,67 @@ $(document).ready(function(){
 // note: key codes reference: https://www.cambiaresearch.com/articles/15/javascript-char-codes-key-codes
 // TO DO: will need to visually denote button presses somehow when keyboard is used
 // TO DO: Add visualizations..
-// TO DO: Add notes/popups? with tips, like ESC will also reset
 // TO DO: consolidate keyboard input into one big "listener" instead of multiple ones
-// CLEAR =======================================================================
-function listenForClear(state){
-  // keyboard: ESC keyboard
+
+// KEYBOARD ====================================================================
+function listenToKeyboard(state){
   $(document).on('keyup', function(event){
+    // ESC key
+    var operator;
     var charCode = (typeof event.which == "number") ? event.which : event.keyCode;
     if (charCode===27){
       console.log("Key pressed (ESC): CLEAR"); // debug
       clear(state);
     }
+    // DIGITS
+    else if (charCode>=48 && charCode<=57 && event.shiftKey===false){
+      var digit = (charCode-48).toString();
+      console.log("Keyboard pressed (digit): " + digit); // debug
+      numberPressed(digit,state);
+      digit = NaN;
+    } else if(charCode>=96 && charCode<=105){ // numpad
+      var digit = (charCode-96).toString();
+      console.log("Keyboard pressed (digit, numpad): " + digit); // debug
+      numberPressed(digit,state);
+      digit = NaN;
+    }
+    // DECIMAL
+    else if ((charCode===190 && event.shiftKey===false) || charCode===110){
+      console.log("Key pressed (.): DECIMAL POINT"); // debug
+      if(state.result!="error"){
+        decimalPoint(state);
+      }
+    }
+    // SIGN
+    else if (charCode===192 && event.shiftKey===true){
+      console.log("Key pressed (~): SIGN"); // debug
+      sign(state);
+    }
+    // SQUARED (^)
+    else if (charCode===54 && event.shiftKey===true){
+      console.log("Key pressed (^): SQUARED"); // debug
+      squared(state);
+    }
+    // OPERATORS
+    else if ((charCode===187 && event.shiftKey===true) || charCode===107){
+      operator = "add";
+    } else if ((charCode===189 && event.shiftKey===false) || charCode===109){
+      operator = "subtract"
+    } else if ((charCode===56 && event.shiftKey===true) || charCode===106){
+      operator = "multiply"
+    } else if ((charCode===191 && event.shiftKey===false) || charCode===111){
+      operator = "divide"
+    }
+    if(operator){ // if operator exists, go on...
+      console.log("Keyboard pressed (operator): " + operator); // debug
+      operatorPressed(operator,state);
+      operator = NaN; // clear var so as not to trigger anything later
+    }
   });
+}
+
+// CLEAR =======================================================================
+function listenForClear(state){
   // mouse click
   $("#clear").on('click', function(){
     console.log("Button pressed: CLEAR"); // debug
@@ -67,21 +117,6 @@ function clear(state){
 
 // NUMBER ======================================================================
 function listenForNumber(state){
-  // keyboard: ESC keyboard
-  $(document).on('keyup', function(event){
-    var charCode = (typeof event.which == "number") ? event.which : event.keyCode;
-    if (charCode>=48 && charCode<=57 && event.shiftKey===false){
-      var digit = (charCode-48).toString();
-      console.log("Keyboard pressed (digit): " + digit); // debug
-      numberPressed(digit,state);
-      digit = NaN;
-    } else if(charCode>=96 && charCode<=105){ // numpad
-      var digit = (charCode-96).toString();
-      console.log("Keyboard pressed (digit, numpad): " + digit); // debug
-      numberPressed(digit,state);
-      digit = NaN;
-    }
-  });
   // mouse click
   $(".digit").on('click', function(){
     var digit = this.value.toString();
@@ -145,16 +180,6 @@ function numberPressed(digit,state){
 
 // DECIMAL =====================================================================
 function listenForDecimal(state){
-  // keyboard: ESC keyboard
-  $(document).on('keyup', function(event){
-    var charCode = (typeof event.which == "number") ? event.which : event.keyCode;
-    if ((charCode===190 && event.shiftKey===false) || charCode===110){
-      console.log("Key pressed (.): DECIMAL POINT"); // debug
-      if(state.result!="error"){
-        decimalPoint(state);
-      }
-    }
-  });
   // mouse click
   $("#decimal").on('click', function(){
     console.log("Button pressed: DECIMAL POINT"); // debug
@@ -202,24 +227,6 @@ function decimalPoint(state){
 // operators: +-*/==============================================================
 function listenForOperator(state){
   var operator;
-  // keyboard: +-*/
-  $(document).on('keyup', function(event){
-    var charCode = (typeof event.which == "number") ? event.which : event.keyCode;
-    if ((charCode===187 && event.shiftKey===true) || charCode===107){
-      operator = "add";
-    } else if ((charCode===189 && event.shiftKey===false) || charCode===109){
-      operator = "subtract"
-    } else if ((charCode===56 && event.shiftKey===true) || charCode===106){
-      operator = "multiply"
-    } else if ((charCode===191 && event.shiftKey===false) || charCode===111){
-      operator = "divide"
-    }
-    if(operator){
-      console.log("Keyboard pressed (operator): " + operator); // debug
-      operatorPressed(operator,state);
-      operator = NaN; // clear var so as not to trigger anything later
-    }
-  });
   // mouse click
   $(".operator").on('click', function(){
     operator = this.value;
@@ -322,14 +329,6 @@ function getSymbol(operator){
 
 // SIGN ========================================================================
 function listenForSign(state){
-  // keyboard: ~ keyboard
-  $(document).on('keyup', function(event){
-    var charCode = (typeof event.which == "number") ? event.which : event.keyCode;
-    if (charCode===192 && event.shiftKey===true){
-      console.log("Key pressed (~): SIGN"); // debug
-      sign(state);
-    }
-  });
   // mouse click
   $("#sign").on('click', function(){
     console.log("Button pressed: SIGN"); // debug
@@ -447,14 +446,6 @@ function equals(state){
 
 // SQUARED =====================================================================
 function listenForSquared(state){
-  // keyboard: ^ keyboard
-  $(document).on('keyup', function(event){
-    var charCode = (typeof event.which == "number") ? event.which : event.keyCode;
-    if (charCode===54 && event.shiftKey===true){
-      console.log("Key pressed (^): SQUARED"); // debug
-      squared(state);
-    }
-  });
   // mouse click
   $("#squared").on('click', function(){
     console.log("Button pressed: SQUARED"); // debug
