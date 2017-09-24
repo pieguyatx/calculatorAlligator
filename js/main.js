@@ -497,7 +497,7 @@ function squared(state){
         state.operatorExists = true;
         state.equalsExists = true;
       }
-      // but if there is BOTH an operator and EQUALS in the history or just empy
+      // but if there is BOTH an operator and EQUALS in the history or just empty
       else if(state.history.text==="" || (state.operatorExists===true && state.equalsExists===true)){
         // update history
         if(parseFloat(state.result)<0){
@@ -516,6 +516,8 @@ function squared(state){
         state.operatorExists = true;
         state.equalsExists = true;
       }
+      // give a message
+      $("#helpText").html("Eat a SQUARE meal every day, I always say.");
     }
   }
 }
