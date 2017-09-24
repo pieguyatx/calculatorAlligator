@@ -112,7 +112,8 @@ function clear(state){
   $("#history").html(state.history.text);   // clear history
   state.result = "0";
   $("#result").html(state.result); // clear result
-  $("#helpText").html("You reset? Feed me more numbers!");
+  let statements = ["You reset? Feed me more numbers!","Yes, let's clear this table.","Tasty!","Mmmmm...","More savory sevens!", "More tasty twos!", "More finger-lickin' fours!","More tempting tens!","Scrumptious!","Very palatable values.","More succulent sixes!","'What a thrill it will be to throw back more threes.' -Me","Empty the buffet!","More flavorful fives!","Why was Six afraid of Seven? ...Because Seven ate Nine! Ha ha!","New number, new plate.","I'll take the Number 5 special, please.","Food goes INTEGER mouth!","Looking forward to some number salad!","Stop feeding me? Don't be IRRATIONAL.","I'll take the PRIME number steak, please.","More zesty zeros!","How about some negative number nougat?","How about a wilted salad of ones?","More excellent eights!","More num-nums made of nines!","I'm hungry for hundreds!","I'm thirsty for thousands!","More mouth-watering millions!","A dozen decimals, please.","Clear the table!","Make way for more food...","I'm opening wide for some ones, next."];
+  $("#helpText").html(randomStatement(statements));
 }
 
 // NUMBER ======================================================================
@@ -404,24 +405,28 @@ function equals(state){
       if(state.history.operator==="add"){
          calc = parseFloat(state.history.numFirst) + parseFloat(state.history.numSecond);
          symbol="+";
-         $("#helpText").html("This is SUM meal!");
+         let statements = ["This is SUM meal!","Great addition to the menu.","More, more, more!","Add this to my bill."];
+         $("#helpText").html(randomStatement(statements));
       }
       else if(state.history.operator==="subtract"){
         calc = parseFloat(state.history.numFirst) - parseFloat(state.history.numSecond);
         calc = reduceErrors(calc); // deal with rounding error
         symbol="&minus;";
-        $("#helpText").html("Is this food, or is this math? I can't tell the DIFFERENCE!");
+        let statements = ["Is this food, or is this math? I can't tell the DIFFERENCE!","Less is more, sometimes.","Your subtraction is sweet perfection."];
+        $("#helpText").html(randomStatement(statements));
       }
       else if(state.history.operator==="multiply"){
         calc = parseFloat(state.history.numFirst) * parseFloat(state.history.numSecond);
         calc = reduceErrors(calc); // deal with rounding error
         symbol="&times;";
-        $("#helpText").html("What a great food PRODUCT!");
+        let statements = ["What a great food PRODUCT!","I like this multiplication of food choices.","Your numbers are mushrooming."];
+        $("#helpText").html(randomStatement(statements));
       }
       else if(state.history.operator==="divide"){
         calc = parseFloat(state.history.numFirst) / parseFloat(state.history.numSecond);
         symbol="&divide;";
-        $("#helpText").html("What's the health QUOTIENT of this meal?");
+        let statements = ["What's the health QUOTIENT of this meal?","I believe in division of labor: you cook, I eat.","Let's divide a pi for dessert."];
+        $("#helpText").html(randomStatement(statements));
       }
       // Replace result with (ans)
       state.result = calc.toString();
@@ -512,7 +517,8 @@ function squared(state){
         state.equalsExists = true;
       }
       // give a message
-      $("#helpText").html("Eat a SQUARE meal every day, I always say.");
+      let statements = ["Eat a SQUARE meal every day, I always say.","Here's TO THE POWER OF TWO people eating!","I've got this eating challenge SQUARED away."];
+      $("#helpText").html(randomStatement(statements));
     }
   }
 }
@@ -531,4 +537,10 @@ function reduceErrors(number){
     }
   }
   return number;
+}
+
+// RANDOM STATEMENT ============================================================
+function randomStatement(statements){  // statements must be an array of strings
+  var i = Math.floor(Math.random()*statements.length);
+  return statements[i];
 }
