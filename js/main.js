@@ -413,6 +413,7 @@ function equals(state){
       }
       else if(state.history.operator==="multiply"){
         calc = parseFloat(state.history.numFirst) * parseFloat(state.history.numSecond);
+        calc = reduceErrors(calc); // deal with rounding error
         symbol="&times;";
         $("#helpText").html("What a great food PRODUCT!");
       }
@@ -479,7 +480,8 @@ function squared(state){
         state.history.text = "(" + state.history.numFirst + " " + symbol + " " + secondNumber + ")&sup2; =" ;
         $("#history").html(state.history.text);
         // now square the new result of the first operation
-        state.result = Math.pow(parseFloat(state.result),2).toString();
+        var calc = Math.pow(parseFloat(state.result),2);
+        state.result = reduceErrors(calc).toString();
         $("#result").html(state.result);
         // update internal history for future calculations
         state.history.numFirst = state.result;
@@ -499,7 +501,8 @@ function squared(state){
         }
         $("#history").html(state.history.text);
         // square the result; update everything appropriately
-        state.result = Math.pow(parseFloat(state.result),2).toString();
+        var calc = Math.pow(parseFloat(state.result),2);
+        state.result = reduceErrors(calc).toString();
         $("#result").html(state.result);
         state.history.numFirst = state.result;
         state.history.operator = "squared";
@@ -511,4 +514,20 @@ function squared(state){
       $("#helpText").html("Eat a SQUARE meal every day, I always say.");
     }
   }
+}
+
+// Handle rounding errors that arise w/ Javascript multiplication===============
+function reduceErrors(number){
+  // If decimal present and lots of zeros, cut the number short
+  var numStr = number.toString();
+  var indexDecimal = numStr.indexOf(".");
+  if(indexDecimal>0){
+    // look for 10 zeros after the decimal pt
+    var indexZeros = numStr.indexOf("0000000000",indexDecimal);
+    if(indexZeros>0){
+      numStr = numStr.slice(0,indexZeros);
+      number = parseFloat(numStr);
+    }
+  }
+  return number;
 }
