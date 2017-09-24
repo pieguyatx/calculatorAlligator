@@ -350,6 +350,13 @@ function sign(state){
     else{
       $("#helpText").html("Neat number! No NEGATIVE attitude from me!");
     }
+    // If the history has an EQUALS, erase the history (new problem starting)
+    if(state.equalsExists===true){
+      state.operatorExists = false;
+      state.equalsExists = false;
+      state.history = {"numFirst": undefined, "operator": undefined, "numSecond": undefined, "text": ""};
+      $("#history").html(state.history.text);   // clear history
+    }
   }
   // if (resultNum) is (0) or (0.) or empty, do nothing
   else{
