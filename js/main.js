@@ -23,7 +23,7 @@ $(document).ready(function(){
   // Listen for signal: SIGN
   listenForSign();
   // Listen for signal: EQUALS
-  listenForEquals();
+  listenForEquals(state);
   // Listen for signal: SQUARED
   listenForSquared();
 
@@ -62,7 +62,7 @@ function clear(state){
   $("#history").html(state.history.text);   // clear history
   state.result = "0";
   $("#result").html(state.result); // clear result
-  $("#helpText").html("Feed me more numbers!");
+  $("#helpText").html("You reset? Feed me more numbers!");
 }
 
 // NUMBER ======================================================================
@@ -229,21 +229,34 @@ function listenForOperator(state){
 }
 
 function operatorPressed(operator,state){
-  console.log(state); // debug
   // If there is NO 1st operator in the history already (and no equals?)...
   if(state.operatorExists===false && state.equalsExists===false){
     // assume (1st num) = number on result (stored in string?)
     state.history.numFirst = state.result;
+    // if any number is negative (<0), put it in parentheses
+    // TO DO LATER AFTER SIGN() is defined
+
     // set history as (1st num) (operator)
     state.history.operator = operator;
     var symbol;
-    if(operator==="add"){symbol="+";}
-    else if(operator==="subtract"){symbol="&minus;";}
-    else if(operator==="multiply"){symbol="&times;";}
-    else if(operator==="divide"){symbol="&divide;";}
+    if(operator==="add"){
+      symbol="+";
+      $("#helpText").html("ADD some good ingredients.");
+    }
+    else if(operator==="subtract"){
+      symbol="&minus;";
+      $("#helpText").html("Don't SUBTRACT too much flavor...");
+    }
+    else if(operator==="multiply"){
+      symbol="&times;";
+      $("#helpText").html("MULTIPLY the portion size!");
+    }
+    else if(operator==="divide"){
+      symbol="&divide;";
+      $("#helpText").html("That DIVISOR looks delicious.");
+    }
     state.history.text = state.history.numFirst.concat(" " + symbol);
     $("#history").html(state.history.text);
-      // if any number is negative (<0), put it in parentheses
     // clear result results (empty)
     state.result = "";
     $("#result").html(state.result);
@@ -253,6 +266,8 @@ function operatorPressed(operator,state){
     state.equalsExists = false;
   }
   // If there IS a 1st operator in the history already, and NO equals sign...
+  else if(state.operatorExists===true && state.equalsExists===false){
+
     // ...and if the number on result is empty...
       // Replace the 1st operator in the history with the new operator
     // ...and if the number on result exists/not empty...
@@ -264,7 +279,9 @@ function operatorPressed(operator,state){
       // Replace result with (ans)
       // store status of "operatorExists" to true
       // store status of "equalsExists" to true
+  }
   // If there IS a 1st operator in the history already AND an equals sign...
+  if(state.operatorExists===true && state.equalsExists===true){
     // assuming result is NOT empty (otherwise there would be no equals)...
     // Assume (resultNum) = (1st num)
     // Replace history with (1st num) (new operator)
@@ -272,6 +289,7 @@ function operatorPressed(operator,state){
     // Empty the result
     // store status of "operatorExists" to true
     // store status of "equalsExists" to false
+  }
 };
 
 // SIGN ========================================================================
@@ -301,42 +319,79 @@ function sign(){
       // flip resultNum to opposite sign
 
 // EQUALS ======================================================================
-function listenForEquals(){
+function listenForEquals(state){
   // keyboard: = keyboard
   $(document).on('keyup', function(event){
     var charCode = (typeof event.which == "number") ? event.which : event.keyCode;
     if (charCode===187 && event.shiftKey===false){
       console.log("Key pressed (=): EQUALS"); // debug
-      sign();
+      equals(state);
     }
   });
   // mouse click
   $("#equals").on('click', function(){
     console.log("Button pressed: EQUALS"); // debug
-    equals();
+    equals(state);
   });
 }
 
-function equals(){
+function equals(state){
+  // If (operatorExists) is false && (equalsExists) is false
+  // OR if (equalsExists) in history already
+  if(state.equalsExists===true || (state.operatorExists===false && state.equalsExists===false)){
+    // do nothing; or just do some silly animation? "Are you calculating something?"
+    $("#helpText").html("That equals itself, doesn't it?")
+  }
+  // If (operatorExists) is true && (equalsExists) is false...
+  else if(state.operatorExists===true && state.equalsExists===false){
+    // If result is empty
+    if(state.result===""){
+      // do nothing; or have gator say "I need a number" or something
+      $("#helpText").html("What number are you going to enter?");
+    }
+    // If result is not empty (resultNum) exists/has value
+    else if(state.result!=""){
+      // Assume (1st num) = the one in the history already
+      // Assume (2nd num) = number on result
+      state.history.numSecond = state.result;
+      // Calculate (1st num) (operator) (2nd num); store as (ans)
+      var calc, symbol;
+      if(state.history.operator==="add"){
+         calc = parseFloat(state.history.numFirst) + parseFloat(state.history.numSecond);
+         symbol="+";
+         $("#helpText").html("This is SUM meal!");
+      }
+      else if(state.history.operator==="subtract"){
+        calc = parseFloat(state.history.numFirst) - parseFloat(state.history.numSecond);
+        symbol="&minus;";
+        $("#helpText").html("Is this food, or is this math? I can't tell the DIFFERENCE!");
+      }
+      else if(state.history.operator==="multiply"){
+        calc = parseFloat(state.history.numFirst) * parseFloat(state.history.numSecond);
+        symbol="&times;";
+        $("#helpText").html("What a great food PRODUCT!");
+      }
+      else if(state.history.operator==="divide"){
+        calc = parseFloat(state.history.numFirst) / parseFloat(state.history.numSecond);
+        symbol="&divide;";
+        $("#helpText").html("What's the health QUOTIENT of this meal?");
+      }
+      // Replace result with (ans)
+      state.result = calc.toString();
+      $("#result").html(state.result);
+      // if second number is negative (<0), put it in parentheses
+      // TO DO: Update this when sign() function equalsExists
 
+      // Replace history with (1st num) (operator) (2nd num) =
+      state.history.text = state.history.numFirst.toString() + " " + symbol + " " + state.history.numSecond.toString() + " =";
+      $("#history").html(state.history.text);
+      // store status of "operatorExists" to true
+      state.operatorExists = true;
+      // store status of "equalsExists" to true
+      state.equalsExists = true;
+    }
+  }
 }
-
-  // If button is (equals)
-    // If (operatorExists) is false && (equalsExists) is false
-    // OR if (equalsExists) in history already
-      // do nothing; or just do some silly animation? "Are you calculating something?"
-    // If (operatorExists) is true && (equalsExists) is false...
-      // If result is empty
-        // do nothing; ir have gator say "I need a number" or something
-      // If result is not empty (resultNum) exists/has value
-        // Assume (1st num) = the one in the history already
-        // Assume (2nd num) = number on result
-        // Calculate (1st num) (operator) (2nd num); store as (ans)
-        // Replace history with (1st num) (operator) (2nd num) =
-          // if any number is negative (<0), put it in parentheses
-        // Replace result with (ans)
-        // store status of "operatorExists" to true
-        // store status of "equalsExists" to true
 
 // SQUARED =====================================================================
 function listenForSquared(){
