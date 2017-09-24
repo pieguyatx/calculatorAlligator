@@ -230,56 +230,66 @@ function listenForOperator(state){
 }
 
 function operatorPressed(operator,state){
-  // If there is NO 1st operator in the history already (and no equals?)...
-  if(state.operatorExists===false && state.equalsExists===false){
-    // assume (1st num) = number on result (stored in string?)
-    state.history.numFirst = state.result;
-    // if any number is negative (<0), put it in parentheses
-    // TO DO LATER AFTER SIGN() is defined
-
-    // set history as (1st num) (operator)
-    state.history.operator = operator;
-    let symbol;
-    symbol = getSymbol(operator);
-    state.history.text = state.history.numFirst.concat(" " + symbol);
-    $("#history").html(state.history.text);
-    // clear result results (empty)
-    state.result = "";
-    $("#result").html(state.result);
-    // store status of "operatorExists" to true
-    state.operatorExists = true;
-    // store status of "equalsExists" to false
-    state.equalsExists = false;
+  // If result is ERROR
+  if(state.result==="error"){
+    $("#helpText").html("Press the ESC key or AC button to reset this meal.");
   }
-  // If there IS a 1st operator in the history already, and NO equals sign...
-  else if(state.operatorExists===true && state.equalsExists===false){
-    // ...and if the number in result is empty...
-    if(state.result===""){
-      // Replace the 1st operator in the history with the new operator
+  // If no error in the result...
+  else {
+    // If there is NO 1st operator in the history already (and no equals?)...
+    if(state.operatorExists===false && state.equalsExists===false){
+      // assume (1st num) = number on result (stored in string?)
+      state.history.numFirst = state.result;
+      // if any number is negative (<0), put it in parentheses
+      // TO DO LATER AFTER SIGN() is defined
+
+      // set history as (1st num) (operator)
+      state.history.operator = operator;
       let symbol;
       symbol = getSymbol(operator);
       state.history.text = state.history.numFirst.concat(" " + symbol);
       $("#history").html(state.history.text);
-    }
-    // ...and if the number on result exists/not empty...
-      // Assume (1st num) = the one in the history already
-      // Assume (2nd num) = number on result
-      // Calculate (1st num) (operator) (2nd num); store as (ans)
-      // Replace history with (1st num) (operator) (2nd num) =
-        // if any number is negative (<0), put it in parentheses
-      // Replace result with (ans)
+      // clear result results (empty)
+      state.result = "";
+      $("#result").html(state.result);
       // store status of "operatorExists" to true
-      // store status of "equalsExists" to true
-  }
-  // If there IS a 1st operator in the history already AND an equals sign...
-  if(state.operatorExists===true && state.equalsExists===true){
-    // assuming result is NOT empty (otherwise there would be no equals)...
-    // Assume (resultNum) = (1st num)
-    // Replace history with (1st num) (new operator)
-      // if any number is negative (<0), put it in parentheses
-    // Empty the result
-    // store status of "operatorExists" to true
-    // store status of "equalsExists" to false
+      state.operatorExists = true;
+      // store status of "equalsExists" to false
+      state.equalsExists = false;
+    }
+    // If there IS a 1st operator in the history already, and NO equals sign...
+    else if(state.operatorExists===true && state.equalsExists===false){
+      // ...and if the number in result is empty...
+      if(state.result===""){
+        // Replace the 1st operator in the history with the new operator
+        let symbol;
+        symbol = getSymbol(operator);
+        state.history.text = state.history.numFirst.concat(" " + symbol);
+        $("#history").html(state.history.text);
+      }
+      // ...and if the number on result exists/not empty...
+      else if(state.result!=""){
+        // Assume (1st num) = the one in the history already
+
+        // Assume (2nd num) = number on result
+        // Calculate (1st num) (operator) (2nd num); store as (ans)
+        // Replace history with (1st num) (operator) (2nd num) =
+          // if any number is negative (<0), put it in parentheses
+        // Replace result with (ans)
+        // store status of "operatorExists" to true
+        // store status of "equalsExists" to true
+      }
+    }
+    // If there IS a 1st operator in the history already AND an equals sign...
+    if(state.operatorExists===true && state.equalsExists===true){
+      // assuming result is NOT empty (otherwise there would be no equals)...
+      // Assume (resultNum) = (1st num)
+      // Replace history with (1st num) (new operator)
+        // if any number is negative (<0), put it in parentheses
+      // Empty the result
+      // store status of "operatorExists" to true
+      // store status of "equalsExists" to false
+    }
   }
 };
 
