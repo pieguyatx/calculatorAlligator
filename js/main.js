@@ -408,6 +408,7 @@ function equals(state){
       }
       else if(state.history.operator==="subtract"){
         calc = parseFloat(state.history.numFirst) - parseFloat(state.history.numSecond);
+        calc = reduceErrors(calc); // deal with rounding error
         symbol="&minus;";
         $("#helpText").html("Is this food, or is this math? I can't tell the DIFFERENCE!");
       }
