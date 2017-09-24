@@ -8,8 +8,7 @@
 body{
   text-align: center;
   color: black;
-  font-family: 'Muli', sans-serif;
-  font-family: 'Encode Sans Expanded', sans-serif;
+  font-family: 'Exo 2', sans-serif;
   background: white;
   margin: 0;
 }
@@ -42,6 +41,7 @@ header #mainChar{
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-top: 10px;
 }
 header svg{
   width: 300px;
@@ -68,8 +68,8 @@ header svg path:hover{
   text-align: left;
   padding: 5px;
   font-family: 'Patrick Hand SC', cursive;
-  font-size: 29px;
-  line-height: 21px;  
+  font-size: 25px;
+  line-height: 30px;
 }
 section{
   margin: 10px;
@@ -104,13 +104,14 @@ section#calculator button{
   height: 40px;
   padding: 10px 20px 10px 20px;
   margin: 4px;
+  font-family: 'Exo 2', sans-serif;
 }
 section#calculator button#clear{
   width: 113px;
 }
 footer{
   margin: 10px;
-  font-family: 'Oxygen', sans-serif;
+  font-family: 'Exo 2', sans-serif;
 }
 
 /* Mobile responsiveness */

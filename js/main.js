@@ -25,7 +25,7 @@ $(document).ready(function(){
   // Listen for signal: EQUALS
   listenForEquals(state);
   // Listen for signal: SQUARED
-  listenForSquared();
+  listenForSquared(state);
 
   // result result
 
@@ -439,36 +439,72 @@ function equals(state){
 }
 
 // SQUARED =====================================================================
-function listenForSquared(){
+function listenForSquared(state){
   // keyboard: ^ keyboard
   $(document).on('keyup', function(event){
     var charCode = (typeof event.which == "number") ? event.which : event.keyCode;
     if (charCode===54 && event.shiftKey===true){
       console.log("Key pressed (^): SQUARED"); // debug
-      sign();
+      squared(state);
     }
   });
   // mouse click
   $("#squared").on('click', function(){
     console.log("Button pressed: SQUARED"); // debug
-    squared();
+    squared(state);
   });
 }
 
-function squared(){
-
-}
-
-  // If button is (squared),
+function squared(state){
+  // If result = error, do nothing, give message
+  if(state.result==="error"){
+    $("#helpText").html("Press the ESC key or AC button to reset this meal.");
+  }
+  else{
     // If result empty,
-      // If (operatorExists) = true AND (equalsExists) = false
-        // do not calculate
-        // give "error", e.g. "Can't square a multiplication sign!"
-      // Else if both false (empty history)
-        // do nothing "need a number"
+    if(state.result===""){
+      // do not calculate; give message e.g. "Can't square a multiplication sign!"
+      $("#helpText").html("What number are you squaring?");
+    }
     // If result !empty,
-      // calculate (resultNum)^2 = (ans)
-      // Set result to (ans)
-      // set history to (resultNum)^2 =
-      // store status of "operatorExists" to false
-      // store status of "equalsExists" to true
+    else if(state.result!=""){
+      // If there is ONLY an operator and no EQUALS in the history
+      if(state.operatorExists===true && state.equalsExists===false){
+        // do the first operation before squaring
+        equals(state);
+        // show the full calculation in the history
+        let symbol = getSymbol(state.history.operator);
+        state.history.text = "(" + state.history.numFirst + " " + symbol + " " + state.history.numSecond + ")&sup2; =" ;
+        $("#history").html(state.history.text);
+        // now square the new result of the first operation
+        state.result = Math.pow(parseFloat(state.result),2).toString();
+        $("#result").html(state.result);
+        // update internal history for future calculations
+        state.history.numFirst = state.result;
+        state.history.operator = "squared";
+        state.history.numSecond = undefined;
+        state.operatorExists = true;
+        state.equalsExists = true;
+      }
+      // If there is BOTH an operator and EQUALS in the history or just empy
+      if(state.history.text==="" || (state.operatorExists===true && state.equalsExists===true)){
+        // update history
+        if(parseFloat(state.result)<0){
+          state.history.text = "(" + state.result + ")&sup2; =" ;
+        }
+        else{
+          state.history.text = state.result + "&sup2; =" ;
+        }
+        $("#history").html(state.history.text);
+        // square the result; update everything appropriately
+        state.result = Math.pow(parseFloat(state.result),2).toString();
+        $("#result").html(state.result);
+        state.history.numFirst = state.result;
+        state.history.operator = "squared";
+        state.history.numSecond = undefined;
+        state.operatorExists = true;
+        state.equalsExists = true;
+      }
+    }
+  }
+}
