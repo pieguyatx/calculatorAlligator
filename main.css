@@ -8,7 +8,7 @@
 body{
   text-align: center;
   color: black;
-  font-family: 'Exo 2', sans-serif;
+  font-family: 'Abel', sans-serif;
   background: white;
   margin: 0;
 }
@@ -25,7 +25,7 @@ header{
   background: lightgray;
 }
 h1, h2, h3{
-  font-family: 'Exo 2', sans-serif;
+  font-family: 'Abel', sans-serif;
 }
 header h1{
   font-size: 4em;
@@ -104,14 +104,14 @@ section#calculator button{
   height: 40px;
   padding: 10px 20px 10px 20px;
   margin: 4px;
-  font-family: 'Exo 2', sans-serif;
+  font-family: 'Abel', sans-serif;
 }
 section#calculator button#clear{
   width: 113px;
 }
 footer{
   margin: 10px;
-  font-family: 'Exo 2', sans-serif;
+  font-family: 'Abel', sans-serif;
 }
 
 /* Mobile responsiveness */
