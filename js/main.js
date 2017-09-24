@@ -21,7 +21,7 @@ $(document).ready(function(){
   // Listen for signal: operator +-*/
   listenForOperator(state);
   // Listen for signal: SIGN
-  listenForSign();
+  listenForSign(state);
   // Listen for signal: EQUALS
   listenForEquals(state);
   // Listen for signal: SQUARED
@@ -37,7 +37,7 @@ $(document).ready(function(){
 // TO DO: will need to visually denote button presses somehow when keyboard is used
 // TO DO: Add visualizations..
 // TO DO: Add notes/popups? with tips, like ESC will also reset
-
+// TO DO: consolidate keyboard input into one big "listener" instead of multiple ones
 // CLEAR =======================================================================
 function listenForClear(state){
   // keyboard: ESC keyboard
@@ -241,9 +241,6 @@ function operatorPressed(operator,state){
     if(state.operatorExists===false && state.equalsExists===false){
       // assume (1st num) = number on result (stored in string?)
       state.history.numFirst = state.result;
-      // if any number is negative (<0), put it in parentheses
-      // TO DO LATER AFTER SIGN() is defined
-
       // set history as (1st num) (operator)
       state.history.operator = operator;
       let symbol;
@@ -278,7 +275,6 @@ function operatorPressed(operator,state){
         equals(state); // calculate before updating operator
         // Replace history with (1st num) (operator) (2nd num) =
         state.history.operator = operator;
-
       }
     }
     // If there IS a 1st operator in the history already AND an equals sign...
@@ -325,30 +321,31 @@ function getSymbol(operator){
 }
 
 // SIGN ========================================================================
-function listenForSign(){
+function listenForSign(state){
   // keyboard: ~ keyboard
   $(document).on('keyup', function(event){
     var charCode = (typeof event.which == "number") ? event.which : event.keyCode;
     if (charCode===192 && event.shiftKey===true){
       console.log("Key pressed (~): SIGN"); // debug
-      sign();
+      sign(state);
     }
   });
   // mouse click
   $("#sign").on('click', function(){
     console.log("Button pressed: SIGN"); // debug
-    sign();
+    sign(state);
   });
 }
 
-function sign(){
-
+function sign(state){
+  // if (resultNum) is (0) or (0.) or empty, do nothing
+  // if (resultNum) is != (0) or (0.)
+  if(state.result!="0" || state.result!="0."){
+    // flip resultNum to opposite sign
+    state.result = (-parseFloat(state.result)).toString();
+    $("#result").html(state.result);
+  }
 }
-
-  // If button is (sign), run SIGN function
-    // if (resultNum) is (0) or (0.) or empty, do nothing
-    // if (resultNum) is != (0) or (0.)
-      // flip resultNum to opposite sign
 
 // EQUALS ======================================================================
 function listenForEquals(state){
@@ -414,7 +411,7 @@ function equals(state){
       // if second number is negative (<0), put it in parentheses
       var numSecondString = state.history.numSecond.toString();
       if(parseFloat(state.history.numSecond)<0){
-        numSecondString = "(-" + numSecondString + ")";
+        numSecondString = "(" + numSecondString + ")";
       }
       // Replace history with (1st num) (operator) (2nd num) =
       state.history.text = state.history.numFirst.toString() + " " + symbol + " " + numSecondString + " =";
