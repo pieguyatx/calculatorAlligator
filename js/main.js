@@ -436,7 +436,7 @@ function equals(state){
         symbol="&divide;";
         let statements;
         if(calc===undefined){
-          statements = ["Dividing by zero is undefined.","Sorry, I don't understand dividing by zero.","What does it mean to divide exactly by zero?","How do I divide a meal by zero people?","How do I divide a cake by zero people?"];
+          statements = ["Dividing by zero is undefined.","Sorry, I don't understand dividing by zero.","What does it mean to divide exactly by zero?","How do I divide a meal by zero people?","How do I divide a cake among zero people?"];
           state.result="error";
           $("#result").html(state.result);
         }
