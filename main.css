@@ -83,10 +83,10 @@ section#calculator .container{
   background-color: lightgray;
 }
 section#calculator #display{
-  width: 350px;
+  width: 355px;
   background-color: white;
   padding: 0;
-  margin: 0;
+  margin: 0 auto 10px auto;
 }
 section#calculator #display #history{
   height: 23px;
@@ -101,14 +101,36 @@ section#calculator #display #result{
   padding: 4px;
 }
 section#calculator button{
-  width: 50px;
-  height: 40px;
-  padding: 10px 20px 10px 20px;
+  width: 80px;
+  height: 55px;
+  padding: 5px;
   margin: 4px;
   font-family: 'Abel', sans-serif;
+  font-size: 30px;
+  border: solid 1px gray;
+  border-radius: 5px;
+  background: rgba(226,226,226,1);
+  background: -moz-linear-gradient(45deg, rgba(226,226,226,1) 0%, rgba(219,219,219,1) 0%, rgba(254,254,254,1) 100%);
+  background: -webkit-gradient(left bottom, right top, color-stop(0%, rgba(226,226,226,1)), color-stop(0%, rgba(219,219,219,1)), color-stop(100%, rgba(254,254,254,1)));
+  background: -webkit-linear-gradient(45deg, rgba(226,226,226,1) 0%, rgba(219,219,219,1) 0%, rgba(254,254,254,1) 100%);
+  background: -o-linear-gradient(45deg, rgba(226,226,226,1) 0%, rgba(219,219,219,1) 0%, rgba(254,254,254,1) 100%);
+  background: -ms-linear-gradient(45deg, rgba(226,226,226,1) 0%, rgba(219,219,219,1) 0%, rgba(254,254,254,1) 100%);
+  background: linear-gradient(45deg, rgba(226,226,226,1) 0%, rgba(219,219,219,1) 0%, rgba(254,254,254,1) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e2e2e2', endColorstr='#fefefe', GradientType=1 );
+}
+section#calculator button:active{
+  color: #02cc0e; /* light green */
+  background: rgba(209,209,209,1);
+  background: -moz-linear-gradient(-45deg, rgba(209,209,209,1) 0%, rgba(219,219,219,1) 0%, rgba(254,254,254,1) 100%);
+  background: -webkit-gradient(left top, right bottom, color-stop(0%, rgba(209,209,209,1)), color-stop(0%, rgba(219,219,219,1)), color-stop(100%, rgba(254,254,254,1)));
+  background: -webkit-linear-gradient(-45deg, rgba(209,209,209,1) 0%, rgba(219,219,219,1) 0%, rgba(254,254,254,1) 100%);
+  background: -o-linear-gradient(-45deg, rgba(209,209,209,1) 0%, rgba(219,219,219,1) 0%, rgba(254,254,254,1) 100%);
+  background: -ms-linear-gradient(-45deg, rgba(209,209,209,1) 0%, rgba(219,219,219,1) 0%, rgba(254,254,254,1) 100%);
+  background: linear-gradient(135deg, rgba(209,209,209,1) 0%, rgba(219,219,219,1) 0%, rgba(254,254,254,1) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d1d1d1', endColorstr='#fefefe', GradientType=1 );
 }
 section#calculator button#clear{
-  width: 113px;
+  width: 172px;
 }
 footer{
   margin: 10px;
