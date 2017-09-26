@@ -149,14 +149,6 @@ function numberPressed(digit,state){
         }
       }
     }
-//    else if(state.operatorExists===true && state.equalsExists===false){
-      // If there IS a 1st operator in the history already AND NO (equals) in history...
-        // If current number = "0" without decimal point
-          // put in result replacing 0
-        // else if current number is empty, add in digit
-        // else if current number != "0" and not empty,
-          // add digit to number on right-hand side
-//    }
     // If there's already an (equals) in the history
     else if(state.equalsExists===true){
       clear(state);
@@ -419,21 +411,52 @@ function equals(state){
         calc = parseFloat(state.history.numFirst) * parseFloat(state.history.numSecond);
         calc = reduceErrors(calc); // deal with rounding error
         symbol="&times;";
-        let statements = ["What a great food PRODUCT!","I like this multiplication of food choices.","Your numbers are mushrooming."];
+        let statements;
+        if(calc>1e15){
+          statements = ["Over a QUADRILLION? I am honored!","Your quest for quadrillion has been fulfilled!","How about gettting me a good GOOGOL while you'are at it?","What a blessed banquet!"];
+        }
+        else if(calc>100000){
+          statements = ["What a humongous PRODUCT!","I like these large portions.","Thanks for these enormous edibles.","What FACTORS led you to produce this big number?"];
+        }
+        else{
+          statements = ["What a great food PRODUCT!","I like this multiplication of food choices.","Your numbers are mushrooming.","This PRODUCT is perplexingly good.","Mighty multiplication strikes again!"];
+        }
         $("#helpText").html(randomStatement(statements));
       }
       else if(state.history.operator==="divide"){
-        calc = parseFloat(state.history.numFirst) / parseFloat(state.history.numSecond);
+        if(state.history.numSecond==0){
+          calc = undefined;
+        }
+        else{
+          calc = parseFloat(state.history.numFirst) / parseFloat(state.history.numSecond);
+        }
         symbol="&divide;";
-        let statements = ["What's the health QUOTIENT of this meal?","I believe in division of labor: you cook, I eat.","Let's divide a pi for dessert."];
+        let statements;
+        if(calc===undefined){
+          statements = ["Dividing by zero is undefined.","Sorry, I don't understand dividing by zero.","What does it mean to divide exactly by zero?","How do I divide a meal by zero people?","How do I divide a cake by zero people?"];
+          state.result="error";
+          $("#result").html(state.result);
+        }
+        else if(Math.abs(calc)<1e-10){
+          statements = ["I'll digest this tiny QUOTIENT quickly.","Are you serving me air?","Bigger numbers, please.","The tiniest of tastes!"];
+        }
+        else if(Math.abs(calc)<0.01){
+          statements = ["We shouldn't quibble about this tiny QUOTIENT.","Yes, even this fraction of food is a feast.","That mini morsel makes a mighty meal!"];
+        }
+        else{
+          statements = ["What's the health QUOTIENT of this meal?","I believe in division of labor: you cook, I eat.","Let's divide a pi for dessert."];
+        }
         $("#helpText").html(randomStatement(statements));
       }
       // Replace result with (ans)
-      state.result = calc.toString();
-      $("#result").html(state.result);
+      if(state.result!="error"){
+        state.result = calc.toString();
+        $("#result").html(state.result);
+      }
       // if result is zero, make a comment
       if(state.result==="0"){
-        $("#helpText").html("Nothing to eat?");
+        let statements = ["Nothing to eat?","Ever notice how the number zero looks like a warm, crusty pizza?","Zero reminds me of donuts...","Zero reminds me of gyros.","Zero reminds me of hero sandwiches.","Zero looks like a cookie, doesn't it?","Empty plate?","I'd love to take about out of that zero.","A bite of nothing?","Zero looks like onion rings.","Zero looks likee fried calamari.","Zero looks like a slice of tomato.","Zero looks like a slice of cucumber.","Zero looks like a pepperoni.","I can eat a whole number next time."];
+        $("#helpText").html(randomStatement(statements));
       }
       // if second number is negative (<0), put it in parentheses
       var numSecondString = state.history.numSecond.toString();
