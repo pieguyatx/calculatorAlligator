@@ -551,15 +551,29 @@ function squared(state){
 
 // Handle rounding errors that arise w/ Javascript multiplication===============
 function reduceErrors(number){
-  // If decimal present and lots of zeros, cut the number short
-  var numStr = number.toString();
-  var indexDecimal = numStr.indexOf(".");
-  if(indexDecimal>0){
-    // look for 10 zeros after the decimal pt
-    var indexZeros = numStr.indexOf("00000000",indexDecimal);
-    if(indexZeros>0){
-      numStr = numStr.slice(0,indexZeros);
-      number = parseFloat(numStr);
+  // If semi-small number, decimal present, and lots of zeros, cut the number short
+  if(number<1e20){
+    var numStr = number.toString();
+    var indexDecimal = numStr.indexOf(".");
+    if(indexDecimal>0){
+      // look for several zeros after the decimal pt
+      if(number>100){
+        var indexZeros = numStr.indexOf("00000000",indexDecimal);
+      }
+      else{
+        var indexZeros = numStr.indexOf("0000000000",indexDecimal);
+      }
+      if(indexZeros>0){
+        // if scientific notation present, keep it
+        var indexE = numStr.indexOf("e",indexDecimal);
+        if(indexE>0){
+          numStr = numStr.slice(0,indexZeros) + numStr.slice(indexE,numStr.length);
+        }
+        else{
+          numStr = numStr.slice(0,indexZeros);
+        }
+        number = parseFloat(numStr);
+      }
     }
   }
   return number;

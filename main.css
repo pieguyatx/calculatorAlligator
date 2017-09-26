@@ -28,12 +28,12 @@ h1, h2, h3{
   font-family: 'Exo 2', sans-serif;
 }
 header h1{
-  font-size: 4em;
+  font-size: 55px;
   margin: 0;
 }
 header h2{
-  font-size: 1.4em;
-  margin-top: -0.4em;
+  font-size: 20px;
+  margin-top: 0;
   margin-bottom: 0;
 }
 header #mainChar{
@@ -72,30 +72,31 @@ header svg path:hover{
   line-height: 30px;
 }
 section{
-  margin: 10px;
+  margin: 30px 0 30px 0;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 section#calculator .container{
-  padding: 4px;
+  padding: 10px;
   border: solid gray 1px;
   background-color: lightgray;
 }
 section#calculator #display{
-  width: 236px;
+  width: 350px;
   background-color: white;
   padding: 0;
-  margin: 4px;
+  margin: 0;
 }
 section#calculator #display #history{
-  height: 20px;
-  font-size: 0.8em;
+  height: 23px;
+  font-size: 18px;
   padding: 4px;
+  text-align: left;
 }
 section#calculator #display #result{
-  height: 30px;
-  font-size: 1.2em;
+  height: 45px;
+  font-size: 30px;
   text-align: right;
   padding: 4px;
 }
