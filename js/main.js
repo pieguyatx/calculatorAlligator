@@ -556,7 +556,7 @@ function reduceErrors(number){
   var indexDecimal = numStr.indexOf(".");
   if(indexDecimal>0){
     // look for 10 zeros after the decimal pt
-    var indexZeros = numStr.indexOf("0000000000",indexDecimal);
+    var indexZeros = numStr.indexOf("00000000",indexDecimal);
     if(indexZeros>0){
       numStr = numStr.slice(0,indexZeros);
       number = parseFloat(numStr);
