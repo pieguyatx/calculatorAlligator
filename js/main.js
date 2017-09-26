@@ -331,7 +331,7 @@ function listenForSign(state){
 
 function sign(state){
   // if (resultNum) is != (0) or (0.)
-  if(state.result!="0" || state.result!="0."){
+  if(state.result!="0" && state.result!="0."){
     // flip resultNum to opposite sign
     state.result = (-parseFloat(state.result)).toString();
     $("#result").html(state.result);
@@ -350,9 +350,12 @@ function sign(state){
       $("#history").html(state.history.text);   // clear history
     }
   }
+  else if(state.result===""){
+    $("#helpText").html("You need to give a number, before you can change its sign.");
+  }
   // if (resultNum) is (0) or (0.) or empty, do nothing
   else{
-    $("#helpText").html("Zero food? That has no SIGN.");
+    $("#helpText").html("Zero food? Zero has no SIGN.");
   }
 }
 
