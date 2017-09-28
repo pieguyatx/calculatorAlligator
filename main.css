@@ -141,8 +141,26 @@ footer{
 }
 
 /* Mobile responsiveness */
-@media only screen and (min-width: 1060px) {
-
+@media only screen and (max-width: 1280px) {
+  section#calculator{
+    position: fixed;
+    z-index: 1;
+    margin: 0;
+    left: 20;
+    top: 20;
+  }
+  section#calculator .container{
+    -webkit-box-shadow: 10px 10px 36px -3px rgba(0,0,0,0.47);
+    -moz-box-shadow: 10px 10px 36px -3px rgba(0,0,0,0.47);
+    box-shadow: 10px 10px 36px -3px rgba(0,0,0,0.47);
+  }
+  header{
+    padding: 10px 0 10px 450px;
+    text-align: left;
+  }
+  header #mainChar{
+    justify-content: left;
+  }
 }
 @media only screen and (max-width: 768px) {
   body{
