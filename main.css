@@ -81,12 +81,15 @@ section#calculator .container{
   padding: 10px;
   border: solid gray 1px;
   background-color: lightgray;
+  border-radius: 10px;
+  border-style: outset;
 }
 section#calculator #display{
   width: 355px;
   background-color: white;
   padding: 0;
   margin: 0 auto 10px auto;
+  border-style: inset;
 }
 section#calculator #display #history{
   height: 23px;
@@ -107,7 +110,7 @@ section#calculator button{
   margin: 4px;
   font-family: 'Abel', sans-serif;
   font-size: 30px;
-  border: solid 1px gray;
+  border: outset 1px gray;
   border-radius: 5px;
   background: rgba(226,226,226,1);
   background: -moz-linear-gradient(45deg, rgba(226,226,226,1) 0%, rgba(219,219,219,1) 0%, rgba(254,254,254,1) 100%);
