@@ -143,8 +143,8 @@ function numberPressed(digit,state){
         // add digit to number on right-hand side
         state.result = state.result.concat(digit);
         $("#result").html(state.result);
-        // if it's a 2nd number, division, and divisor>1, output "divisor" msg
-        if(state.history.numFirst!=undefined && state.history.operator==="divide" && parseInt(state.result)>1){
+        // if it's a 2nd number, division, and divisor>1 & length==2 exactly, output "divisor" msg
+        if(state.history.numFirst!=undefined && state.history.operator==="divide" && parseInt(state.result)>1 && state.result.length===3){
           displayHelp("That DIVISOR looks delectable.");
         }
       }
@@ -275,18 +275,31 @@ function operatorPressed(operator,state){
         equals(state); // calculate before updating operator
         // Replace history with (1st num) (operator) (2nd num) =
         state.history.operator = operator;
+        // Assume (resultNum) = (1st num)
+        state.history.numFirst = state.result;
+        state.history.numSecond = undefined;
+        // Replace history with (1st num) (new operator)
+        let symbol = getSymbol(operator,true);
+        state.history.text = state.history.numFirst.concat(" " + symbol);
+        $("#history").html(state.history.text);
+        // Empty the result
+        state.result = "";
+        $("#result").html("")
+        // store status of "operatorExists" to true
+        state.operatorExists = true;
+        // store status of "equalsExists" to false
+        state.equalsExists = false;
       }
     }
     // If there IS a 1st operator in the history already AND an equals sign...
-    if(state.operatorExists===true && state.equalsExists===true){
+    else if(state.operatorExists===true && state.equalsExists===true){
       // assuming result is NOT empty (otherwise there would be no equals)...
       // Assume (resultNum) = (1st num)
       state.history.numFirst = state.result;
       state.history.numSecond = undefined;
       // Replace history with (1st num) (new operator)
       state.history.operator = operator;
-      let symbol;
-      symbol = getSymbol(operator);
+      let symbol = getSymbol(operator);
       state.history.text = state.history.numFirst.concat(" " + symbol);
       $("#history").html(state.history.text);
       // Empty the result
@@ -300,22 +313,26 @@ function operatorPressed(operator,state){
   }
 };
 
-function getSymbol(operator){
+function getSymbol(operator,noDisplay){
+  var message;
   if(operator==="add"){
     symbol="+";
-    displayHelp("ADD some good ingredients.");
+    message = "ADD some good ingredients.";
   }
   else if(operator==="subtract"){
     symbol="&minus;";
-    displayHelp("Don't SUBTRACT too much flavor...");
+    message = "Don't SUBTRACT too much flavor...";
   }
   else if(operator==="multiply"){
     symbol="&times;";
-    displayHelp("MULTIPLY the portion size!");
+    message = "MULTIPLY the portion size!";
   }
   else if(operator==="divide"){
     symbol="&divide;";
-    displayHelp("That DIVIDEND looks delicious.");
+    message = "That DIVIDEND looks delicious.";
+  }
+  if(!noDisplay){ // default is to display message
+    displayHelp(message);
   }
   return symbol;
 }
@@ -396,25 +413,22 @@ function equals(state){
       // Assume (2nd num) = number on result
       state.history.numSecond = state.result;
       // Calculate (1st num) (operator) (2nd num); store as (ans)
-      var calc, symbol;
+      var calc, symbol, statements;
       if(state.history.operator==="add"){
          calc = parseFloat(state.history.numFirst) + parseFloat(state.history.numSecond);
          symbol="+";
-         let statements = ["This is SUM meal!","Great addition to the menu.","More, more, more!","Add this to my bill."];
-         displayHelp(randomStatement(statements));
+         statements = ["This is SUM meal!","Great addition to the menu.","More, more, more!","Add this to my bill."];
       }
       else if(state.history.operator==="subtract"){
         calc = parseFloat(state.history.numFirst) - parseFloat(state.history.numSecond);
         calc = reduceErrors(calc); // deal with rounding error
         symbol="&minus;";
-        let statements = ["Is this food, or is this math? I can't tell the DIFFERENCE!","Less is more, sometimes.","Your subtraction is sweet perfection."];
-        displayHelp(randomStatement(statements));
+        statements = ["Is this food, or is this math? I can't tell the DIFFERENCE!","Less is more, sometimes.","Your subtraction is sweet perfection."];
       }
       else if(state.history.operator==="multiply"){
         calc = parseFloat(state.history.numFirst) * parseFloat(state.history.numSecond);
         calc = reduceErrors(calc); // deal with rounding error
         symbol="&times;";
-        let statements;
         if(calc>1e15){
           statements = ["Over a QUADRILLION? I am honored!","Your quest for quadrillion has been fulfilled!","How about gettting me a good GOOGOL while you'are at it?","What a blessed banquet!"];
         }
@@ -424,7 +438,6 @@ function equals(state){
         else{
           statements = ["What a great food PRODUCT!","I like this multiplication of food choices.","Your numbers are mushrooming.","This PRODUCT is perplexingly good.","Mighty multiplication strikes again!"];
         }
-        displayHelp(randomStatement(statements));
       }
       else if(state.history.operator==="divide"){
         if(state.history.numSecond==0){
@@ -434,7 +447,6 @@ function equals(state){
           calc = parseFloat(state.history.numFirst) / parseFloat(state.history.numSecond);
         }
         symbol="&divide;";
-        let statements;
         if(calc===undefined){
           statements = ["Dividing by zero is undefined.","Sorry, I don't understand dividing by zero.","What does it mean to divide exactly by zero?","How do I divide a meal by zero people?","How do I divide a cake among zero people?"];
           state.result="error";
@@ -449,18 +461,18 @@ function equals(state){
         else{
           statements = ["What's the health QUOTIENT of this meal?","I believe in division of labor: you cook, I eat.","Let's divide a pi for dessert."];
         }
-        displayHelp(randomStatement(statements));
       }
       // Replace result with (ans)
       if(state.result!="error"){
         state.result = calc.toString();
         $("#result").html(state.result);
       }
-      // if result is zero, make a comment
+      // if result is zero, make a comment specific to that
       if(state.result==="0"){
-        let statements = ["Nothing to eat?","Ever notice how the number zero looks like a warm, crusty pizza?","Zero reminds me of donuts...","Zero reminds me of gyros.","Zero reminds me of hero sandwiches.","Zero looks like a cookie, doesn't it?","Empty plate?","I'd love to take about out of that zero.","A bite of nothing?","Zero looks like onion rings.","Zero looks likee fried calamari.","Zero looks like a slice of tomato.","Zero looks like a slice of cucumber.","Zero looks like a pepperoni.","I can eat a whole number next time."];
-        displayHelp(randomStatement(statements));
+        statements = ["Nothing to eat?","Ever notice how the number zero looks like a warm, crusty pizza?","Zero reminds me of donuts...","Zero reminds me of gyros.","Zero reminds me of hero sandwiches.","Zero looks like a cookie, doesn't it?","Empty plate?","I'd love to take about out of that zero.","A bite of nothing?","Zero looks like onion rings.","Zero looks likee fried calamari.","Zero looks like a slice of tomato.","Zero looks like a slice of cucumber.","Zero looks like a pepperoni.","I can eat a whole number next time."];
       }
+      // make the appropriate statement to user
+      displayHelp(randomStatement(statements));
       // if second number is negative (<0), put it in parentheses
       var numSecondString = state.history.numSecond.toString();
       if(parseFloat(state.history.numSecond)<0){
@@ -504,7 +516,7 @@ function squared(state){
         // do the first operation before squaring
         equals(state);
         // show the full calculation in the history
-        let symbol = getSymbol(state.history.operator);
+        let symbol = getSymbol(state.history.operator,true);
         let secondNumber = state.history.numSecond;
         if(parseFloat(secondNumber)<0){
           secondNumber = "(" + secondNumber + ")";
