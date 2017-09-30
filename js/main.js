@@ -393,19 +393,20 @@ function listenForEquals(state){
   });
 }
 
-function equals(state){
+function equals(state,noDisplay){
+  var statements;
   // If (operatorExists) is false && (equalsExists) is false
   // OR if (equalsExists) in history already
   if(state.equalsExists===true || (state.operatorExists===false && state.equalsExists===false)){
     // do nothing; or just do some silly animation? "Are you calculating something?"
-    displayHelp("That equals itself, doesn't it?")
+    statements = ["That equals itself, doesn't it?","What is the calculation?"];
   }
   // If (operatorExists) is true && (equalsExists) is false...
   else if(state.operatorExists===true && state.equalsExists===false){
     // If result is empty
     if(state.result===""){
       // do nothing; or have gator say "I need a number" or something
-      displayHelp("What number are you going to enter?");
+      statements = ["What number are you going to enter?","I need another number..."];
     }
     // If result is not empty (resultNum) exists/has value
     else if(state.result!=""){
@@ -413,7 +414,7 @@ function equals(state){
       // Assume (2nd num) = number on result
       state.history.numSecond = state.result;
       // Calculate (1st num) (operator) (2nd num); store as (ans)
-      var calc, symbol, statements;
+      var calc, symbol;
       if(state.history.operator==="add"){
          calc = parseFloat(state.history.numFirst) + parseFloat(state.history.numSecond);
          symbol="+";
@@ -471,8 +472,6 @@ function equals(state){
       if(state.result==="0"){
         statements = ["Nothing to eat?","Ever notice how the number zero looks like a warm, crusty pizza?","Zero reminds me of donuts...","Zero reminds me of gyros.","Zero reminds me of hero sandwiches.","Zero looks like a cookie, doesn't it?","Empty plate?","I'd love to take about out of that zero.","A bite of nothing?","Zero looks like onion rings.","Zero looks likee fried calamari.","Zero looks like a slice of tomato.","Zero looks like a slice of cucumber.","Zero looks like a pepperoni.","I can eat a whole number next time."];
       }
-      // make the appropriate statement to user
-      displayHelp(randomStatement(statements));
       // if second number is negative (<0), put it in parentheses
       var numSecondString = state.history.numSecond.toString();
       if(parseFloat(state.history.numSecond)<0){
@@ -486,6 +485,10 @@ function equals(state){
       // store status of "equalsExists" to true
       state.equalsExists = true;
     }
+  }
+  // make the appropriate statement to user
+  if(!noDisplay){
+    displayHelp(randomStatement(statements));
   }
 }
 
@@ -514,7 +517,7 @@ function squared(state){
       // If there is ONLY an operator and no EQUALS in the history
       if(state.operatorExists===true && state.equalsExists===false){
         // do the first operation before squaring
-        equals(state);
+        equals(state,true);
         // show the full calculation in the history
         let symbol = getSymbol(state.history.operator,true);
         let secondNumber = state.history.numSecond;
