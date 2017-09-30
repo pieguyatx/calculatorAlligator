@@ -113,7 +113,7 @@ function clear(state){
   state.result = "0";
   $("#result").html(state.result); // clear result
   let statements = ["You reset? Feed me more numbers!","Yes, let's clear this table.","Tasty!","Mmmmm...","More savory sevens!", "More tasty twos!", "More finger-lickin' fours!","More tempting tens!","Scrumptious!","Very palatable values.","More succulent sixes!","'What a thrill it will be to throw back more threes.' -Me","Empty the buffet!","More flavorful fives!","Why was Six afraid of Seven? ...Because Seven ate Nine! Ha ha!","New number, new plate.","I'll take the Number 5 special, please.","Food goes INTEGER mouth!","Looking forward to some number salad!","Stop feeding me? Don't be IRRATIONAL.","I'll take the PRIME number steak, please.","More zesty zeros!","How about some negative number nougat?","How about a wilted salad of ones?","More excellent eights!","More num-nums made of nines!","I'm hungry for hundreds!","I'm thirsty for thousands!","More mouth-watering millions!","A dozen decimals, please.","Clear the table!","Make way for more food...","I'm opening wide for some ones, next."];
-  $("#helpText").html(randomStatement(statements));
+  displayHelp(randomStatement(statements));
 }
 
 // NUMBER ======================================================================
@@ -145,7 +145,7 @@ function numberPressed(digit,state){
         $("#result").html(state.result);
         // if it's a 2nd number, division, and divisor>1, output "divisor" msg
         if(state.history.numFirst!=undefined && state.history.operator==="divide" && parseInt(state.result)>1){
-          $("#helpText").html("That DIVISOR looks delectable.");
+          displayHelp("That DIVISOR looks delectable.");
         }
       }
     }
@@ -167,7 +167,7 @@ function numberPressed(digit,state){
     state.history = {"numFirst": undefined, "operator": undefined, "numSecond": undefined, "text": ""};
     $("#history").html(state.history.text);
     // update help text
-    $("#helpText").html("OK. That number looks tasty.");
+    displayHelp("OK. That number looks tasty.");
   }
 };
 
@@ -191,13 +191,13 @@ function decimalPoint(state){
       state.result = "0.";
       $("#result").html(state.result);
       // update help text
-      $("#helpText").html("Such a teensy number!");
+      displayHelp("Such a teensy number!");
     }
     // if there is a decimal in the result number already, output an error
     else if(state.result.indexOf(".")>0){
       state.result = "error";
       $("#result").html(state.result);
-      $("#helpText").html("Too many decimal points!");
+      displayHelp("Too many decimal points!");
     }
     // If current result number is != (0), (0.) or empty
     else{
@@ -213,7 +213,7 @@ function decimalPoint(state){
     state.result = "0.";
     $("#result").html(state.result);
     // update help text
-    $("#helpText").html("Making a small number, eh?");
+    displayHelp("Making a small number, eh?");
   }
 }
 
@@ -232,7 +232,7 @@ function listenForOperator(state){
 function operatorPressed(operator,state){
   // If result is ERROR
   if(state.result==="error"){
-    $("#helpText").html("Press the ESC key or AC button to reset this meal.");
+    displayHelp("Press the ESC key or AC button to reset this meal.");
   }
   // If no error in the result...
   else {
@@ -303,19 +303,19 @@ function operatorPressed(operator,state){
 function getSymbol(operator){
   if(operator==="add"){
     symbol="+";
-    $("#helpText").html("ADD some good ingredients.");
+    displayHelp("ADD some good ingredients.");
   }
   else if(operator==="subtract"){
     symbol="&minus;";
-    $("#helpText").html("Don't SUBTRACT too much flavor...");
+    displayHelp("Don't SUBTRACT too much flavor...");
   }
   else if(operator==="multiply"){
     symbol="&times;";
-    $("#helpText").html("MULTIPLY the portion size!");
+    displayHelp("MULTIPLY the portion size!");
   }
   else if(operator==="divide"){
     symbol="&divide;";
-    $("#helpText").html("That DIVIDEND looks delicious.");
+    displayHelp("That DIVIDEND looks delicious.");
   }
   return symbol;
 }
@@ -337,10 +337,10 @@ function sign(state){
     $("#result").html(state.result);
     // output appropriate message
     if(parseFloat(state.result)>0){
-      $("#helpText").html("I am POSITIVE I want to eat that.");
+      displayHelp("I am POSITIVE I want to eat that.");
     }
     else{
-      $("#helpText").html("Neat number! No NEGATIVE attitude from me!");
+      displayHelp("Neat number! No NEGATIVE attitude from me!");
     }
     // If the history has an EQUALS, erase the history (new problem starting)
     if(state.equalsExists===true){
@@ -351,11 +351,11 @@ function sign(state){
     }
   }
   else if(state.result===""){
-    $("#helpText").html("You need to give a number, before you can change its sign.");
+    displayHelp("You need to give a number, before you can change its sign.");
   }
   // if (resultNum) is (0) or (0.) or empty, do nothing
   else{
-    $("#helpText").html("Zero food? Zero has no SIGN.");
+    displayHelp("Zero food? Zero has no SIGN.");
   }
 }
 
@@ -381,14 +381,14 @@ function equals(state){
   // OR if (equalsExists) in history already
   if(state.equalsExists===true || (state.operatorExists===false && state.equalsExists===false)){
     // do nothing; or just do some silly animation? "Are you calculating something?"
-    $("#helpText").html("That equals itself, doesn't it?")
+    displayHelp("That equals itself, doesn't it?")
   }
   // If (operatorExists) is true && (equalsExists) is false...
   else if(state.operatorExists===true && state.equalsExists===false){
     // If result is empty
     if(state.result===""){
       // do nothing; or have gator say "I need a number" or something
-      $("#helpText").html("What number are you going to enter?");
+      displayHelp("What number are you going to enter?");
     }
     // If result is not empty (resultNum) exists/has value
     else if(state.result!=""){
@@ -401,14 +401,14 @@ function equals(state){
          calc = parseFloat(state.history.numFirst) + parseFloat(state.history.numSecond);
          symbol="+";
          let statements = ["This is SUM meal!","Great addition to the menu.","More, more, more!","Add this to my bill."];
-         $("#helpText").html(randomStatement(statements));
+         displayHelp(randomStatement(statements));
       }
       else if(state.history.operator==="subtract"){
         calc = parseFloat(state.history.numFirst) - parseFloat(state.history.numSecond);
         calc = reduceErrors(calc); // deal with rounding error
         symbol="&minus;";
         let statements = ["Is this food, or is this math? I can't tell the DIFFERENCE!","Less is more, sometimes.","Your subtraction is sweet perfection."];
-        $("#helpText").html(randomStatement(statements));
+        displayHelp(randomStatement(statements));
       }
       else if(state.history.operator==="multiply"){
         calc = parseFloat(state.history.numFirst) * parseFloat(state.history.numSecond);
@@ -424,7 +424,7 @@ function equals(state){
         else{
           statements = ["What a great food PRODUCT!","I like this multiplication of food choices.","Your numbers are mushrooming.","This PRODUCT is perplexingly good.","Mighty multiplication strikes again!"];
         }
-        $("#helpText").html(randomStatement(statements));
+        displayHelp(randomStatement(statements));
       }
       else if(state.history.operator==="divide"){
         if(state.history.numSecond==0){
@@ -449,7 +449,7 @@ function equals(state){
         else{
           statements = ["What's the health QUOTIENT of this meal?","I believe in division of labor: you cook, I eat.","Let's divide a pi for dessert."];
         }
-        $("#helpText").html(randomStatement(statements));
+        displayHelp(randomStatement(statements));
       }
       // Replace result with (ans)
       if(state.result!="error"){
@@ -459,7 +459,7 @@ function equals(state){
       // if result is zero, make a comment
       if(state.result==="0"){
         let statements = ["Nothing to eat?","Ever notice how the number zero looks like a warm, crusty pizza?","Zero reminds me of donuts...","Zero reminds me of gyros.","Zero reminds me of hero sandwiches.","Zero looks like a cookie, doesn't it?","Empty plate?","I'd love to take about out of that zero.","A bite of nothing?","Zero looks like onion rings.","Zero looks likee fried calamari.","Zero looks like a slice of tomato.","Zero looks like a slice of cucumber.","Zero looks like a pepperoni.","I can eat a whole number next time."];
-        $("#helpText").html(randomStatement(statements));
+        displayHelp(randomStatement(statements));
       }
       // if second number is negative (<0), put it in parentheses
       var numSecondString = state.history.numSecond.toString();
@@ -489,13 +489,13 @@ function listenForSquared(state){
 function squared(state){
   // If result = error, do nothing, give message
   if(state.result==="error"){
-    $("#helpText").html("Press the ESC key or AC button to reset this meal.");
+    displayHelp("Press the ESC key or AC button to reset this meal.");
   }
   else{
     // If result empty,
     if(state.result===""){
       // do not calculate; give message e.g. "Can't square a multiplication sign!"
-      $("#helpText").html("What number are you squaring?");
+      displayHelp("What number are you squaring?");
     }
     // If result !empty,
     else if(state.result!=""){
@@ -544,7 +544,7 @@ function squared(state){
       }
       // give a message
       let statements = ["Eat a SQUARE meal every day, I always say.","Here's TO THE POWER OF TWO people eating!","I've got this eating challenge SQUARED away."];
-      $("#helpText").html(randomStatement(statements));
+      displayHelp(randomStatement(statements));
     }
   }
 }
@@ -583,4 +583,9 @@ function reduceErrors(number){
 function randomStatement(statements){  // statements must be an array of strings
   var i = Math.floor(Math.random()*statements.length);
   return statements[i];
+}
+
+// Display Help Text ===========================================================
+function displayHelp(statement){
+  $("#helpText").html(statement).animate({opacity: "0"},0).animate({opacity: "1"},300);
 }
