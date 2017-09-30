@@ -347,6 +347,7 @@ function listenForSign(state){
 }
 
 function sign(state){
+  var statements;
   // if (resultNum) is != (0) or (0.)
   if(state.result!="0" && state.result!="0."){
     // flip resultNum to opposite sign
@@ -354,10 +355,10 @@ function sign(state){
     $("#result").html(state.result);
     // output appropriate message
     if(parseFloat(state.result)>0){
-      displayHelp("I am POSITIVE I want to eat that.");
+      statements=["I am POSITIVE I want to eat that.","I am positively hungry.","Your generosity makes me feel so POSITIVE.","I am positively ravenous."];
     }
     else{
-      displayHelp("Neat number! No NEGATIVE attitude from me!");
+      statements=["Neat number! No NEGATIVE attitude from me!","Skip lunch today? That's a NEGATIVE.","Delay dinner? NEGATIVE.","The opposite value still looks great!"];
     }
     // If the history has an EQUALS, erase the history (new problem starting)
     if(state.equalsExists===true){
@@ -368,12 +369,14 @@ function sign(state){
     }
   }
   else if(state.result===""){
-    displayHelp("You need to give a number, before you can change its sign.");
+    statements=["You need to give a number, before you can change its sign.","Please give me a number before changing its sign."];
   }
   // if (resultNum) is (0) or (0.) or empty, do nothing
   else{
-    displayHelp("Zero food? Zero has no SIGN.");
+    statements=["Zero food? Zero has no SIGN.","Negative zero is... zero!","You know, +0 and -0 are all tasty zeros to me."];
   }
+  // display appropriate help message
+  displayHelp(randomStatement(statements));
 }
 
 // EQUALS ======================================================================
