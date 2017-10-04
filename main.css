@@ -105,6 +105,9 @@ section#calculator .container{
   background-color: lightgray;
   border-radius: 10px;
   border-style: outset;
+  -webkit-box-shadow: 10px 10px 36px -3px rgba(0,0,0,0.47);
+  -moz-box-shadow: 10px 10px 36px -3px rgba(0,0,0,0.47);
+  box-shadow: 10px 10px 36px -3px rgba(0,0,0,0.47);
 }
 section#calculator #display{
   width: 355px;
@@ -163,18 +166,13 @@ footer{
 }
 
 /* Mobile responsiveness */
-@media only screen and (max-width: 1280px) {
+@media only screen and (max-width: 1280px) and (min-width: 765px){
   section#calculator{
     position: fixed;
     z-index: 1;
     margin: 0;
     left: 20;
     top: 20;
-  }
-  section#calculator .container{
-    -webkit-box-shadow: 10px 10px 36px -3px rgba(0,0,0,0.47);
-    -moz-box-shadow: 10px 10px 36px -3px rgba(0,0,0,0.47);
-    box-shadow: 10px 10px 36px -3px rgba(0,0,0,0.47);
   }
   header{
     padding: 10px 0 10px 450px;
@@ -205,7 +203,7 @@ footer{
     text-align: left;
   }
 }
-@media only screen and (max-width: 1140px) {
+@media only screen and (max-width: 1140px) and (min-width: 765px){
   header{
     padding-right: 170px;
   }
@@ -217,7 +215,7 @@ footer{
     font-size: 17px;
   }
 }
-@media only screen and (max-width: 900px) {
+@media only screen and (max-width: 900px) and (min-width: 765px){
   header{
     padding-left: 429px;
     padding-right: 22px;
@@ -237,17 +235,43 @@ footer{
     width: 200px;
   }
   aside{
-    visibility: hidden; /* Small devices less likely to have keyboard*/
+    display: none; /* Small screens less likely to have keyboard*/
   }
 }
-@media only screen and (max-width: 765px) {
+@media only screen and (max-width: 765px){
+  section#calculator{
+  }
   header{
-    padding: 20px 0 20px 0;
+
   }
   header h1{
-    font-size: 3em;
+    font-size: 32px;
   }
-  header h2{
-    font-size: 1.3em;
+  header h1{
+    font-size: 32px;
+  }
+  header #mainChar{
+    flex-direction: column;
+    margin: 0;
+  }
+  header svg{
+    width: 200px;
+    height: 100px;
+  }
+  #help{
+    width: auto;
+    top: auto;
+    right: auto;
+  }
+  #help div:first-child{
+    display: none;
+  }
+  #helpText{
+    padding: 5px;
+    font-size: 20px;
+    line-height: 25px;
+  }
+  aside{
+    display: none; /* Small screens less likely to have keyboard*/
   }
 }
