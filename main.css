@@ -178,6 +178,25 @@ footer{
   font-family: 'Oxygen', sans-serif;
 }
 
+/* Visualization animations */
+.circle{
+  display: block;
+  background: white;
+  border-radius: 50%;
+  height: 50px;
+  width: 50px;
+  margin: 0;
+}
+.positive{
+  background: radial-gradient(circle at 100px 100px, #cc0404, #000);
+}
+.negative{
+  background: radial-gradient(circle at 100px 100px, #686868, #000);
+}
+.zero{
+  border: solid 1px black;
+}
+
 /* Mobile responsiveness */
 @media only screen and (max-width: 1280px) and (min-width: 765px){
   section#calculator{
