@@ -205,12 +205,42 @@ footer{
     text-align: left;
   }
 }
-@media only screen and (max-width: 768px) {
-  body{
-    margin: 0;
+@media only screen and (max-width: 1140px) {
+  header{
+    padding-right: 170px;
+  }
+  header h1{
+    font-size: 30px;
+    margin-top: 5px;
+  }
+  header h2{
+    font-size: 17px;
   }
 }
-@media only screen and (max-width: 620px) {
+@media only screen and (max-width: 900px) {
+  header{
+    padding-left: 429px;
+    padding-right: 22px;
+    text-align: center;
+  }
+  header h1{
+    font-size: 32px;
+  }
+  header h1{
+    font-size: 32px;
+  }
+  header #mainChar{
+    justify-content: center;
+  }
+  #help{
+    top: -22px;
+    width: 200px;
+  }
+  aside{
+    visibility: hidden; /* Small devices less likely to have keyboard*/
+  }
+}
+@media only screen and (max-width: 765px) {
   header{
     padding: 20px 0 20px 0;
   }
@@ -219,18 +249,5 @@ footer{
   }
   header h2{
     font-size: 1.3em;
-  }
-}
-@media only screen and (max-width: 500px){
-  header{
-    padding: 25px;
-  }
-  header h1{
-    line-height: 0.8em;
-    margin-bottom: 10px;
-  }
-  header h2{
-    width: 270px;
-    margin: 0 auto 0 auto;
   }
 }
