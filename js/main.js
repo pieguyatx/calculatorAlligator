@@ -605,5 +605,6 @@ function randomStatement(statements){  // statements must be an array of strings
 
 // Display Help Text ===========================================================
 function displayHelp(statement){
-  $("#helpText").html(statement).animate({opacity: "0"},0).animate({opacity: "1"},300);
+  $("#helpText").html(statement);
+  $("#help").animate({opacity: "0"},0).animate({opacity: "1"},300);
 }

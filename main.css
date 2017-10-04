@@ -65,12 +65,21 @@ header svg path:hover{
   display: flex;
   align-items: center;
 }
+#help div:first-child{
+  color: rgba(0,0,0,0);
+  background: #eee;
+  border-radius: 0 0 0 100%;
+  height: 10px;
+  width: 20px;
+}
 #helpText{
-  text-align: left;
   padding: 5px;
   font-family: 'Patrick Hand SC', cursive;
   font-size: 25px;
   line-height: 30px;
+  text-align: center;
+  background: #eee;
+  border-radius: 4px;
 }
 aside{
   position: absolute;
@@ -187,7 +196,7 @@ footer{
     height: 150px;
   }
   #help{
-    top: -30px;
+    top: -24px;
     right: -2px;
     width: 260px;
   }
@@ -239,39 +248,112 @@ footer{
   }
 }
 @media only screen and (max-width: 765px){
-  section#calculator{
-  }
   header{
-
+    padding: 5px;
   }
   header h1{
     font-size: 32px;
   }
-  header h1{
-    font-size: 32px;
+  header h2{
+    font-size: 18px;
+    line-height: 0.8em;
+    margin-bottom: 5px;
   }
   header #mainChar{
-    flex-direction: column;
-    margin: 0;
+    margin: 0 4px 0 4px;
   }
   header svg{
-    width: 200px;
+    width: 150px;
     height: 100px;
   }
   #help{
     width: auto;
     top: auto;
     right: auto;
+    margin: 4px;
   }
   #help div:first-child{
-    display: none;
+    color: rgba(0,0,0,0);
+    background: #eee;
+    border-radius: 0 0 0 100%;
+    height: 10px;
   }
   #helpText{
     padding: 5px;
     font-size: 20px;
     line-height: 25px;
+    text-align: center;
+    background: #eee;
+    border-radius: 4px;
   }
   aside{
     display: none; /* Small screens less likely to have keyboard*/
+  }
+  section{
+    margin: 30px 0 30px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  section#calculator .container{
+    padding: 10px;
+    border: solid gray 1px;
+    background-color: lightgray;
+    border-radius: 10px;
+    border-style: outset;
+    -webkit-box-shadow: 10px 10px 36px -3px rgba(0,0,0,0.47);
+    -moz-box-shadow: 10px 10px 36px -3px rgba(0,0,0,0.47);
+    box-shadow: 10px 10px 36px -3px rgba(0,0,0,0.47);
+  }
+  section#calculator #display{
+    width: 355px;
+    background-color: white;
+    padding: 0;
+    margin: 0 auto 10px auto;
+    border-style: inset;
+  }
+  section#calculator #display #history{
+    height: 23px;
+    font-size: 18px;
+    padding: 4px;
+    text-align: left;
+  }
+  section#calculator #display #result{
+    height: 45px;
+    font-size: 30px;
+    text-align: right;
+    padding: 4px;
+  }
+  section#calculator button{
+    width: 80px;
+    height: 55px;
+    padding: 5px;
+    margin: 4px;
+    font-family: 'Abel', sans-serif;
+    font-size: 30px;
+    border: outset 1px gray;
+    border-radius: 5px;
+    background: rgba(226,226,226,1);
+    background: -moz-linear-gradient(45deg, rgba(226,226,226,1) 0%, rgba(219,219,219,1) 0%, rgba(254,254,254,1) 100%);
+    background: -webkit-gradient(left bottom, right top, color-stop(0%, rgba(226,226,226,1)), color-stop(0%, rgba(219,219,219,1)), color-stop(100%, rgba(254,254,254,1)));
+    background: -webkit-linear-gradient(45deg, rgba(226,226,226,1) 0%, rgba(219,219,219,1) 0%, rgba(254,254,254,1) 100%);
+    background: -o-linear-gradient(45deg, rgba(226,226,226,1) 0%, rgba(219,219,219,1) 0%, rgba(254,254,254,1) 100%);
+    background: -ms-linear-gradient(45deg, rgba(226,226,226,1) 0%, rgba(219,219,219,1) 0%, rgba(254,254,254,1) 100%);
+    background: linear-gradient(45deg, rgba(226,226,226,1) 0%, rgba(219,219,219,1) 0%, rgba(254,254,254,1) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e2e2e2', endColorstr='#fefefe', GradientType=1 );
+  }
+  section#calculator button:active{
+    color: #02cc0e; /* light green */
+    background: rgba(209,209,209,1);
+    background: -moz-linear-gradient(-45deg, rgba(209,209,209,1) 0%, rgba(219,219,219,1) 0%, rgba(254,254,254,1) 100%);
+    background: -webkit-gradient(left top, right bottom, color-stop(0%, rgba(209,209,209,1)), color-stop(0%, rgba(219,219,219,1)), color-stop(100%, rgba(254,254,254,1)));
+    background: -webkit-linear-gradient(-45deg, rgba(209,209,209,1) 0%, rgba(219,219,219,1) 0%, rgba(254,254,254,1) 100%);
+    background: -o-linear-gradient(-45deg, rgba(209,209,209,1) 0%, rgba(219,219,219,1) 0%, rgba(254,254,254,1) 100%);
+    background: -ms-linear-gradient(-45deg, rgba(209,209,209,1) 0%, rgba(219,219,219,1) 0%, rgba(254,254,254,1) 100%);
+    background: linear-gradient(135deg, rgba(209,209,209,1) 0%, rgba(219,219,219,1) 0%, rgba(254,254,254,1) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d1d1d1', endColorstr='#fefefe', GradientType=1 );
+  }
+  section#calculator button#clear{
+    width: 172px;
   }
 }
