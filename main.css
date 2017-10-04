@@ -270,90 +270,68 @@ footer{
     width: auto;
     top: auto;
     right: auto;
-    margin: 4px;
+    margin: 4px 0 4px 4px;
   }
   #help div:first-child{
-    color: rgba(0,0,0,0);
-    background: #eee;
-    border-radius: 0 0 0 100%;
-    height: 10px;
+    height: 8px;
   }
   #helpText{
     padding: 5px;
     font-size: 20px;
-    line-height: 25px;
-    text-align: center;
+    line-height: 20px;
     background: #eee;
-    border-radius: 4px;
   }
   aside{
     display: none; /* Small screens less likely to have keyboard*/
   }
   section{
-    margin: 30px 0 30px 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    margin: 10px 0 10px 0;
   }
   section#calculator .container{
-    padding: 10px;
+    margin: 0 10px 0 10px;
     border: solid gray 1px;
-    background-color: lightgray;
     border-radius: 10px;
-    border-style: outset;
-    -webkit-box-shadow: 10px 10px 36px -3px rgba(0,0,0,0.47);
-    -moz-box-shadow: 10px 10px 36px -3px rgba(0,0,0,0.47);
-    box-shadow: 10px 10px 36px -3px rgba(0,0,0,0.47);
   }
   section#calculator #display{
-    width: 355px;
-    background-color: white;
+    width: 320px;
     padding: 0;
-    margin: 0 auto 10px auto;
-    border-style: inset;
+    margin: 0 auto 5px auto;
   }
   section#calculator #display #history{
-    height: 23px;
-    font-size: 18px;
-    padding: 4px;
-    text-align: left;
+    height: 20px;
+    font-size: 16px;
   }
   section#calculator #display #result{
-    height: 45px;
-    font-size: 30px;
-    text-align: right;
-    padding: 4px;
+    height: 38px;
+    font-size: 27px;
   }
   section#calculator button{
-    width: 80px;
-    height: 55px;
-    padding: 5px;
-    margin: 4px;
-    font-family: 'Abel', sans-serif;
-    font-size: 30px;
-    border: outset 1px gray;
-    border-radius: 5px;
-    background: rgba(226,226,226,1);
-    background: -moz-linear-gradient(45deg, rgba(226,226,226,1) 0%, rgba(219,219,219,1) 0%, rgba(254,254,254,1) 100%);
-    background: -webkit-gradient(left bottom, right top, color-stop(0%, rgba(226,226,226,1)), color-stop(0%, rgba(219,219,219,1)), color-stop(100%, rgba(254,254,254,1)));
-    background: -webkit-linear-gradient(45deg, rgba(226,226,226,1) 0%, rgba(219,219,219,1) 0%, rgba(254,254,254,1) 100%);
-    background: -o-linear-gradient(45deg, rgba(226,226,226,1) 0%, rgba(219,219,219,1) 0%, rgba(254,254,254,1) 100%);
-    background: -ms-linear-gradient(45deg, rgba(226,226,226,1) 0%, rgba(219,219,219,1) 0%, rgba(254,254,254,1) 100%);
-    background: linear-gradient(45deg, rgba(226,226,226,1) 0%, rgba(219,219,219,1) 0%, rgba(254,254,254,1) 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e2e2e2', endColorstr='#fefefe', GradientType=1 );
-  }
-  section#calculator button:active{
-    color: #02cc0e; /* light green */
-    background: rgba(209,209,209,1);
-    background: -moz-linear-gradient(-45deg, rgba(209,209,209,1) 0%, rgba(219,219,219,1) 0%, rgba(254,254,254,1) 100%);
-    background: -webkit-gradient(left top, right bottom, color-stop(0%, rgba(209,209,209,1)), color-stop(0%, rgba(219,219,219,1)), color-stop(100%, rgba(254,254,254,1)));
-    background: -webkit-linear-gradient(-45deg, rgba(209,209,209,1) 0%, rgba(219,219,219,1) 0%, rgba(254,254,254,1) 100%);
-    background: -o-linear-gradient(-45deg, rgba(209,209,209,1) 0%, rgba(219,219,219,1) 0%, rgba(254,254,254,1) 100%);
-    background: -ms-linear-gradient(-45deg, rgba(209,209,209,1) 0%, rgba(219,219,219,1) 0%, rgba(254,254,254,1) 100%);
-    background: linear-gradient(135deg, rgba(209,209,209,1) 0%, rgba(219,219,219,1) 0%, rgba(254,254,254,1) 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d1d1d1', endColorstr='#fefefe', GradientType=1 );
+    width: 73px;
+    height: 40px;
+    padding: 0;
+    margin: 2px;
+    font-size: 24px;
   }
   section#calculator button#clear{
-    width: 172px;
+    width: 154px;
+  }
+}
+@media only screen and (max-width: 320px){
+  section#calculator #display{
+    width: 286px;
+  }
+  section#calculator #display #history{
+    height: 18px;
+    font-size: 16px;
+  }
+  section#calculator #display #result{
+    height: 36px;
+    font-size: 24px;
+  }
+  section#calculator button{
+    width: 64px;
+  }
+  section#calculator button#clear{
+    width: 136px;
   }
 }
