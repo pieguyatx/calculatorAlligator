@@ -130,12 +130,16 @@ section#calculator #display #history{
   font-size: 18px;
   padding: 4px;
   text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 section#calculator #display #result{
   height: 45px;
   font-size: 30px;
   text-align: right;
   padding: 4px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 section#calculator button{
   width: 80px;
