@@ -605,6 +605,17 @@ function randomStatement(statements){  // statements must be an array of strings
 
 // Display Help Text ===========================================================
 function displayHelp(statement){
+  var timeAnimate = 300; // time in ms
   $("#helpText").html(statement);
-  $("#help").animate({opacity: "0"},0).animate({opacity: "1"},300);
+  $("#help").animate({opacity: "0"},0).animate({opacity: "1"},timeAnimate);
+  $("header svg path").css({fill: getRandomColor(), transition: "0.2s"});
+
+  function getRandomColor() {
+    var letters = '0123456789ABCDEF';
+    var color = '#';
+    for (var i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+  }
 }
