@@ -181,9 +181,6 @@ footer{
 
 /* Visualization animations */
 /* Default for screens >1280 wide */
-#visualization, #visualization div{ /*debug*/
-  border: solid 1px red;
-}
 section#visualization{
   margin: 10px;
   position: relative;
@@ -195,7 +192,7 @@ section#visualization>div{
   width: 50%;
   display: flex;
   justify-content: center;
-  align-items: flex-start;
+  align-items: center;
   min-height: 400px;
 }
 #visHistory{
@@ -213,13 +210,13 @@ section#visualization>div{
   margin: 0;
 }
 .positive{
-  background: radial-gradient(circle at 100px 100px, #cc0404, #000);
+  background: radial-gradient(circle at 18px 18px, #cc0404, #000);
 }
 .negative{
-  background: radial-gradient(circle at 100px 100px, #686868, #000);
+  background: radial-gradient(circle at 18px 18px, #686868, #000);
 }
 .zero{
-  border: solid 1px black;
+  background: radial-gradient(circle at 18px 18px, #eaeaea, #fff);
 }
 
 /* Mobile responsiveness */
