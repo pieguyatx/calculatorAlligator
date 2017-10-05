@@ -117,6 +117,7 @@ section#calculator .container{
   -webkit-box-shadow: 10px 10px 36px -3px rgba(0,0,0,0.47);
   -moz-box-shadow: 10px 10px 36px -3px rgba(0,0,0,0.47);
   box-shadow: 10px 10px 36px -3px rgba(0,0,0,0.47);
+  z-index: 1;
 }
 section#calculator #display{
   width: 355px;
@@ -179,6 +180,29 @@ footer{
 }
 
 /* Visualization animations */
+/* Default for screens >1280 wide */
+#visualization, #visualization div{ /*debug*/
+  border: solid 1px red;
+}
+section#visualization{
+  margin: 10px;
+  position: relative;
+  top: -470px;
+  display: flex;
+  align-items: center;
+}
+section#visualization>div{
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+#visHistory{
+  padding-right: 200px; /* half off calc width */
+}
+#visResult{
+  padding-left: 200px; /* half off calc width */
+}
 .circle{
   display: block;
   background: white;
@@ -201,7 +225,6 @@ footer{
 @media only screen and (max-width: 1280px) and (min-width: 765px){
   section#calculator{
     position: fixed;
-    z-index: 1;
     margin: 0;
     left: 20;
     top: 20;
