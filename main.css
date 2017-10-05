@@ -196,6 +196,7 @@ section#visualization>div{
   display: flex;
   justify-content: center;
   align-items: flex-start;
+  min-height: 400px;
 }
 #visHistory{
   padding-right: 200px; /* half off calc width */

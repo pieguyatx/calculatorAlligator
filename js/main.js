@@ -3,13 +3,14 @@ $(document).ready(function(){
   var state = {};
   state.operatorExists = false; // status of operator in history
   state.equalsExists = false; // status of equals sign in history
-  state.history = {
+  state.history = { // strings defining the history
     "numFirst": undefined,
     "operator": undefined,
     "numSecond": undefined,
     "text": ""
   };
-  state.result = "0";
+  state.result = "0"; // string defining the displayed result
+  var oldState = state; // To be used for visualize [vis()] function
 
   // Read in button presses (types: clear, square/operator, number, dec, sign, equals)
   listenToKeyboard(state); // listen for all keys
@@ -27,17 +28,12 @@ $(document).ready(function(){
   listenForEquals(state);
   // Listen for signal: SQUARED
   listenForSquared(state);
-
-  // result result
-
-  // clear on click
-
 });
 
 // note: key codes reference: https://www.cambiaresearch.com/articles/15/javascript-char-codes-key-codes
+// TO DO: Add visualizations.. (in progress 10/5/17)
 // TO DO: will need to visually denote button presses somehow when keyboard is used
-// TO DO: Add visualizations..
-// TO DO: consolidate keyboard input into one big "listener" instead of multiple ones
+// TO DO: Remove debug comments/code
 
 // KEYBOARD ====================================================================
 function listenToKeyboard(state){
@@ -47,7 +43,7 @@ function listenToKeyboard(state){
     var charCode = (typeof event.which == "number") ? event.which : event.keyCode;
     if (charCode===27){
       console.log("Key pressed (ESC): CLEAR"); // debug
-      clear(state);
+      clear(state,true);
     }
     // DIGITS
     else if (charCode>=48 && charCode<=57 && event.shiftKey===false){
@@ -101,11 +97,11 @@ function listenForClear(state){
   // mouse click
   $("#clear").on('click', function(){
     console.log("Button pressed: CLEAR"); // debug
-    clear(state);
+    clear(state,true);
   });
 }
 
-function clear(state){
+function clear(state,clearVis){
   state.operatorExists = false;
   state.equalsExists = false;
   state.history = {"numFirst": undefined, "operator": undefined, "numSecond": undefined, "text": ""};
@@ -114,6 +110,10 @@ function clear(state){
   $("#result").html(state.result); // clear result
   let statements = ["You reset? Feed me more numbers!","Yes, let's clear this table.","Tasty!","Mmmmm...","More savory sevens!", "More tasty twos!", "More finger-lickin' fours!","More tempting tens!","Scrumptious!","Very palatable values.","More succulent sixes!","'What a thrill it will be to throw back more threes.' -Me","Empty the buffet!","More flavorful fives!","Why was Six afraid of Seven? ...Because Seven ate Nine! Ha ha!","New number, new plate.","I'll take the Number 5 special, please.","Food goes INTEGER mouth!","Looking forward to some number salad!","Stop feeding me? Don't be IRRATIONAL.","I'll take the PRIME number steak, please.","More zesty zeros!","How about some negative number nougat?","How about a wilted salad of ones?","More excellent eights!","More num-nums made of nines!","I'm hungry for hundreds!","I'm thirsty for thousands!","More mouth-watering millions!","A dozen decimals, please.","Clear the table!","Make way for more food...","I'm opening wide for some ones, next."];
   displayHelp(randomStatement(statements));
+  // If flag set to clear the visualizations === true, then clear the visualizations
+  if(clearVis){
+    vis(state);
+  }
 }
 
 // NUMBER ======================================================================
@@ -208,7 +208,7 @@ function decimalPoint(state){
   }
   // if there is an EQUALS already in the history, then start a new number...
   else if(state.equalsExists===true){
-    clear(state);
+    clear(state,true);
     // replace result with (0.)
     state.result = "0.";
     $("#result").html(state.result);
@@ -618,4 +618,41 @@ function displayHelp(statement){
     }
     return color;
   }
+}
+
+// VISUALIZE NUMBERS & OPERATIONS ==============================================
+// =============================================================================
+function vis(state, oldState){ // (new state, old state)
+  // This function takes in the state of the calculator and compares it to the
+  // old state (global obj). Depending on the changes, animations are performed.
+  /* DEFAULT STATE:
+    state.operatorExists===false && state.equalsExists===false
+    state.history = {"numFirst": undefined, "operator": undefined, "numSecond": undefined, "text": ""};
+    $("#history").html(state.history.text);   // clear history
+    state.result = "0";  */
+    var timeAnimate = 200; // default animation time
+
+  // CLEAR
+  // If current history is clear....
+  if(state.operatorExists===false && state.equalsExists===false){
+    // if result is 0, 0., 0.000, "error", etc
+    if(state.result==0){
+      // fade all, clear, make opaque again
+      $("#visHistory, #visResult").animate({opacity: "0"},timeAnimate,function(){
+        $(this).html("");
+      }).animate({opacity: "1"},0);
+    }
+    // if result !=0
+    else{
+      // if absolute value of result <100
+        // if result positive
+        // if result negative
+      // if absolute value of result >100
+        // ...?
+    }
+  }
+
+  // After new state has been analyzed, save it as the old one for later
+  oldState = state;
+  console.log(oldState); // DEBUG
 }
