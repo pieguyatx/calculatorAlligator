@@ -733,6 +733,9 @@ function vis(state, stateVis){ // (new state, old state)
         resultVis = parseInt(resultVis);
         // if the sign of the number has changed, pulse the units
         if((resultVis<0 && resultNew>0) || (resultVis>0 && resultNew<0)){
+          let temp = $("#visResult .collection").html();
+          $("#visResult .collection").html(""); // clear it, then add it again
+          $("#visResult .collection").html(temp);
           $("#visResult .collection>div").addClass("shake");
         }
         // if the sign is the same, add the appropriate number of units
