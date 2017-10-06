@@ -723,14 +723,17 @@ function vis(state, stateVis){ // (new state, old state)
 
     // if absolute value of result <100
     if(Math.abs(resultNew)<100){
-      // check if decimals present...
+      // check if decimals present in result...
       if(resultNew.toString().indexOf(".")>0 || resultVis.toString().indexOf(".")>0){
         // set the leftover fractional part of new result aside
         var wholeNum = Math.floor(Math.abs(resultNew));
         var fraction = Math.abs(resultNew)-wholeNum;
         // if fraction is 0, or if fraction is the equal (trailing zeroes), then do nothing
-        if(fraction===0 || resultNew===resultVis){
-          // visResultWhole(resultNew,resultVis,timeAnimate);
+        if(fraction===0 || Math.abs(resultNew)===Math.abs(resultVis)){
+          // check for sign change
+          if(detectSignChange(resultNew,resultVis)){
+            colorUnits(resultNew);
+          }
         }
         // if fraction exists, and the new Result is different from what's displayed
         else{
@@ -765,20 +768,27 @@ function vis(state, stateVis){ // (new state, old state)
   };
 
   function visResultBasic(resultNew,resultVis,timeAnimate){
-    // if the SIGN of the number has changed, pulse the units
-    if((resultVis<0 && resultNew>0) || (resultVis>0 && resultNew<0)){
-      let temp = $("#visResult .collection").html();
-      // clear it, then add it again
-      $("#visResult .collection").html(temp);
-      $("#visResult .collection>div").addClass("shake");
-    }
+    var signChange = detectSignChange(resultNew,resultVis);
     // if the sign is the same, add the appropriate number of units
-    else{
+    if(!signChange){
       for(var i=0; i<(Math.abs(resultNew)-Math.abs(resultVis)); i++){
         $("#visResult .collection").append("<div class='circle bloopIn'></div>");
       }
     }
     colorUnits(resultNew);
+  }
+
+  function detectSignChange(resultNew,resultVis){
+    signChange = false;
+    // if the SIGN of the number has changed, pulse the units
+    if((resultVis<0 && resultNew>0) || (resultVis>0 && resultNew<0)){
+      signChange = true;
+      let temp = $("#visResult .collection").html();
+      // clear it, then add it again
+      $("#visResult .collection").html(temp);
+      $("#visResult .collection>div").addClass("shake");
+    }
+    return signChange;
   }
 
   // Change the color to signify the appropriate sign
