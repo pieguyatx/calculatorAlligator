@@ -736,11 +736,17 @@ function vis(state, stateVis){ // (new state, old state)
         else{
           // Find string to represent fraction
           var fxString = Math.round((1-fraction)*100).toString();
-          // if some whole numbers are already displayed
-          $("#visResult .collection").html("<div class='square fraction bloopIn'></div>");
           var x = "inset(" + fxString + "% 0px 0px 0px)";
-          $("#visResult .fraction").css("clip-path", x);
-          colorUnits(resultNew);
+          // if fraction is not displayed in results yet...
+          if($("#visResult .fraction").length==0){
+            $("#visResult .collection").append("<div class='square fraction bloopIn'></div>");
+            $("#visResult .fraction").css("clip-path", x);
+            colorUnits(resultNew);
+          }
+          // if the fraction already is there...
+          else{
+            $("#visResult .fraction").css("clip-path", x);
+          }
         }
       }
       // if no decimals present (just whole numbers)
