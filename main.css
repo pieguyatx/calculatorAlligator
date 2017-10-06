@@ -227,6 +227,8 @@ section#visualization>div{
   background: white;
   border-radius: 4px;
   width: 8%;
+  -webkit-transition: border-radius 0.2s;
+  transition: border-radius 0.2s;
 }
 .square:after {
   display: block;
@@ -236,6 +238,8 @@ section#visualization>div{
 .fraction{
   -webkit-clip-path: inset(50% 0px 0px 0px);
   clip-path: inset(50% 0px 0px 0px);
+  -webkit-transition: clip-path 0.2s;
+  transition: clip-path 0.2s;
 }
 .positive{
   background: radial-gradient(circle at 18px 18px, #e50000, #440000);
