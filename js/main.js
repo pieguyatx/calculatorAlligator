@@ -66,7 +66,7 @@ function listenToKeyboard(state,stateVis){
     else if ((charCode===190 && event.shiftKey===false) || charCode===110){
       console.log("Key pressed (.): DECIMAL POINT"); // debug
       if(state.result!="error"){
-        decimalPoint(state);
+        decimalPoint(state,stateVis);
       }
     }
     // SIGN
@@ -179,17 +179,17 @@ function numberPressed(digit,state,stateVis){
 };
 
 // DECIMAL =====================================================================
-function listenForDecimal(state){
+function listenForDecimal(state,stateVis){
   // mouse click
   $("#decimal").on('click', function(){
     console.log("Button pressed: DECIMAL POINT"); // debug
     if(state.result!="error"){
-      decimalPoint(state);
+      decimalPoint(state,stateVis);
     }
   });
 }
 
-function decimalPoint(state){
+function decimalPoint(state,stateVis){
   // if there is not an EQUALS already in the history, modify result number
   if(state.equalsExists===false){
     // If current result number is (0), (0.), or empty,
@@ -222,6 +222,8 @@ function decimalPoint(state){
     // update help text
     displayHelp("Making a small number, eh?");
   }
+  // visualize
+  vis(state,stateVis);
 }
 
 // operators: +-*/==============================================================
@@ -644,7 +646,7 @@ function vis(state, stateVis){ // (new state, old state)
   // If current history is clear....
   if(state.operatorExists===false && state.equalsExists===false){
     // if result is 0, 0., 0.000, "error", etc
-    if(state.result==0){
+    if(state.result==0 || state.result==="error"){
       // fade all, clear, make opaque again
       $("#visHistory").animate({opacity: "0"},timeAnimate,function(){
         $(this).html("<div class='collection'></div>");
