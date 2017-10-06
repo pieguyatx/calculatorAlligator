@@ -653,10 +653,15 @@ function vis(state, stateVis){ // (new state, old state)
       }).animate({opacity: "1"},0);
       stateVis.result.value = undefined;
       stateVis.result.orientation = undefined;
+      $("#visResult .collection").addClass("getEatenUpLeft").on("webkitAnimationEnd mozAnimationEnd oAnimationEnd oanimationend animationend",function(){
+        $("#visResult").html("<div class='collection'><div class='circle zero'></div></div>");
+      });
+      /*
       $("#visResult").animate({opacity: "0"},timeAnimate,function(){
         // show a zero
         $(this).html("<div class='collection'><div class='circle zero'></div></div>").animate({opacity: "0"},0).animate({opacity: "1"},timeAnimate);
       });
+      */
       stateVis.result.value = 0;
       stateVis.result.orientation = "add";
     }
