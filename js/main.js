@@ -733,12 +733,12 @@ function vis(state, stateVis){ // (new state, old state)
         resultVis = parseInt(resultVis);
         // if the sign of the number has changed, pulse the units
         if((resultVis<0 && resultNew>0) || (resultVis>0 && resultNew<0)){
-          $("#visResult .collection>div").animate({"margin": "20px"},200);
+          $("#visResult .collection>div").addClass("shake");
         }
         // if the sign is the same, add the appropriate number of units
         else{
-          for(var i=0; i<(resultNew-resultVis); i++){
-            $("#visResult .collection").append("<div class='circle'></div>");
+          for(var i=0; i<(Math.abs(resultNew)-Math.abs(resultVis)); i++){
+            $("#visResult .collection").append("<div class='circle bloopIn'></div>");
           }
         }
         // Change the color to signify the appropriate sign
@@ -757,6 +757,7 @@ function vis(state, stateVis){ // (new state, old state)
       }
       // if absolute value of result >100
       else {
+        $("#visResult .collection").html("Number too big to show"); // DEBUG
         // TBD: Use a "water tank" analogy?
       }
     }
