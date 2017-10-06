@@ -227,8 +227,6 @@ section#visualization>div{
   background: white;
   border-radius: 4px;
   width: 8%;
-  -webkit-clip-path: inset(50% 0px 0px 0px);
-  clip-path: inset(50% 0px 0px 0px);
 }
 .square:after {
   display: block;
@@ -236,7 +234,8 @@ section#visualization>div{
   padding-bottom: 100%;
 }
 .fraction{
-
+  -webkit-clip-path: inset(50% 0px 0px 0px);
+  clip-path: inset(50% 0px 0px 0px);
 }
 .positive{
   background: radial-gradient(circle at 18px 18px, #e50000, #440000);
@@ -266,8 +265,8 @@ section#visualization>div{
 .bloopIn{
 	-webkit-animation-name: bloopIn;
 	animation-name: bloopIn;
-  -webkit-animation-duration: 0.3s;
-	animation-duration: 0.3s;
+  -webkit-animation-duration: 0.15s;
+	animation-duration: 0.15s;
   -webkit-animation-timing-function: ease-in-out;
 	animation-timing-function: ease-in-out;
 }

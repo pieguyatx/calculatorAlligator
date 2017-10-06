@@ -13,8 +13,8 @@ $(document).ready(function(){
 
   // To be used for visualize [vis()] function
   var stateVis = {
-    "history": {"value": undefined, "orientation": undefined},
-    "result": {"value": undefined, "orientation": undefined}
+    "history": {"value": 0, "orientation": "add"},
+    "result": {"value": 0, "orientation": "add"}
   };
 
   // Read in button presses (types: clear, square/operator, number, dec, sign, equals)
@@ -671,9 +671,9 @@ function vis(state, stateVis){ // (new state, old state)
       // if current visualized result is 0, clear the display, then display result
       if(resultVis===0 || resultVis===undefined){
         $(".collection").animate({opacity: "0"},timeAnimate,function(){
-          $(this).html("").animate({opacity: "1"},0,function(){
-            visResult(resultNew,resultVis,timeAnimate);
-          });
+          $(this).remove();
+          $("#visResult,#visHistory").html("<div class='collection'></div>");
+          visResult(resultNew,resultVis,timeAnimate);
         });
       }
       else{
@@ -742,6 +742,8 @@ function vis(state, stateVis){ // (new state, old state)
             $("#visResult .collection").append("<div class='square fraction bloopIn'></div>");
             $("#visResult .fraction").css("clip-path", x);
             colorUnits(resultNew);
+            // and change all the shapes to fractional shapes
+            $(".collection>div").removeClass("circle").addClass("square");
           }
           // if the fraction already is there...
           else{
