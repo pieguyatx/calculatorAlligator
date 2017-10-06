@@ -193,7 +193,7 @@ section#visualization>div{
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 400px;
+  min-height: 450px;
 }
 #visHistory{
   padding-right: 200px; /* half off calc width */
@@ -206,17 +206,22 @@ section#visualization>div{
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
+  width: 95%;
 }
 .collection>div{
-  margin:4px;
+  margin:0.95%;
 }
 .circle{
   display: block;
   background: white;
   border-radius: 50%;
-  height: 50px;
-  width: 50px;
+  width: 8%;
   margin: 0;
+}
+.circle:after {
+    display: block;
+    content: "";
+    padding-bottom: 100%;
 }
 .positive{
   background: radial-gradient(circle at 18px 18px, #e50000, #440000);
