@@ -10,24 +10,29 @@ $(document).ready(function(){
     "text": ""
   };
   state.result = "0"; // string defining the displayed result
-  var oldState = state; // To be used for visualize [vis()] function
+
+  // To be used for visualize [vis()] function
+  var stateVis = {
+    "history": {"value": undefined, "orientation": undefined},
+    "result": {"value": undefined, "orientation": undefined}
+  };
 
   // Read in button presses (types: clear, square/operator, number, dec, sign, equals)
-  listenToKeyboard(state,oldState); // listen for all keys
+  listenToKeyboard(state,stateVis); // listen for all keys
   // Listen for signal: CLEAR
-  listenForClear(state,oldState);
+  listenForClear(state,stateVis);
   // Listen for signal: number 0-9
-  listenForNumber(state,oldState);
+  listenForNumber(state,stateVis);
   // Listen for signal: DECIMAL
-  listenForDecimal(state,oldState);
+  listenForDecimal(state,stateVis);
   // Listen for signal: operator +-*/
-  listenForOperator(state,oldState);
+  listenForOperator(state,stateVis);
   // Listen for signal: SIGN
-  listenForSign(state,oldState);
+  listenForSign(state,stateVis);
   // Listen for signal: EQUALS
-  listenForEquals(state,oldState);
+  listenForEquals(state,stateVis);
   // Listen for signal: SQUARED
-  listenForSquared(state,oldState);
+  listenForSquared(state,stateVis);
 });
 
 // note: key codes reference: https://www.cambiaresearch.com/articles/15/javascript-char-codes-key-codes
@@ -36,14 +41,14 @@ $(document).ready(function(){
 // TO DO: Remove debug comments/code
 
 // KEYBOARD ====================================================================
-function listenToKeyboard(state,oldState){
+function listenToKeyboard(state,stateVis){
   $(document).on('keyup', function(event){
     // ESC key
     var operator;
     var charCode = (typeof event.which == "number") ? event.which : event.keyCode;
     if (charCode===27){
       console.log("Key pressed (ESC): CLEAR"); // debug
-      clear(state,oldState,true);
+      clear(state,stateVis,true);
     }
     // DIGITS
     else if (charCode>=48 && charCode<=57 && event.shiftKey===false){
@@ -67,7 +72,7 @@ function listenToKeyboard(state,oldState){
     // SIGN
     else if (charCode===192 && event.shiftKey===true){
       console.log("Key pressed (~): SIGN"); // debug
-      sign(state);
+      sign(state,stateVis);
     }
     // SQUARED (^)
     else if (charCode===54 && event.shiftKey===true){
@@ -93,15 +98,15 @@ function listenToKeyboard(state,oldState){
 }
 
 // CLEAR =======================================================================
-function listenForClear(state,oldState){
+function listenForClear(state,stateVis){
   // mouse click
   $("#clear").on('click', function(){
     console.log("Button pressed: CLEAR"); // debug
-    clear(state,oldState,true);
+    clear(state,stateVis,true);
   });
 }
 
-function clear(state,oldState,clearVis){
+function clear(state,stateVis,clearVis){
   state.operatorExists = false;
   state.equalsExists = false;
   state.history = {"numFirst": undefined, "operator": undefined, "numSecond": undefined, "text": ""};
@@ -112,22 +117,22 @@ function clear(state,oldState,clearVis){
   displayHelp(randomStatement(statements));
   // If flag set to clear the visualizations === true, then clear the visualizations
   if(clearVis){
-    vis(state, oldState);
+    vis(state, stateVis);
   }
 }
 
 // NUMBER ======================================================================
-function listenForNumber(state,oldState){
+function listenForNumber(state,stateVis){
   // mouse click
   $(".digit").on('click', function(){
     var digit = this.value.toString();
     console.log("Button pressed (digit): " + digit); // debug
-    numberPressed(digit,state,oldState);
+    numberPressed(digit,state,stateVis);
     digit = NaN;
   });
 }
 
-function numberPressed(digit,state,oldState){
+function numberPressed(digit,state,stateVis){
   // If Result has no error:
   if(state.result!="error"){
     // If there is NOT an EQUALS in the history already...
@@ -151,7 +156,7 @@ function numberPressed(digit,state,oldState){
     }
     // If there's already an (equals) in the history
     else if(state.equalsExists===true){
-      clear(state,oldState);
+      clear(state,stateVis);
       state.result = digit;
       $("#result").html(state.result);
     }
@@ -170,7 +175,7 @@ function numberPressed(digit,state,oldState){
     displayHelp("OK. That number looks tasty.");
   }
   // visualize results
-  vis(state,oldState);
+  vis(state,stateVis);
 };
 
 // DECIMAL =====================================================================
@@ -210,7 +215,7 @@ function decimalPoint(state){
   }
   // if there is an EQUALS already in the history, then start a new number...
   else if(state.equalsExists===true){
-    clear(state,oldState,true);
+    clear(state,stateVis,true);
     // replace result with (0.)
     state.result = "0.";
     $("#result").html(state.result);
@@ -340,15 +345,15 @@ function getSymbol(operator,noDisplay){
 }
 
 // SIGN ========================================================================
-function listenForSign(state){
+function listenForSign(state,stateVis){
   // mouse click
   $("#sign").on('click', function(){
     console.log("Button pressed: SIGN"); // debug
-    sign(state);
+    sign(state,stateVis);
   });
 }
 
-function sign(state){
+function sign(state,stateVis){
   var statements;
   // if (resultNum) is != (0) or (0.)
   if(state.result!="0" && state.result!="0."){
@@ -379,6 +384,8 @@ function sign(state){
   }
   // display appropriate help message
   displayHelp(randomStatement(statements));
+  // visualize number in result
+  vis(state,stateVis);
 }
 
 // EQUALS ======================================================================
@@ -624,7 +631,7 @@ function displayHelp(statement){
 
 // VISUALIZE NUMBERS & OPERATIONS ==============================================
 // =============================================================================
-function vis(state, oldState){ // (new state, old state)
+function vis(state, stateVis){ // (new state, old state)
   // This function takes in the state of the calculator and compares it to the
   // old state (global obj). Depending on the changes, animations are performed.
   /* DEFAULT STATE:
@@ -633,7 +640,7 @@ function vis(state, oldState){ // (new state, old state)
     $("#history").html(state.history.text);   // clear history
     state.result = "0";  */
   var timeAnimate = 200; // default animation time
-
+  console.log("FIRST: ", stateVis); // DEBUG
   // CLEAR
   // If current history is clear....
   if(state.operatorExists===false && state.equalsExists===false){
@@ -643,24 +650,35 @@ function vis(state, oldState){ // (new state, old state)
       $("#visHistory").animate({opacity: "0"},timeAnimate,function(){
         $(this).html("<div class='collection'></div>");
       }).animate({opacity: "1"},0);
+      stateVis.result.value = undefined;
+      stateVis.result.orientation = undefined;
       $("#visResult").animate({opacity: "0"},timeAnimate,function(){
         // show a zero
         $(this).html("<div class='collection'><div class='circle zero'></div></div>").animate({opacity: "0"},0).animate({opacity: "1"},timeAnimate);
       });
+      stateVis.result.value = 0;
+      stateVis.result.orientation = "add";
     }
+    // DIGITS
     // if result !=0, there's a number to deal with
     else{
-      // DIGITS
       var resultNew = parseFloat(state.result);
-      var resultOld = parseFloat(oldState.result);
-      // if absolute value of result <100
-      if(Math.abs(resultNew)<100){
-        displayAsUnits(resultNew,resultOld,timeAnimate);
+      var resultVis = stateVis.result.value;
+      // if visualized result is 0, clear the results, then display result
+      if(resultVis===0 || resultVis===undefined){
+        $(".collection").animate({opacity: "0"},timeAnimate,function(){
+          $(this).html("").animate({opacity: "1"},0,function(){
+            visResult(resultNew,resultVis,timeAnimate);
+          });
+        });
       }
-      // if absolute value of result >100
-      else {
-        // TBD: Use a "water tank" analogy?
+      else{
+        // if old result !=0, just display result
+        visResult(resultNew,resultVis,timeAnimate);
       }
+      // update visualization state
+      stateVis.result.value = resultNew;
+      stateVis.result.orientation = "add"; // default
     }
   }
   // OPERATIONS
@@ -677,24 +695,70 @@ function vis(state, oldState){ // (new state, old state)
           // rearrange units in history for appropriate math operation
       // and there is something in the results now
     // If there is an operator and equals in the history...
-      //
+      // animate according to operator types
+      // add
+      // subtract
+      // multiply
+      // divide
+      // square
     //
   }
 
-  // After new state has been analyzed, save it as the old one for later
-  oldState = state;
-  console.log(oldState); // DEBUG
+  // After new state has been analyzed, update the visualization state
+  console.log("LAST: ", stateVis); // DEBUG
 
   // This function accepts numbers and displays then w/ animations of length defined in ms
-  function displayAsUnits(resultNew, resultOld, timeAnimate){
-    $("#visResult .collection").html("<div class='circle'></div>");
-    // if positive
-    if(resultNew>0){
-      $(".circle").addClass("positive");
+  // It assumes resultVis is the number of units already displayed in the results
+  // while resultNew is the new number to show in the results
+  function visResult(resultNew, resultVis, timeAnimate){
+    if(resultNew===undefined){
+      resultNew = 0;
     }
-    // if negative
+    if(resultVis===undefined){
+      resultVis = 0;
+    }
+    // check if decimals present...
+    if(resultNew.toString().indexOf(".")>0 || resultVis.toString().indexOf(".")>0){
+      // TBD -- add up whole number parts separately from decimal parts
 
-    // if there's a decimal point....
 
+
+    }
+    // if no decimals present (just whole numbers)
+    else{
+      // if absolute value of result <100
+      if(Math.abs(resultNew)<100){
+        // Add units according to the size of the number
+        resultNew = parseInt(resultNew);
+        resultVis = parseInt(resultVis);
+        // if the sign of the number has changed, pulse the units
+        if((resultVis<0 && resultNew>0) || (resultVis>0 && resultNew<0)){
+          $("#visResult .collection>div").animate({"margin": "20px"},200);
+        }
+        // if the sign is the same, add the appropriate number of units
+        else{
+          for(var i=0; i<(resultNew-resultVis); i++){
+            $("#visResult .collection").append("<div class='circle'></div>");
+          }
+        }
+        // Change the color to signify the appropriate sign
+        // if positive
+        if(resultNew>0){
+          $(".circle").removeClass("negative zero").addClass("positive");
+        }
+        // if negative
+        else if(resultNew<0){
+          $(".circle").removeClass("positive zero").addClass("negative");
+        }
+        // if zero
+        else if(resultNew===0){
+          $(".circle").removeClass("positive negative").addClass("zero");
+        }
+      }
+      // if absolute value of result >100
+      else {
+        // TBD: Use a "water tank" analogy?
+      }
+    }
   };
 }

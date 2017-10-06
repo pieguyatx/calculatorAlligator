@@ -201,6 +201,15 @@ section#visualization>div{
 #visResult{
   padding-left: 200px; /* half off calc width */
 }
+.collection{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+.collection>div{
+  margin:4px;
+}
 .circle{
   display: block;
   background: white;
@@ -210,7 +219,7 @@ section#visualization>div{
   margin: 0;
 }
 .positive{
-  background: radial-gradient(circle at 18px 18px, #cc0404, #000);
+  background: radial-gradient(circle at 18px 18px, #e50000, #440000);
 }
 .negative{
   background: radial-gradient(circle at 18px 18px, #686868, #000);
