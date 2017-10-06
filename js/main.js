@@ -643,34 +643,32 @@ function vis(state, stateVis){ // (new state, old state)
     state.result = "0";  */
   var timeAnimate = 200; // default animation time
   // CLEAR
-  // If current history is clear....
+  // If current history in the numbers is clear....
   if(state.operatorExists===false && state.equalsExists===false){
-    // if result is 0, 0., 0.000, "error", etc
+    // if result is 0, 0., 0.000, "error", etc AND it's new
     if(state.result==0 || state.result==="error"){
-      // fade all, clear, make opaque again
-      $("#visHistory").animate({opacity: "0"},timeAnimate,function(){
-        $(this).html("<div class='collection'></div>");
-      }).animate({opacity: "1"},0);
-      stateVis.result.value = undefined;
-      stateVis.result.orientation = undefined;
-      $("#visResult .collection").addClass("getEatenUpLeft").on("webkitAnimationEnd mozAnimationEnd oAnimationEnd oanimationend animationend",function(){
-        $("#visResult").html("<div class='collection'><div class='circle zero'></div></div>");
-      });
-      /*
-      $("#visResult").animate({opacity: "0"},timeAnimate,function(){
-        // show a zero
-        $(this).html("<div class='collection'><div class='circle zero'></div></div>").animate({opacity: "0"},0).animate({opacity: "1"},timeAnimate);
-      });
-      */
-      stateVis.result.value = 0;
-      stateVis.result.orientation = "add";
+      // if there's not already a zero displayed...
+      if(stateVis.result.value!=0){
+        // fade all, clear, make opaque again
+        $("#visHistory").animate({opacity: "0"},timeAnimate,function(){
+          $(this).html("<div class='collection'></div>");
+        }).animate({opacity: "1"},0);
+        stateVis.result.value = undefined;
+        stateVis.result.orientation = undefined;
+        $("#visResult .collection").addClass("getEatenUpLeft").on("webkitAnimationEnd mozAnimationEnd oAnimationEnd oanimationend animationend",function(){
+          $("#visResult").html("<div class='collection'><div class='circle zero'></div></div>");
+        });
+        // update vis state
+        stateVis.result.value = 0;
+        stateVis.result.orientation = "add";
+      }
     }
     // DIGITS
     // if result !=0, there's a number to deal with
     else{
       var resultNew = parseFloat(state.result);
       var resultVis = stateVis.result.value;
-      // if visualized result is 0, clear the results, then display result
+      // if current visualized result is 0, clear the display, then display result
       if(resultVis===0 || resultVis===undefined){
         $(".collection").animate({opacity: "0"},timeAnimate,function(){
           $(this).html("").animate({opacity: "1"},0,function(){
@@ -679,12 +677,11 @@ function vis(state, stateVis){ // (new state, old state)
         });
       }
       else{
-        // if old result !=0, just display result
+        // if current displayed result !=0, just display result
         visResult(resultNew,resultVis,timeAnimate);
       }
       // update visualization state
       stateVis.result.value = resultNew;
-      stateVis.result.orientation = "add"; // default
     }
   }
   // OPERATIONS
@@ -723,52 +720,72 @@ function vis(state, stateVis){ // (new state, old state)
     if(resultVis===undefined){
       resultVis = 0;
     }
-    // check if decimals present...
-    if(resultNew.toString().indexOf(".")>0 || resultVis.toString().indexOf(".")>0){
-      // TBD -- add up whole number parts separately from decimal parts
 
-
-
-    }
-    // if no decimals present (just whole numbers)
-    else{
-      // if absolute value of result <100
-      if(Math.abs(resultNew)<100){
-        // Add units according to the size of the number
-        resultNew = parseInt(resultNew);
-        resultVis = parseInt(resultVis);
-        // if the sign of the number has changed, pulse the units
-        if((resultVis<0 && resultNew>0) || (resultVis>0 && resultNew<0)){
-          let temp = $("#visResult .collection").html();
-          // clear it, then add it again
-          $("#visResult .collection").html(temp);
-          $("#visResult .collection>div").addClass("shake");
+    // if absolute value of result <100
+    if(Math.abs(resultNew)<100){
+      // check if decimals present...
+      if(resultNew.toString().indexOf(".")>0 || resultVis.toString().indexOf(".")>0){
+        // set the leftover fractional part of new result aside
+        var wholeNum = Math.floor(Math.abs(resultNew));
+        var fraction = Math.abs(resultNew)-wholeNum;
+        // if fraction is 0, or if fraction is the equal (trailing zeroes), then do nothing
+        if(fraction===0 || resultNew===resultVis){
+          // visResultWhole(resultNew,resultVis,timeAnimate);
         }
-        // if the sign is the same, add the appropriate number of units
+        // if fraction exists, and the new Result is different from what's displayed
         else{
-          for(var i=0; i<(Math.abs(resultNew)-Math.abs(resultVis)); i++){
-            $("#visResult .collection").append("<div class='circle bloopIn'></div>");
-          }
-        }
-        // Change the color to signify the appropriate sign
-        // if positive
-        if(resultNew>0){
-          $(".circle").removeClass("negative zero").addClass("positive");
-        }
-        // if negative
-        else if(resultNew<0){
-          $(".circle").removeClass("positive zero").addClass("negative");
-        }
-        // if zero
-        else if(resultNew===0){
-          $(".circle").removeClass("positive negative").addClass("zero");
+          // Find string to represent fraction
+          var fxString = Math.round((1-fraction)*100).toString();
+          // if some whole numbers are already displayed
+          $("#visResult .collection").html("<div class='square fraction bloopIn'></div>");
+          var x = "inset(" + fxString + "% 0px 0px 0px)";
+          $("#visResult .fraction").css("clip-path", x);
+          colorUnits(resultNew);
         }
       }
-      // if absolute value of result >100
-      else {
-        $("#visResult .collection").html("Number too big to show"); // DEBUG
-        // TBD: Use a "water tank" analogy?
+      // if no decimals present (just whole numbers)
+      else{
+        visResultBasic(resultNew,resultVis,timeAnimate);
       }
     }
+    // if absolute value of result >100
+    else {
+      $("#visResult .collection").html("Number too big to show"); // DEBUG
+      // TBD: Use a "water tank" analogy?
+    }
+
   };
+
+  function visResultBasic(resultNew,resultVis,timeAnimate){
+    // if the SIGN of the number has changed, pulse the units
+    if((resultVis<0 && resultNew>0) || (resultVis>0 && resultNew<0)){
+      let temp = $("#visResult .collection").html();
+      // clear it, then add it again
+      $("#visResult .collection").html(temp);
+      $("#visResult .collection>div").addClass("shake");
+    }
+    // if the sign is the same, add the appropriate number of units
+    else{
+      for(var i=0; i<(Math.abs(resultNew)-Math.abs(resultVis)); i++){
+        $("#visResult .collection").append("<div class='circle bloopIn'></div>");
+      }
+    }
+    colorUnits(resultNew);
+  }
+
+  // Change the color to signify the appropriate sign
+  function colorUnits(resultNew){
+    // if positive
+    if(resultNew>0){
+      $("#visResult .collection>div").removeClass("negative zero").addClass("positive");
+    }
+    // if negative
+    else if(resultNew<0){
+      $("#visResult .collection>div").removeClass("positive zero").addClass("negative");
+    }
+    // if zero
+    else if(resultNew===0){
+      $("#visResult .collection>div").removeClass("positive negative").addClass("zero");
+    }
+  }
 }

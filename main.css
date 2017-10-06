@@ -216,12 +216,27 @@ section#visualization>div{
   background: white;
   border-radius: 50%;
   width: 8%;
-  margin: 0;
 }
 .circle:after {
-    display: block;
-    content: "";
-    padding-bottom: 100%;
+  display: block;
+  content: "";
+  padding-bottom: 100%;
+}
+.square{
+  display: block;
+  background: white;
+  border-radius: 4px;
+  width: 8%;
+  -webkit-clip-path: inset(50% 0px 0px 0px);
+  clip-path: inset(50% 0px 0px 0px);
+}
+.square:after {
+  display: block;
+  content: "";
+  padding-bottom: 100%;
+}
+.fraction{
+
 }
 .positive{
   background: radial-gradient(circle at 18px 18px, #e50000, #440000);
@@ -232,6 +247,7 @@ section#visualization>div{
 .zero{
   background: radial-gradient(circle at 18px 18px, #eaeaea, #fff);
 }
+
 /* Transitions */
 .getEatenUpLeft{
   -webkit-animation-name: getEatenUpLeft;
