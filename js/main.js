@@ -54,12 +54,12 @@ function listenToKeyboard(state,stateVis){
     else if (charCode>=48 && charCode<=57 && event.shiftKey===false){
       var digit = (charCode-48).toString();
       console.log("Keyboard pressed (digit): " + digit); // debug
-      numberPressed(digit,state);
+      numberPressed(digit,state,stateVis);
       digit = NaN;
     } else if(charCode>=96 && charCode<=105){ // numpad
       var digit = (charCode-96).toString();
       console.log("Keyboard pressed (digit, numpad): " + digit); // debug
-      numberPressed(digit,state);
+      numberPressed(digit,state,stateVis);
       digit = NaN;
     }
     // DECIMAL
@@ -77,7 +77,7 @@ function listenToKeyboard(state,stateVis){
     // SQUARED (^)
     else if (charCode===54 && event.shiftKey===true){
       console.log("Key pressed (^): SQUARED"); // debug
-      squared(state);
+      squared(state,stateVis);
     }
     // OPERATORS
     else if ((charCode===187 && event.shiftKey===true) || charCode===107){
@@ -91,7 +91,7 @@ function listenToKeyboard(state,stateVis){
     }
     if(operator){ // if operator exists, go on...
       console.log("Keyboard pressed (operator): " + operator); // debug
-      operatorPressed(operator,state);
+      operatorPressed(operator,state,stateVis);
       operator = NaN; // clear var so as not to trigger anything later
     }
   });
@@ -640,7 +640,6 @@ function vis(state, stateVis){ // (new state, old state)
     $("#history").html(state.history.text);   // clear history
     state.result = "0";  */
   var timeAnimate = 200; // default animation time
-  console.log("FIRST: ", stateVis); // DEBUG
   // CLEAR
   // If current history is clear....
   if(state.operatorExists===false && state.equalsExists===false){
@@ -734,7 +733,7 @@ function vis(state, stateVis){ // (new state, old state)
         // if the sign of the number has changed, pulse the units
         if((resultVis<0 && resultNew>0) || (resultVis>0 && resultNew<0)){
           let temp = $("#visResult .collection").html();
-          $("#visResult .collection").html(""); // clear it, then add it again
+          // clear it, then add it again
           $("#visResult .collection").html(temp);
           $("#visResult .collection>div").addClass("shake");
         }
