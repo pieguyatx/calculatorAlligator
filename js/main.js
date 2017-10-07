@@ -13,7 +13,7 @@ $(document).ready(function(){
 
   // To be used for visualize [vis()] function
   var stateVis = {
-    "history": {"value": 0, "orientation": "add"},
+    "history": {"value": undefined, "orientation": "add"},
     "result": {"value": 0, "orientation": "add"}
   };
 
@@ -227,18 +227,18 @@ function decimalPoint(state,stateVis){
 }
 
 // operators: +-*/==============================================================
-function listenForOperator(state){
+function listenForOperator(state,stateVis){
   var operator;
   // mouse click
   $(".operator").on('click', function(){
     operator = this.value;
     console.log("Button pressed (operator): " + operator); // debug
-    operatorPressed(operator,state);
+    operatorPressed(operator,state,stateVis);
     operator = NaN; // clear var so as not to trigger anything later
   });
 }
 
-function operatorPressed(operator,state){
+function operatorPressed(operator,state,stateVis){
   // If result is ERROR
   if(state.result==="error"){
     displayHelp("Press the ESC key or AC button to reset this meal.");
@@ -320,6 +320,8 @@ function operatorPressed(operator,state){
       state.equalsExists = false;
     }
   }
+  // visualize
+  vis(state,stateVis);
 };
 
 function getSymbol(operator,noDisplay){
@@ -685,18 +687,38 @@ function vis(state, stateVis){ // (new state, old state)
     }
   }
   // OPERATIONS
-  // If there is a history now...
+  // If there is a history now... if operator OR equals exists
   else{
     // If first number & operator exists, but no equals...
-      // and there wasn't an equals before
+    if(state.operatorExists===true && state.equalsExists===false){
+      // and there isn't any number visualized in the history
+      if(stateVis.history.value===undefined || stateVis.history.value===""){
         // move units in results to the history
+        var temp = $("#visResult .collection").html();
+        $("#visResult .collection").addClass("sendLeft").on("webkitAnimationEnd mozAnimationEnd oAnimationEnd oanimationend animationend",function(){
+          $("#visResult .collection").html("");
+          $("#visHistory .collection").html(temp).addClass("receiveRight");
+        });
         // check sizes of current number in history and in result;
           // set new size based on that
         // display new units in results
-      // and there is nothing in the results now
+      }
+      // and there is nothing visualized in the results now
+      else if(stateVis.results.value===undefined){
         // and there is a DIFFERENT operator than before (replacement operator chosen)
           // rearrange units in history for appropriate math operation
+      }
       // and there is something in the results now
+      else if(stateVis.results.value){
+        // add digits TBD
+
+
+
+      }
+      //update visHistory
+      stateVis.result.value = parseFloat(state.result);
+      stateVis.resul
+    }
     // If there is an operator and equals in the history...
       // animate according to operator types
       // add
@@ -705,10 +727,13 @@ function vis(state, stateVis){ // (new state, old state)
       // divide
       // square
     //
+    // update visualization state
+    stateVis.result.value = resultNew;
   }
 
   // After new state has been analyzed, update the visualization state
   console.log("LAST: ", stateVis); // DEBUG
+  console.log("STATE: ", state); // DEBUG
 
   // This function accepts numbers and displays then w/ animations of length defined in ms
   // It assumes resultVis is the number of units already displayed in the results

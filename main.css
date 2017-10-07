@@ -207,6 +207,7 @@ section#visualization>div{
   justify-content: center;
   align-items: center;
   width: 95%;
+  z-index: 2;
 }
 .collection>div{
   margin:0.95%;
@@ -357,6 +358,38 @@ section#visualization>div{
   100% {
     transform: translate(0%, 0%);
 	}
+}
+.sendLeft{
+  -webkit-animation-name: sendLeft;
+  animation-name: sendLeft;
+  -webkit-animation-duration: 0.15s;
+	animation-duration: 0.15s;
+}
+@-webkit-keyframes sendLeft {
+	0%   {opacity: 1; transform: translate(0%,0%) scale(1);}
+	50%  {opacity: 0.5; transform: translate(-50%,-7%);}
+	100% {opacity: 0; transform: translate(-100%,-10%) scale(1.1);}
+}
+@keyframes sendLeft {
+  0%   {opacity: 1; transform: translate(0%,0%) scale(1);}
+	50%  {opacity: 0.5; transform: translate(-50%,-7%);}
+	100% {opacity: 0; transform: translate(-100%,-10%) scale(1.1);}
+}
+.receiveRight{
+  -webkit-animation-name: receiveRight;
+  animation-name: receiveRight;
+  -webkit-animation-duration: 0.15s;
+	animation-duration: 0.15s;
+}
+@-webkit-keyframes receiveRight {
+	0%   {opacity: 0; transform: translate(100%,-10%) scale(1.1);}
+	50%  {opacity: 0.5; transform: translate(50%,-7%);}
+	100% {opacity: 1; transform: translate(0%,0%) scale(1);}
+}
+@keyframes receiveRight {
+  0%   {opacity: 0; transform: translate(100%,-10%) scale(1.1);}
+	50%  {opacity: 0.5; transform: translate(50%,-7%);}
+	100% {opacity: 1; transform: translate(0%,0%) scale(1);}
 }
 
 /* Mobile responsiveness */
