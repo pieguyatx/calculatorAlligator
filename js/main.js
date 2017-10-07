@@ -360,7 +360,7 @@ function listenForSign(state,stateVis){
 function sign(state,stateVis){
   var statements;
   // if (resultNum) is != (0) or (0.)
-  if(state.result!="0" && state.result!="0."){
+  if(state.result!="0" && state.result!="0." && state.result!=""){
     // flip resultNum to opposite sign
     state.result = (-parseFloat(state.result)).toString();
     $("#result").html(state.result);
@@ -379,7 +379,7 @@ function sign(state,stateVis){
       $("#history").html(state.history.text);   // clear history
     }
   }
-  else if(state.result===""){
+  else if(state.result==="" || state.result===NaN){
     statements=["You need to give a number, before you can change its sign.","Please give me a number before changing its sign."];
   }
   // if (resultNum) is (0) or (0.) or empty, do nothing
