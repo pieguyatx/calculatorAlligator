@@ -652,7 +652,7 @@ function vis(state, stateVis){ // (new state, old state)
     // if result is 0, 0., 0.000, "error", etc AND it's new
     if(state.result==0 || state.result==="error"){
       // if there's not already a zero displayed...
-      if(stateVis.result.value!=0){
+      if(stateVis.result.value!=0 || stateVis.history.value!=0 ){
         // fade all, clear, make opaque again
         $("#visHistory").animate({opacity: "0"},timeAnimate,function(){
           $(this).html("<div class='collection'></div>").animate({opacity: "1"},0);
