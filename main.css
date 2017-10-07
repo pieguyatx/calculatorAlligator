@@ -211,6 +211,7 @@ section#visualization>div{
 }
 .collection>div{
   margin:0.95%;
+  transition: margin 0.2s;
 }
 .circle{
   display: flex;

@@ -709,7 +709,7 @@ function vis(state, stateVis){ // (new state, old state)
         visResult(resultNew,0,timeAnimate);
       }
       // and there is something in the results now
-      else if(stateVis.result.value){
+      else if(stateVis.result.value || stateVis.result.value===0){
         // add digits TBD
         visResult(resultNew,resultVis,timeAnimate);
 
@@ -748,15 +748,14 @@ function vis(state, stateVis){ // (new state, old state)
     if(resultVis===undefined){
       resultVis = 0;
     }
-
-    // if absolute value of result <=100
-    if(Math.abs(resultNew)<=100){
+    // if absolute value of result <=100 && >=0.1
+    if(Math.abs(resultNew)<=100 && Math.abs(resultNew)>=0.1 || resultNew===0){
       // check if decimals present in result...
       if(resultNew.toString().indexOf(".")>0 || resultVis.toString().indexOf(".")>0){
         // set the leftover fractional part of new result aside
         var wholeNum = Math.floor(Math.abs(resultNew));
         var fraction = Math.abs(resultNew)-wholeNum;
-        // if fraction is 0, or if fraction is the equal (trailing zeroes), then do nothing
+        // if fraction is 0, or if fraction is equal to what it was (trailing zeroes), then do nothing
         if(fraction===0 || Math.abs(resultNew)===Math.abs(resultVis)){
           // check for sign change
           if(detectSignChange(resultNew,resultVis)){
@@ -793,9 +792,9 @@ function vis(state, stateVis){ // (new state, old state)
         // 100
       // if max scale is >1,000,000, display sci notation - toExponential() + words
       // if max scale is >1,000,000,000,000,000,000 (quintillion), stop using the words
-      // display number as fraction of rectangle
-      (Math.abs(resultNew)<=100)
-      $("#visResult .collection").html("Number too big to show"); // DEBUG
+      // is mall number .... Math.abs(resultNew)<0.1
+      // scale numbers to 0.1 to 100 units (e.g. 134 goes to 13 10s; If range is 10e2-10e3, do units of 10e1)
+      $("#visResult .collection").html("Number too big/small to show"); // DEBUG
       // TBD: Use a "water tank" analogy?
     }
 
