@@ -644,6 +644,8 @@ function vis(state, stateVis){ // (new state, old state)
     $("#history").html(state.history.text);   // clear history
     state.result = "0";  */
   var timeAnimate = 200; // default animation time
+  var resultNew = parseFloat(state.result);
+  var resultVis = stateVis.result.value;
   // CLEAR
   // If current history in the numbers is clear....
   if(state.operatorExists===false && state.equalsExists===false){
@@ -653,10 +655,10 @@ function vis(state, stateVis){ // (new state, old state)
       if(stateVis.result.value!=0){
         // fade all, clear, make opaque again
         $("#visHistory").animate({opacity: "0"},timeAnimate,function(){
-          $(this).html("<div class='collection'></div>");
-        }).animate({opacity: "1"},0);
-        stateVis.result.value = undefined;
-        stateVis.result.orientation = undefined;
+          $(this).html("<div class='collection'></div>").animate({opacity: "1"},0);
+        });
+        stateVis.history.value = undefined;
+        stateVis.history.orientation = undefined;
         $("#visResult .collection").addClass("getEatenUpLeft").on("webkitAnimationEnd mozAnimationEnd oAnimationEnd oanimationend animationend",function(){
           $("#visResult").html("<div class='collection'><div class='circle zero'></div></div>");
         });
@@ -668,8 +670,6 @@ function vis(state, stateVis){ // (new state, old state)
     // DIGITS
     // if result !=0, there's a number to deal with
     else{
-      var resultNew = parseFloat(state.result);
-      var resultVis = stateVis.result.value;
       // if current visualized result is 0, clear the display, then display result
       if(resultVis===0 || resultVis===undefined){
         $(".collection").animate({opacity: "0"},timeAnimate,function(){
@@ -695,29 +695,31 @@ function vis(state, stateVis){ // (new state, old state)
       if(stateVis.history.value===undefined || stateVis.history.value===""){
         // move units in results to the history
         var temp = $("#visResult .collection").html();
-        $("#visResult .collection").addClass("sendLeft").on("webkitAnimationEnd mozAnimationEnd oAnimationEnd oanimationend animationend",function(){
-          $("#visResult .collection").html("");
-          $("#visHistory .collection").html(temp).addClass("receiveRight");
+        $("#visResult .collection").addClass("sendLeft").on("webkitAnimationEnd mozAnimationEnd oAnimationEnd oanimationend animationend",function(e){
+          $("#visResult").html("<div class='collection'></div>");
+          $("#visHistory .collection").html(temp).addClass("receiveRight").on("webkitAnimationEnd mozAnimationEnd oAnimationEnd oanimationend animationend",function(e){
+            $("#visHistory .collection").removeClass("receiveRight");
+          });
         });
-        // check sizes of current number in history and in result;
-          // set new size based on that
-        // display new units in results
       }
       // and there is nothing visualized in the results now
-      else if(stateVis.results.value===undefined){
-        // and there is a DIFFERENT operator than before (replacement operator chosen)
-          // rearrange units in history for appropriate math operation
+      else if(stateVis.result.value===undefined || isNaN(stateVis.result.value)){
+        // add digits
+        visResult(resultNew,0,timeAnimate);
       }
       // and there is something in the results now
-      else if(stateVis.results.value){
+      else if(stateVis.result.value){
         // add digits TBD
-
+        visResult(resultNew,resultVis,timeAnimate);
 
 
       }
+      // check sizes of current number in history and in result;
+        // set new size based on that
+      // display new units in results
       //update visHistory
+      stateVis.history.value = parseFloat(state.history.numFirst);
       stateVis.result.value = parseFloat(state.result);
-      stateVis.resul
     }
     // If there is an operator and equals in the history...
       // animate according to operator types
