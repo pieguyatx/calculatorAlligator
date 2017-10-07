@@ -213,7 +213,11 @@ section#visualization>div{
   margin:0.95%;
 }
 .circle{
-  display: block;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  line-height: 0;
+  color: white;
   background: white;
   border-radius: 50%;
   width: 8%;
@@ -224,7 +228,11 @@ section#visualization>div{
   padding-bottom: 100%;
 }
 .square{
-  display: block;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  line-height: 0;
+  color: white;
   background: white;
   border-radius: 4px;
   width: 8%;
@@ -241,6 +249,7 @@ section#visualization>div{
   clip-path: inset(50% 0px 0px 0px);
   -webkit-transition: clip-path 0.2s;
   transition: clip-path 0.2s;
+  content: "";
 }
 .positive{
   background: radial-gradient(circle at 18px 18px, #e50000, #440000);

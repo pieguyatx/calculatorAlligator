@@ -748,8 +748,8 @@ function vis(state, stateVis){ // (new state, old state)
       resultVis = 0;
     }
 
-    // if absolute value of result <100
-    if(Math.abs(resultNew)<100){
+    // if absolute value of result <=100
+    if(Math.abs(resultNew)<=100){
       // check if decimals present in result...
       if(resultNew.toString().indexOf(".")>0 || resultVis.toString().indexOf(".")>0){
         // set the leftover fractional part of new result aside
@@ -786,8 +786,14 @@ function vis(state, stateVis){ // (new state, old state)
         visResultBasic(resultNew,resultVis,timeAnimate);
       }
     }
-    // if absolute value of result >100
     else {
+      // resultNew is >100; Determine scalemin,max (e.g. 10^2-10^3, 10^5-10^6...)
+      // if max scale is <=1,000,000, display regular notation, + words (thousands, millions)
+        // 100
+      // if max scale is >1,000,000, display sci notation - toExponential() + words
+      // if max scale is >1,000,000,000,000,000,000 (quintillion), stop using the words
+      // display number as fraction of rectangle
+      (Math.abs(resultNew)<=100)
       $("#visResult .collection").html("Number too big to show"); // DEBUG
       // TBD: Use a "water tank" analogy?
     }
@@ -799,7 +805,7 @@ function vis(state, stateVis){ // (new state, old state)
     // if the sign is the same, add the appropriate number of units
     if(!signChange){
       for(var i=0; i<(Math.abs(resultNew)-Math.abs(resultVis)); i++){
-        $("#visResult .collection").append("<div class='circle bloopIn'></div>");
+        $("#visResult .collection").append("<div class='circle bloopIn'>1</div>");
       }
     }
     colorUnits(resultNew);
@@ -823,10 +829,12 @@ function vis(state, stateVis){ // (new state, old state)
     // if positive
     if(resultNew>0){
       $("#visResult .collection>div").removeClass("negative zero").addClass("positive");
+      $("#visResult .collection>div:not(.fraction)").html("1");
     }
     // if negative
     else if(resultNew<0){
       $("#visResult .collection>div").removeClass("positive zero").addClass("negative");
+      $("#visResult .collection>div:not(.fraction)").html("-1");
     }
     // if zero
     else if(resultNew===0){
