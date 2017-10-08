@@ -861,7 +861,7 @@ function vis(state, stateVis){ // (new state, old state)
     var sci = resultNew.toExponential().toString(); // scientific notation string
     var indexE = sci.indexOf("e");
     var exp = (sci.charAt(indexE+1)==="+") ? sci.slice(indexE+2,sci.length+1) : -sci.slice(indexE+2,sci.length+1);
-    var unit = Math.pow(10,exp);
+    var unit = Math.pow(10,exp-1);
     // console.log("Sci, indexE, unit: ",sci, indexE, unit); // DEBUG
     return unit;
   }
