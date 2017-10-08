@@ -763,7 +763,7 @@ function vis(state, stateVis){ // (new state, old state)
     else {
       //$("#visResult .collection").html("Number too big/small to show"); // DEBUG
       // if new number is bigger, need to change unit of visualization...
-      if(resultNew>100){
+      if(Math.abs(resultNew)>100){
         // if units are in the same unit type as what's already visualized...
         // but offset by 1 (so 100 has unit 10^2, but should be in 0.1-100 category)
         var unitVis = determineUnit(resultVis);
