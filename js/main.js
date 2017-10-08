@@ -620,7 +620,7 @@ function randomStatement(statements){  // statements must be an array of strings
 function displayHelp(statement){
   var timeAnimate = 300; // time in ms
   $("#helpText").html(statement);
-  $("#help").animate({opacity: "0"},0).animate({opacity: "1"},timeAnimate);
+  $("#help").stop(true).animate({opacity: "0"},0).animate({opacity: "1"},timeAnimate);
   $("header svg path").css({fill: getRandomColor(), transition: "0.2s"});
 
   function getRandomColor() {
@@ -696,9 +696,9 @@ function vis(state, stateVis){ // (new state, old state)
       if(stateVis.history.value===undefined || stateVis.history.value===""){
         // move units in results to the history
         var temp = $("#visResult .collection").html();
-        $("#visResult .collection").addClass("sendLeft").on("webkitAnimationEnd mozAnimationEnd oAnimationEnd oanimationend animationend",function(e){
+        $("#visResult .collection").stop(true).addClass("sendLeft").on("webkitAnimationEnd mozAnimationEnd oAnimationEnd oanimationend animationend",function(e){
           $("#visResult").html("<div class='collection'></div>");
-          $("#visHistory .collection").html(temp).addClass("receiveRight").on("webkitAnimationEnd mozAnimationEnd oAnimationEnd oanimationend animationend",function(e){
+          $("#visHistory .collection").html(temp).stop(true).addClass("receiveRight").on("webkitAnimationEnd mozAnimationEnd oAnimationEnd oanimationend animationend",function(e){
             $("#visHistory .collection").removeClass("receiveRight");
           });
         });
@@ -775,7 +775,7 @@ function vis(state, stateVis){ // (new state, old state)
         // if they are NOT in the same unit type (smaller unit type instead)
         else{
           // clear results visualization (shrink), then visualize new result
-          $("#visResult .collection").animate({width: "10%"},timeAnimate,function(){
+          $("#visResult .collection").animate({opacity: "0"},timeAnimate,function(){
             $("#visResult").html("<div class='collection'></div>");
             visResultComplex(resultNew,resultVis,timeAnimate);
           });
