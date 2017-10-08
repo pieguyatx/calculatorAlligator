@@ -763,7 +763,7 @@ function vis(state, stateVis){ // (new state, old state)
     else {
       //$("#visResult .collection").html("Number too big/small to show"); // DEBUG
       // if new number is bigger, need to change unit of visualization...
-      if(Math.abs(resultNew)>100){
+      if(Math.abs(resultNew)>100 || Math.abs(resultVis)<0.1){
         // if units are in the same unit type as what's already visualized...
         // but offset by 1 (so 100 has unit 10^2, but should be in 0.1-100 category)
         var unitVis = determineUnit(resultVis);
@@ -835,6 +835,7 @@ function vis(state, stateVis){ // (new state, old state)
   // Add units onto screen, for numbers <0.1 or >100
   function visResultComplex(resultNew,resultVis,timeAnimate){
     var signChange = detectSignChange(resultNew,resultVis);
+    // find what unit to put the new result in, if there were no history
     var unit = determineUnit(resultNew);
     // if the sign is the same, add the appropriate number of units
     if(!signChange){
@@ -883,18 +884,26 @@ function vis(state, stateVis){ // (new state, old state)
   // Change the color to signify the appropriate sign
   function colorUnits(resultNew,unit){
     if(unit===undefined){unit = "1";} // default if undefined
-    else if(unit===10){unit = "10";}
-    else if(unit===100){unit = "100";}
-    else if(unit===1000){unit = "1k";}
-    else if(unit===10000){unit = "10k";}
-    else if(unit===100000){unit = "100k";}
-    else if(unit===1000000){unit = "1M";}
-    else if(unit===10000000){unit = "10M";}
-    else if(unit===100000000){unit = "100M";}
-    else if(unit===1000000000){unit = "1B";}
-    else if(unit===10000000000){unit = "10B";}
-    else if(unit===100000000000){unit = "100B";}
-    else if(unit===1000000000000){unit = "1Tr";}
+    else if(unit>1){
+      if(unit===10){unit = "10";}
+      else if(unit===100){unit = "100";}
+      else if(unit===1000){unit = "1k";}
+      else if(unit===10000){unit = "10k";}
+      else if(unit===100000){unit = "100k";}
+      else if(unit===1000000){unit = "1M";}
+      else if(unit===10000000){unit = "10M";}
+      else if(unit===100000000){unit = "100M";}
+      else if(unit===1000000000){unit = "1B";}
+      else if(unit===10000000000){unit = "10B";}
+      else if(unit===100000000000){unit = "100B";}
+      else if(unit===1000000000000){unit = "1Tr";}
+      else{unit = unit.toExponential();}
+    }
+    else if(unit<1){
+      if(unit===0.1){unit = "0.1";}
+      else if(unit===0.01){unit = "0.01";}
+      else{unit = unit.toExponential();}
+    }
     else{unit = unit.toExponential();}
     // if positive
     if(resultNew>0){
