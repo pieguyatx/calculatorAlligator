@@ -790,6 +790,7 @@ function vis(state, stateVis){ // (new state, old state)
 
   // Deal w/ fractions
   function visualizeFraction(resultNew,resultVis){
+    var unit = determineUnit(resultNew); // get unit for later
     // set the leftover fractional part of new result aside
     var wholeNum = Math.floor(Math.abs(resultNew));
     var fraction = Math.abs(resultNew)-wholeNum;
@@ -797,7 +798,7 @@ function vis(state, stateVis){ // (new state, old state)
     if(fraction===0 || Math.abs(resultNew)===Math.abs(resultVis)){
       // check for sign change
       if(detectSignChange(resultNew,resultVis)){
-        colorUnits(resultNew);
+        styleUnits(resultNew,unit);
       }
     }
     // if fraction exists, and the new Result is different from what's displayed
@@ -809,7 +810,7 @@ function vis(state, stateVis){ // (new state, old state)
       if($("#visResult .fraction").length==0){
         $("#visResult .collection").append("<div class='square fraction bloopIn'></div>");
         $("#visResult .fraction").css("clip-path", x);
-        colorUnits(resultNew);
+        styleUnits(resultNew,unit);
         // and change all the shapes to fractional shapes
         $(".collection>div").removeClass("circle").addClass("square");
       }
@@ -829,7 +830,7 @@ function vis(state, stateVis){ // (new state, old state)
         $("#visResult .collection").append("<div class='circle bloopIn'>1</div>");
       }
     }
-    colorUnits(resultNew);
+    styleUnits(resultNew);
   }
 
   // Add units onto screen, for numbers <0.1 or >100
@@ -850,8 +851,8 @@ function vis(state, stateVis){ // (new state, old state)
       // Then visualize the "fractional" part last
       visualizeFraction(resultNew,resultVis);
     }
-    // console.log(resultNew,resultVis,unit); // DEBUG
-    colorUnits(resultNew,unit);
+    // console.log("visResultComplex(): ", resultNew,resultVis,unit); // DEBUG
+    styleUnits(resultNew,unit);
   }
 
   // determine the right unit
@@ -881,43 +882,62 @@ function vis(state, stateVis){ // (new state, old state)
     return signChange;
   }
 
-  // Change the color to signify the appropriate sign
-  function colorUnits(resultNew,unit){
-    if(unit===undefined){unit = "1";} // default if undefined
+  // Change the color to signify the appropriate sign; give appropriate look
+  function styleUnits(resultNew,unit){
+    var borderType = "none"; // default border
+    var borderColor = "red"; // default color
+    var unitLabel = "1"; // default
+    if(unit===undefined){unitLabel = "1";} // default if undefined
     else if(unit>1){
-      if(unit===10){unit = "10";}
-      else if(unit===100){unit = "100";}
-      else if(unit===1000){unit = "1k";}
-      else if(unit===10000){unit = "10k";}
-      else if(unit===100000){unit = "100k";}
-      else if(unit===1000000){unit = "1M";}
-      else if(unit===10000000){unit = "10M";}
-      else if(unit===100000000){unit = "100M";}
-      else if(unit===1000000000){unit = "1B";}
-      else if(unit===10000000000){unit = "10B";}
-      else if(unit===100000000000){unit = "100B";}
-      else if(unit===1000000000000){unit = "1Tr";}
-      else{unit = unit.toExponential();}
+      borderType = "outset";
+      if(unit===10){unitLabel = "10";}
+      else if(unit===100){unitLabel = "100";}
+      else if(unit===1000){unitLabel = "1k";}
+      else if(unit===10000){unitLabel = "10k";}
+      else if(unit===100000){unitLabel = "100k";}
+      else if(unit===1000000){unitLabel = "1M";}
+      else if(unit===10000000){unitLabel = "10M";}
+      else if(unit===100000000){unitLabel = "100M";}
+      else if(unit===1000000000){unitLabel = "1B";}
+      else if(unit===10000000000){unitLabel = "10B";}
+      else if(unit===100000000000){unitLabel = "100B";}
+      else if(unit===1000000000000){unitLabel = "1Tr";}
+      else{unitLabel = unit.toExponential().toString();}
     }
     else if(unit<1){
-      if(unit===0.1){unit = "0.1";}
-      else if(unit===0.01){unit = "0.01";}
-      else{unit = unit.toExponential();}
+      borderType = "inset";
+      if(unit===0.1){unitLabel = "0.1";}
+      else if(unit===0.01){unitLabel = "0.01";}
+      else{unitLabel = unit.toExponential().toString();}
     }
-    else{unit = unit.toExponential();}
+    else{unit = unit.toExponential();} // not needed - just in case
     // if positive
     if(resultNew>0){
       $("#visResult .collection>div").removeClass("negative zero").addClass("positive");
-      $("#visResult .collection>div:not(.fraction)").html(unit);
+      $("#visResult .collection>div:not(.fraction)").html(unitLabel);
     }
     // if negative
     else if(resultNew<0){
       $("#visResult .collection>div").removeClass("positive zero").addClass("negative");
-      $("#visResult .collection>div:not(.fraction)").html("-"+unit);
+      $("#visResult .collection>div:not(.fraction)").html("-"+unitLabel);
     }
     // if zero
     else if(resultNew===0){
       $("#visResult .collection>div").removeClass("positive negative").addClass("zero");
     }
+    // set border thickness for small & large numbers
+    if(unit!=1){
+      borderColor = (resultNew>0) ? "red" : "black";
+      var borderThickness = parseInt(0.5*Math.log(unit)/Math.log(10));
+      if(borderThickness>9){ // set max thickness
+        borderThickness = 9;
+      }
+      borderThickness = borderThickness.toString() + "px";
+      var borderString = borderType + " " + borderThickness + " " + borderColor;
+      console.log(borderString); // DEBUG
+      $("#visResult .collection>div").css("border",borderString);
+    }
+
   }
+
 }
