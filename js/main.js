@@ -735,8 +735,8 @@ function vis(state, stateVis){ // (new state, old state)
   }
 
   // After new state has been analyzed, update the visualization state
-  console.log("LAST: ", stateVis); // DEBUG
-  console.log("STATE: ", state); // DEBUG
+  console.log("StateVis (end): ", stateVis); // DEBUG
+  console.log("State (end): ", state); // DEBUG
 
   // This function accepts numbers and displays then w/ animations of length defined in ms
   // It assumes resultVis is the number of units already displayed in the results
@@ -748,50 +748,79 @@ function vis(state, stateVis){ // (new state, old state)
     if(resultVis===undefined){
       resultVis = 0;
     }
-    // if absolute value of result <=100 && >=0.1
+    // if absolute value of result <=100 && >=0.1 || ===0
     if(Math.abs(resultNew)<=100 && Math.abs(resultNew)>=0.1 || resultNew===0){
       // check if decimals present in result...
       if(resultNew.toString().indexOf(".")>0 || resultVis.toString().indexOf(".")>0){
-        // set the leftover fractional part of new result aside
-        var wholeNum = Math.floor(Math.abs(resultNew));
-        var fraction = Math.abs(resultNew)-wholeNum;
-        // if fraction is 0, or if fraction is equal to what it was (trailing zeroes), then do nothing
-        if(fraction===0 || Math.abs(resultNew)===Math.abs(resultVis)){
-          // check for sign change
-          if(detectSignChange(resultNew,resultVis)){
-            colorUnits(resultNew);
-          }
-        }
-        // if fraction exists, and the new Result is different from what's displayed
-        else{
-          // Find string to represent fraction
-          var fxString = Math.round((1-fraction)*100).toString();
-          var x = "inset(" + fxString + "% 0px 0px 0px)";
-          // if fraction is not displayed in results yet...
-          if($("#visResult .fraction").length==0){
-            $("#visResult .collection").append("<div class='square fraction bloopIn'></div>");
-            $("#visResult .fraction").css("clip-path", x);
-            colorUnits(resultNew);
-            // and change all the shapes to fractional shapes
-            $(".collection>div").removeClass("circle").addClass("square");
-          }
-          // if the fraction already is there...
-          else{
-            $("#visResult .fraction").css("clip-path", x);
-          }
-        }
+        visualizeFraction(resultNew,resultVis);
       }
       // if no decimals present (just whole numbers)
       else{
         visResultBasic(resultNew,resultVis,timeAnimate);
       }
     }
+    // if absolute value of result >100 || <0.1 && !=0 (small or big numbers)
     else {
-      // visResultComplex(resultNew,resultVis,timeAnimate);
-      $("#visResult .collection").html("Number too big/small to show"); // DEBUG
+      //$("#visResult .collection").html("Number too big/small to show"); // DEBUG
+      // if new number is bigger, need to change unit of visualization...
+      if(resultNew>100){
+        // if units are in the same unit type as what's already visualized...
+        // but offset by 1 (so 100 has unit 10^2, but should be in 0.1-100 category)
+        var unitVis = determineUnit(resultVis);
+        var unitNew = determineUnit(resultNew);
+        if(unitVis===unitNew){
+          // visualize the result like normal
+          visResultComplex(resultNew,resultVis,timeAnimate);
+        }
+        // if they are NOT in the same unit type (smaller unit type instead)
+        else{
+          // clear results visualization (shrink), then visualize new result
+          $("#visResult .collection").animate({width: "10%"},timeAnimate,function(){
+            $("#visResult").html("<div class='collection'></div>");
+            visResultComplex(resultNew,resultVis,timeAnimate);
+          });
+        }
+      }
+      // if nonzero numbers are not already visualized in the results...
+      else if(resultVis<0.1){
+        // this should only happen with numbers <1... just visualize
+      }
     }
   };
 
+  // Deal w/ fractions
+  function visualizeFraction(resultNew,resultVis){
+    // set the leftover fractional part of new result aside
+    var wholeNum = Math.floor(Math.abs(resultNew));
+    var fraction = Math.abs(resultNew)-wholeNum;
+    // if fraction is 0, or if fraction is equal to what it was (trailing zeroes), then do nothing
+    if(fraction===0 || Math.abs(resultNew)===Math.abs(resultVis)){
+      // check for sign change
+      if(detectSignChange(resultNew,resultVis)){
+        colorUnits(resultNew);
+      }
+    }
+    // if fraction exists, and the new Result is different from what's displayed
+    else{
+      // Find string to represent fraction
+      var fxString = Math.round((1-fraction)*100).toString();
+      var x = "inset(" + fxString + "% 0px 0px 0px)";
+      // if fraction is not displayed in results yet...
+      if($("#visResult .fraction").length==0){
+        $("#visResult .collection").append("<div class='square fraction bloopIn'></div>");
+        $("#visResult .fraction").css("clip-path", x);
+        colorUnits(resultNew);
+        // and change all the shapes to fractional shapes
+        $(".collection>div").removeClass("circle").addClass("square");
+      }
+      // if the fraction already is there...
+      else{
+        $("#visResult .fraction").css("clip-path", x);
+      }
+    }
+  }
+
+  // Basic function for adding units onto the screen, for 0.1<=|numbers|<=100
   function visResultBasic(resultNew,resultVis,timeAnimate){
     var signChange = detectSignChange(resultNew,resultVis);
     // if the sign is the same, add the appropriate number of units
@@ -803,25 +832,41 @@ function vis(state, stateVis){ // (new state, old state)
     colorUnits(resultNew);
   }
 
+  // Add units onto screen, for numbers <0.1 or >100
   function visResultComplex(resultNew,resultVis,timeAnimate){
     var signChange = detectSignChange(resultNew,resultVis);
-    var unit = "1"; //default
     // if the sign is the same, add the appropriate number of units
-    // resultNew is >100; Determine scalemin,max (e.g. 10^2-10^3, 10^5-10^6...)
-    // if max scale is <=1,000,000, display regular notation, + words (thousands, millions)
-      // 100
-    // if max scale is >1,000,000, display sci notation - toExponential() + words
-    // if max scale is >1,000,000,000,000,000,000 (quintillion), stop using the words
-    // is mall number .... Math.abs(resultNew)<0.1
-    // scale numbers to 0.1 to 100 units (e.g. 134 goes to 13 10s; If range is 10e2-10e3, do units of 10e1)
     if(!signChange){
-      for(var i=0; i<(Math.abs(resultNew)-Math.abs(resultVis)); i++){
+      // determine the right unit
+      var unit = determineUnit(resultNew);
+      // reduce the number down to a manageable scale to visualize
+      resultNew = resultNew/unit;
+      resultVis = resultVis/unit;
+      console.log(resultNew,resultVis,unit); // DEBUG
+      // display the "whole/round number" units
+      for(var i=0; i<(Math.floor(Math.abs(resultNew))-Math.floor(Math.abs(resultVis))); i++){
         $("#visResult .collection").append("<div class='circle bloopIn'>"+unit+"</div>");
       }
+      // Then visualize the "fractional" part last
+      visualizeFraction(resultNew,resultVis);
     }
     colorUnits(resultNew);
   }
 
+  // determine the right unit
+  function determineUnit(resultNew){
+    var unit = 1; //default
+    // Determine scalemin,max (e.g. 10^2-10^3 units of 10^1, 10^5-10^6 units 10^4...)
+    //  (e.g. 134 goes to 13 10s; If range is 10e2-10e3, do units of 10e1)
+    var sci = resultNew.toExponential().toString(); // scientific notation string
+    var indexE = sci.indexOf("e");
+    var exp = (sci.charAt(indexE+1)==="+") ? sci.slice(indexE+2,sci.length+1) : -sci.slice(indexE+2,sci.length+1);
+    var unit = Math.pow(10,exp);
+    // console.log("Sci, indexE, unit: ",sci, indexE, unit); // DEBUG
+    return unit;
+  }
+
+  // Given the old visualized result and the new result, output if sign has changed
   function detectSignChange(resultNew,resultVis){
     signChange = false;
     // if the SIGN of the number has changed, pulse the units
