@@ -928,7 +928,7 @@ function vis(state, stateVis){ // (new state, old state)
     // set border thickness for small & large numbers
     if(unit!=1){
       borderColor = (resultNew>0) ? "red" : "black";
-      var borderThickness = parseInt(0.5*Math.log(unit)/Math.log(10));
+      var borderThickness = parseInt(0.5*Math.abs(Math.log(unit)/Math.log(10)));
       if(borderThickness>9){ // set max thickness
         borderThickness = 9;
       }
