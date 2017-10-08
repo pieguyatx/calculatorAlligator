@@ -653,7 +653,6 @@ function vis(state, stateVis){ // (new state, old state)
     if(state.result==="0" || state.result==="error"){
       // if there's not already a zero displayed...
       if(stateVis.result.value!=0 || (stateVis.history.value!=0 && !isNaN(state.history.value)) ){
-              console.log("BLAH");
         // fade all, clear, make opaque again
         $("#visHistory").animate({opacity: "0"},timeAnimate,function(){
           $(this).html("<div class='collection'></div>").animate({opacity: "1"},0);
@@ -769,11 +768,13 @@ function vis(state, stateVis){ // (new state, old state)
         var unitVis = determineUnit(resultVis);
         var unitNew = determineUnit(resultNew);
         if(unitVis===unitNew){
+          // console.log("Same unit type already visualized!"); // DEBUG
           // visualize the result like normal
           visResultComplex(resultNew,resultVis,timeAnimate);
         }
         // if they are NOT in the same unit type (smaller unit type instead)
         else{
+          // console.log("New units and old visualized units are different!"); // DEBUG
           // clear results visualization (shrink), then visualize new result
           $("#visResult .collection").animate({opacity: "0"},timeAnimate,function(){
             $("#visResult").html("<div class='collection'></div>");
@@ -843,7 +844,7 @@ function vis(state, stateVis){ // (new state, old state)
       // determine the right unit
       // reduce the number down to a manageable scale to visualize
       resultNew = resultNew/unit;
-      resultVis = resultVis/unit;
+      resultVis = 0 // assume the results have to be re-visualized completely
       // display the "whole/round number" units
       for(var i=0; i<(Math.floor(Math.abs(resultNew))-Math.floor(Math.abs(resultVis))); i++){
         $("#visResult .collection").append("<div class='circle bloopIn'>"+unit+"</div>");
@@ -934,7 +935,7 @@ function vis(state, stateVis){ // (new state, old state)
       }
       borderThickness = borderThickness.toString() + "px";
       var borderString = borderType + " " + borderThickness + " " + borderColor;
-      console.log(borderString); // DEBUG
+      // console.log(borderString); // DEBUG
       $("#visResult .collection>div").css("border",borderString);
     }
 
