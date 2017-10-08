@@ -835,14 +835,13 @@ function vis(state, stateVis){ // (new state, old state)
   // Add units onto screen, for numbers <0.1 or >100
   function visResultComplex(resultNew,resultVis,timeAnimate){
     var signChange = detectSignChange(resultNew,resultVis);
+    var unit = determineUnit(resultNew);
     // if the sign is the same, add the appropriate number of units
     if(!signChange){
       // determine the right unit
-      var unit = determineUnit(resultNew);
       // reduce the number down to a manageable scale to visualize
       resultNew = resultNew/unit;
       resultVis = resultVis/unit;
-      console.log(resultNew,resultVis,unit); // DEBUG
       // display the "whole/round number" units
       for(var i=0; i<(Math.floor(Math.abs(resultNew))-Math.floor(Math.abs(resultVis))); i++){
         $("#visResult .collection").append("<div class='circle bloopIn'>"+unit+"</div>");
@@ -850,7 +849,8 @@ function vis(state, stateVis){ // (new state, old state)
       // Then visualize the "fractional" part last
       visualizeFraction(resultNew,resultVis);
     }
-    colorUnits(resultNew);
+    // console.log(resultNew,resultVis,unit); // DEBUG
+    colorUnits(resultNew,unit);
   }
 
   // determine the right unit
@@ -881,16 +881,30 @@ function vis(state, stateVis){ // (new state, old state)
   }
 
   // Change the color to signify the appropriate sign
-  function colorUnits(resultNew){
+  function colorUnits(resultNew,unit){
+    if(unit===undefined){unit = "1";} // default if undefined
+    else if(unit===10){unit = "10";}
+    else if(unit===100){unit = "100";}
+    else if(unit===1000){unit = "1k";}
+    else if(unit===10000){unit = "10k";}
+    else if(unit===100000){unit = "100k";}
+    else if(unit===1000000){unit = "1M";}
+    else if(unit===10000000){unit = "10M";}
+    else if(unit===100000000){unit = "100M";}
+    else if(unit===1000000000){unit = "1B";}
+    else if(unit===10000000000){unit = "10B";}
+    else if(unit===100000000000){unit = "100B";}
+    else if(unit===1000000000000){unit = "1Tr";}
+    else{unit = unit.toExponential();}
     // if positive
     if(resultNew>0){
       $("#visResult .collection>div").removeClass("negative zero").addClass("positive");
-      $("#visResult .collection>div:not(.fraction)").html("1");
+      $("#visResult .collection>div:not(.fraction)").html(unit);
     }
     // if negative
     else if(resultNew<0){
       $("#visResult .collection>div").removeClass("positive zero").addClass("negative");
-      $("#visResult .collection>div:not(.fraction)").html("-1");
+      $("#visResult .collection>div:not(.fraction)").html("-"+unit);
     }
     // if zero
     else if(resultNew===0){
