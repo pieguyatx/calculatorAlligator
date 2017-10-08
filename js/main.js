@@ -768,13 +768,13 @@ function vis(state, stateVis){ // (new state, old state)
         var unitVis = determineUnit(resultVis);
         var unitNew = determineUnit(resultNew);
         if(unitVis===unitNew){
-          // console.log("Same unit type already visualized!"); // DEBUG
+          console.log("Same unit type already visualized!"); // DEBUG
           // visualize the result like normal
           visResultComplex(resultNew,resultVis,timeAnimate);
         }
         // if they are NOT in the same unit type (smaller unit type instead)
         else{
-          // console.log("New units and old visualized units are different!"); // DEBUG
+          console.log("New units and old visualized units are different!"); // DEBUG
           // clear results visualization (shrink), then visualize new result
           $("#visResult .collection").animate({opacity: "0"},timeAnimate,function(){
             $("#visResult").html("<div class='collection'></div>");
@@ -843,8 +843,14 @@ function vis(state, stateVis){ // (new state, old state)
     if(!signChange){
       // determine the right unit
       // reduce the number down to a manageable scale to visualize
+      if(Math.abs(resultNew)<1){
+        resultVis = resultVis/unit; // for small units, units could be there already; so account for that
+      }
+      else{
+        resultVis = 0 // assume the results have to be re-visualized completely for large numbers
+      }
       resultNew = resultNew/unit;
-      resultVis = 0 // assume the results have to be re-visualized completely
+      // console.log(resultNew,resultVis);
       // display the "whole/round number" units
       for(var i=0; i<(Math.floor(Math.abs(resultNew))-Math.floor(Math.abs(resultVis))); i++){
         $("#visResult .collection").append("<div class='circle bloopIn'>"+unit+"</div>");

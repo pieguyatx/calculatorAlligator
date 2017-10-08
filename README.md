@@ -16,7 +16,6 @@ These are known bugs that should be fixed over time. They haven't been fixed yet
 * Typing (or clicking) digits too fast makes the visualizations not appear correctly. The animations seem to get in the way of proper processing. (10/8/17)
 * Small decimal numbers show up funny when including more and more digits - square, circle, and fractional types might mix inappropriately. (10/8/17)
 * Unit labels don't show up properly on small screens. The fix should be to just hide the labels on small screens. (10/8/17)
-* small numbers are off
 
 ## Miscellaneous
 *The original project was named "Calculator Alligator" before I found out that a children's book already existed by that name.  I've changed it to "Calculator Gator" to disambiguate the names and because it is easier to say.
