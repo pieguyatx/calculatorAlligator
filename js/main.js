@@ -787,17 +787,9 @@ function vis(state, stateVis){ // (new state, old state)
       }
     }
     else {
-      // resultNew is >100; Determine scalemin,max (e.g. 10^2-10^3, 10^5-10^6...)
-      // if max scale is <=1,000,000, display regular notation, + words (thousands, millions)
-        // 100
-      // if max scale is >1,000,000, display sci notation - toExponential() + words
-      // if max scale is >1,000,000,000,000,000,000 (quintillion), stop using the words
-      // is mall number .... Math.abs(resultNew)<0.1
-      // scale numbers to 0.1 to 100 units (e.g. 134 goes to 13 10s; If range is 10e2-10e3, do units of 10e1)
+      // visResultComplex(resultNew,resultVis,timeAnimate);
       $("#visResult .collection").html("Number too big/small to show"); // DEBUG
-      // TBD: Use a "water tank" analogy?
     }
-
   };
 
   function visResultBasic(resultNew,resultVis,timeAnimate){
@@ -806,6 +798,25 @@ function vis(state, stateVis){ // (new state, old state)
     if(!signChange){
       for(var i=0; i<(Math.abs(resultNew)-Math.abs(resultVis)); i++){
         $("#visResult .collection").append("<div class='circle bloopIn'>1</div>");
+      }
+    }
+    colorUnits(resultNew);
+  }
+
+  function visResultComplex(resultNew,resultVis,timeAnimate){
+    var signChange = detectSignChange(resultNew,resultVis);
+    var unit = "1"; //default
+    // if the sign is the same, add the appropriate number of units
+    // resultNew is >100; Determine scalemin,max (e.g. 10^2-10^3, 10^5-10^6...)
+    // if max scale is <=1,000,000, display regular notation, + words (thousands, millions)
+      // 100
+    // if max scale is >1,000,000, display sci notation - toExponential() + words
+    // if max scale is >1,000,000,000,000,000,000 (quintillion), stop using the words
+    // is mall number .... Math.abs(resultNew)<0.1
+    // scale numbers to 0.1 to 100 units (e.g. 134 goes to 13 10s; If range is 10e2-10e3, do units of 10e1)
+    if(!signChange){
+      for(var i=0; i<(Math.abs(resultNew)-Math.abs(resultVis)); i++){
+        $("#visResult .collection").append("<div class='circle bloopIn'>"+unit+"</div>");
       }
     }
     colorUnits(resultNew);
