@@ -849,17 +849,27 @@ function vis(state, stateVis){ // (new state, old state)
     if(!signChange){
       // determine the right unit
       // reduce the number down to a manageable scale to visualize
-      if(Math.abs(resultNew)<1){
-        resultVis = resultVis/unit; // for small units, units could be there already; so account for that
-      }
+      // for numbers that are the same (just a decimal pt added), don't revisualize anything
+      if(resultNew===resultVis){
+          // do nothing...
+      }  // otherwise...
       else{
-        resultVis = 0 // assume the results have to be re-visualized completely for large numbers
-      }
-      resultNew = resultNew/unit;
-      // console.log(resultNew,resultVis);
-      // display the "whole/round number" units
-      for(var i=0; i<(Math.floor(Math.abs(resultNew))-Math.floor(Math.abs(resultVis))); i++){
-        $("#visResult .collection").append("<div class='circle bloopIn'>"+unit+"</div>");
+        // for certain cases, units will already be there; just add more units as needed:
+        //    for small numbers<1, numbers>100 w/ decimals
+        if(Math.abs(resultNew)<1 || resultNew.toString().indexOf(".")>0){
+          resultVis = resultVis/unit;
+        }
+        else{
+          resultVis = 0 // assume the results have to be re-visualized completely for large numbers
+        }
+        resultNew = resultNew/unit;
+        console.log(resultNew,resultVis,unit);
+
+        // console.log(resultNew,resultVis);
+        // display the "whole/round number" units
+        for(var i=0; i<(Math.floor(Math.abs(resultNew))-Math.floor(Math.abs(resultVis))); i++){
+          $("#visResult .collection").append("<div class='circle bloopIn'>"+unit+"</div>");
+        }
       }
       // Then visualize the "fractional" part last
       visualizeFraction(resultNew,resultVis);
