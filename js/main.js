@@ -709,13 +709,16 @@ function vis(state, stateVis){ // (new state, old state)
       }
       // and there is something in the results now
       else if(stateVis.result.value || stateVis.result.value===0){
-        // add digits TBD
+        // add digits, recognizing that some units are already visualized
         visResult(resultNew,resultVis,timeAnimate);
-
-
       }
       // check sizes of current number in history and in result;
         // set new size based on that
+
+        //TBD
+
+
+
       // display new units in results
       //update visHistory
       stateVis.history.value = parseFloat(state.history.numFirst);
@@ -791,12 +794,14 @@ function vis(state, stateVis){ // (new state, old state)
 
   // Deal w/ fractions
   function visualizeFraction(resultNew,resultVis){
+    console.log("Running the visualizeFraction() function now..."); // DEBUG
     var unit = determineUnit(resultNew); // get unit for later
     // set the leftover fractional part of new result aside
     var wholeNum = Math.floor(Math.abs(resultNew));
     var fraction = Math.abs(resultNew)-wholeNum;
     // if fraction is 0, or if fraction is equal to what it was (trailing zeroes), then do nothing
     if(fraction===0 || Math.abs(resultNew)===Math.abs(resultVis)){
+      console.log("Assuming number is the same value as before, or no fraction exists.");
       // check for sign change
       if(detectSignChange(resultNew,resultVis)){
         styleUnits(resultNew,unit);
@@ -836,6 +841,7 @@ function vis(state, stateVis){ // (new state, old state)
 
   // Add units onto screen, for numbers <0.1 or >100
   function visResultComplex(resultNew,resultVis,timeAnimate){
+    console.log("Running the visResultComplex() function now...");
     var signChange = detectSignChange(resultNew,resultVis);
     // find what unit to put the new result in, if there were no history
     var unit = determineUnit(resultNew);
