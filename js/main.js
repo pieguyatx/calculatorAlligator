@@ -712,17 +712,11 @@ function vis(state, stateVis){ // (new state, old state)
         // add digits, recognizing that some units are already visualized
         visResult(resultNew,resultVis,timeAnimate);
       }
-      // check sizes of current number in history and in result;
-        // set new size based on that
-
-        //TBD
-
-
-
       // display new units in results
       //update visHistory
       stateVis.history.value = parseFloat(state.history.numFirst);
-      stateVis.result.value = parseFloat(state.result);
+      stateVis.history.orientation = stateVis.result.orientation;
+      stateVis.result.value = resultNew;
     }
     // If there is an operator and equals in the history...
       // animate according to operator types
