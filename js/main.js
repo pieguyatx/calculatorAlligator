@@ -803,7 +803,7 @@ function vis(state, stateVis){ // (new state, old state)
 
   // Deal w/ fractions
   function visualizeFraction(resultNew,resultVis){
-    console.log("Running the visualizeFraction() function now..."); // DEBUG
+    console.log("Running the visualizeFraction() function now: ", resultNew, resultVis); // DEBUG
     var unit = 1;
     if(Math.abs(resultNew)<1 || Math.abs(resultNew)>100){
       unit = determineUnit(resultNew); // get unit for later
@@ -874,12 +874,12 @@ function vis(state, stateVis){ // (new state, old state)
         // for certain cases, units will already be there; just add more units as needed:
         //    for small numbers<1, numbers>100 w/ decimals
         if(Math.abs(resultNew)<1 || resultNew.toString().indexOf(".")>0){
-          resultVis = parseFloat((resultVis/unit).toFixed(4)); // converts to number >0,<=100
+          resultVis = parseFloat((resultVis/unit).toFixed(12)); // converts to number >0,<=100
         }
         else{
           resultVis = 0 // assume the results have to be re-visualized completely for large numbers
         }
-        resultNew = parseFloat((resultNew/unit).toFixed(4)); // converts to number >0,<=100
+        resultNew = parseFloat((resultNew/unit).toFixed(12)); // converts to number >0,<=100
         // console.log(resultNew,resultVis);
         // display the "whole/round number" units
         for(var i=0; i<(Math.floor(Math.abs(resultNew))-Math.floor(Math.abs(resultVis))); i++){
