@@ -636,6 +636,7 @@ function displayHelp(statement){
 // VISUALIZE NUMBERS & OPERATIONS ==============================================
 // =============================================================================
 function vis(state, stateVis){ // (new state, old state)
+  console.log("Running vis() function now...");  // DEBUG
   // This function takes in the state of the calculator and compares it to the
   // old state (global obj). Depending on the changes, animations are performed.
   /* DEFAULT STATE:
@@ -646,9 +647,11 @@ function vis(state, stateVis){ // (new state, old state)
   var timeAnimate = 200; // default animation time
   var resultNew = parseFloat(state.result);
   var resultVis = stateVis.result.value;
+  var historyVis = stateVis.history.value;
   // CLEAR
   // If current history in the numbers is clear....
   if(state.operatorExists===false && state.equalsExists===false){
+    console.log("Running vis() function now; history is clear."); // DEBUG
     // if result is 0, 0., 0.000, "error", etc AND it's new
     if(state.result==="0" || state.result==="error"){
       // if there's not already a zero displayed...
@@ -672,9 +675,15 @@ function vis(state, stateVis){ // (new state, old state)
     else{
       // if current visualized result is 0, clear the display, then display result
       if(resultVis===0 || resultVis===undefined){
-        $(".collection").animate({opacity: "0"},timeAnimate,function(){
+        // clear visualized history
+        $("#visHistory .collection").animate({opacity: "0"},timeAnimate,function(){
           $(this).remove();
-          $("#visResult,#visHistory").html("<div class='collection'></div>");
+          $("#visHistory").html("<div class='collection'></div>");
+        });
+        // clear and update visualized result
+        $("#visResult .collection").animate({opacity: "0"},timeAnimate,function(){
+          $(this).remove();
+          $("#visResult").html("<div class='collection'></div>");
           visResult(resultNew,resultVis,timeAnimate);
         });
       }
@@ -689,6 +698,7 @@ function vis(state, stateVis){ // (new state, old state)
   // OPERATIONS
   // If there is a history now... if operator OR equals exists
   else{
+    console.log("Running vis() function now; there is a history."); // DEBUG
     // If first number & operator exists, but no equals...
     if(state.operatorExists===true && state.equalsExists===false){
       // and there isn't any number visualized in the history
@@ -704,13 +714,15 @@ function vis(state, stateVis){ // (new state, old state)
       }
       // and there is nothing visualized in the results now
       else if(stateVis.result.value===undefined || isNaN(stateVis.result.value)){
+        console.log("Current visualized result is undefined; will update."); // DEBUG
         // add digits
-        visResult(resultNew,0,timeAnimate);
+        visResult(resultNew,0,timeAnimate,historyVis);
       }
       // and there is something in the results now
       else if(stateVis.result.value || stateVis.result.value===0){
+        console.log("Current visualized result is defined; will update."); // DEBUG
         // add digits, recognizing that some units are already visualized
-        visResult(resultNew,resultVis,timeAnimate);
+        visResult(resultNew,resultVis,timeAnimate,historyVis);
       }
       // display new units in results
       //update visHistory
@@ -737,7 +749,7 @@ function vis(state, stateVis){ // (new state, old state)
   // This function accepts numbers and displays then w/ animations of length defined in ms
   // It assumes resultVis is the number of units already displayed in the results
   // while resultNew is the new number to show in the results
-  function visResult(resultNew, resultVis, timeAnimate){
+  function visResult(resultNew, resultVis, timeAnimate, historyVis){
     if(resultNew===undefined){
       resultNew = 0;
     }
@@ -765,13 +777,13 @@ function vis(state, stateVis){ // (new state, old state)
         var unitVis = determineUnit(resultVis);
         var unitNew = determineUnit(resultNew);
         if(unitVis===unitNew){
-          console.log("Same unit type already visualized!"); // DEBUG
+          // console.log("Same unit type already visualized!"); // DEBUG
           // visualize the result like normal
           visResultComplex(resultNew,resultVis,timeAnimate);
         }
         // if they are NOT in the same unit type (smaller unit type instead)
         else{
-          console.log("New units and old visualized units are different!"); // DEBUG
+          // console.log("New units and old visualized units are different!"); // DEBUG
           // clear results visualization (shrink), then visualize new result
           $("#visResult .collection").animate({opacity: "0"},timeAnimate,function(){
             $("#visResult").html("<div class='collection'></div>");
@@ -788,14 +800,14 @@ function vis(state, stateVis){ // (new state, old state)
 
   // Deal w/ fractions
   function visualizeFraction(resultNew,resultVis){
-    console.log("Running the visualizeFraction() function now..."); // DEBUG
+    // console.log("Running the visualizeFraction() function now..."); // DEBUG
     var unit = determineUnit(resultNew); // get unit for later
     // set the leftover fractional part of new result aside
     var wholeNum = Math.floor(Math.abs(resultNew));
     var fraction = Math.abs(resultNew)-wholeNum;
     // if fraction is 0, or if fraction is equal to what it was (trailing zeroes), then do nothing
     if(fraction===0 || Math.abs(resultNew)===Math.abs(resultVis)){
-      console.log("Assuming number is the same value as before, or no fraction exists.");
+      // console.log("Assuming number is the same value as before, or no fraction exists.");
       // check for sign change
       if(detectSignChange(resultNew,resultVis)){
         styleUnits(resultNew,unit);
@@ -834,11 +846,15 @@ function vis(state, stateVis){ // (new state, old state)
   }
 
   // Add units onto screen, for numbers <0.1 or >100
-  function visResultComplex(resultNew,resultVis,timeAnimate){
-    console.log("Running the visResultComplex() function now...");
+  function visResultComplex(resultNew,resultVis,timeAnimate,unitForced){
+    // console.log("Running the visResultComplex() function now...");
     var signChange = detectSignChange(resultNew,resultVis);
     // find what unit to put the new result in, if there were no history
     var unit = determineUnit(resultNew);
+    // override the scientific notation unit if specified
+    if(unitForced){
+      unit = unitForced;
+    }
     // if the sign is the same, add the appropriate number of units
     if(!signChange){
       // determine the right unit
@@ -851,14 +867,12 @@ function vis(state, stateVis){ // (new state, old state)
         // for certain cases, units will already be there; just add more units as needed:
         //    for small numbers<1, numbers>100 w/ decimals
         if(Math.abs(resultNew)<1 || resultNew.toString().indexOf(".")>0){
-          resultVis = resultVis/unit;
+          resultVis = parseFloat((resultVis/unit).toFixed(4)); // converts to number >0,<=100
         }
         else{
           resultVis = 0 // assume the results have to be re-visualized completely for large numbers
         }
-        resultNew = resultNew/unit;
-        console.log(resultNew,resultVis,unit);
-
+        resultNew = parseFloat((resultNew/unit).toFixed(4)); // converts to number >0,<=100
         // console.log(resultNew,resultVis);
         // display the "whole/round number" units
         for(var i=0; i<(Math.floor(Math.abs(resultNew))-Math.floor(Math.abs(resultVis))); i++){
