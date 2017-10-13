@@ -388,8 +388,10 @@ function sign(state,stateVis){
   }
   // display appropriate help message
   displayHelp(randomStatement(statements));
-  // visualize number in result
-  vis(state,stateVis);
+  // visualize number in result if it's not zero
+  if(state.result!="0" && state.result!="0." && state.result!=""){
+    vis(state,stateVis);
+  }
 }
 
 // EQUALS ======================================================================
@@ -760,6 +762,7 @@ function vis(state, stateVis){ // (new state, old state)
     if(Math.abs(resultNew)<=100 && Math.abs(resultNew)>=0.1 || resultNew===0){
       // check if decimals present in result...
       if(resultNew.toString().indexOf(".")>0 || resultVis.toString().indexOf(".")>0){
+        console.log("Running visualizeFraction() function from visResult()");
         visualizeFraction(resultNew,resultVis);
       }
       // if no decimals present (just whole numbers)
@@ -800,14 +803,17 @@ function vis(state, stateVis){ // (new state, old state)
 
   // Deal w/ fractions
   function visualizeFraction(resultNew,resultVis){
-    // console.log("Running the visualizeFraction() function now..."); // DEBUG
-    var unit = determineUnit(resultNew); // get unit for later
+    console.log("Running the visualizeFraction() function now..."); // DEBUG
+    var unit = 1;
+    if(Math.abs(resultNew)<1 || Math.abs(resultNew)>100){
+      unit = determineUnit(resultNew); // get unit for later
+    }
     // set the leftover fractional part of new result aside
     var wholeNum = Math.floor(Math.abs(resultNew));
     var fraction = Math.abs(resultNew)-wholeNum;
     // if fraction is 0, or if fraction is equal to what it was (trailing zeroes), then do nothing
     if(fraction===0 || Math.abs(resultNew)===Math.abs(resultVis)){
-      // console.log("Assuming number is the same value as before, or no fraction exists.");
+      console.log("Assuming number is the same value as before, or no fraction exists.");
       // check for sign change
       if(detectSignChange(resultNew,resultVis)){
         styleUnits(resultNew,unit);
@@ -815,6 +821,7 @@ function vis(state, stateVis){ // (new state, old state)
     }
     // if fraction exists, and the new Result is different from what's displayed
     else{
+      console.log("Fraction exists that is different from before.");
       // Find string to represent fraction
       var fxString = Math.round((1-fraction)*100).toString();
       var x = "inset(" + fxString + "% 0px 0px 0px)";
@@ -880,6 +887,7 @@ function vis(state, stateVis){ // (new state, old state)
         }
       }
       // Then visualize the "fractional" part last
+      console.log("Running visualizeFraction() function from visResultComplex()");
       visualizeFraction(resultNew,resultVis);
     }
     // console.log("visResultComplex(): ", resultNew,resultVis,unit); // DEBUG
