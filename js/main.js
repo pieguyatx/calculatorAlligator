@@ -645,6 +645,7 @@ function displayHelp(statement){
 
 // VISUALIZE NUMBERS & OPERATIONS ==============================================
 // =============================================================================
+// One giant function with lots of internal subfunctions/methods
 function vis(state, stateVis){ // (new state, old state)
   console.log("Running vis() function now...");  // DEBUG
   // This function takes in the state of the calculator and compares it to the
@@ -769,6 +770,20 @@ function vis(state, stateVis){ // (new state, old state)
         else{
           console.log("Seems like an operator was pressed before pressing equals..."); // DEBUG
           // Clear both history and result visualizations
+          let unitVisHistory = 1;
+          let historyVisTarget = parseFloat(state.history.numFirst);
+          if( Math.abs(historyVisTarget)<0.1 || Math.abs(historyVisTarget)>100){
+            unitVisHistory = determineUnit(parseFloat(state.history.numFirst));
+          }
+          revisualizeHistory(historyVisTarget,unitVisHistory,timeAnimate);
+          stateVis.history.value = historyVisTarget;
+          stateVis.history.orientation = "add";
+          $("#visResult .collection").animate({opacity: "0"},timeAnimate,function(){
+            $("#visResult").html("<div class='collection'><div class='circle zero'></div></div>");
+          });
+          // update vis state
+          stateVis.result.value = 0;
+          stateVis.result.orientation = "add";
           // Display the new history (or the result of the last operation) without any special animations
         }
       }
@@ -880,29 +895,7 @@ function vis(state, stateVis){ // (new state, old state)
       // if it's not just a sign change in the result AND not the same number...
       showResults(resultNew,resultVis,timeAnimate,unitLargest);
       // clear history visualization, then visualize new history
-      $("#visHistory .collection").animate({opacity: "0"},timeAnimate,function(){
-        $("#visHistory").html("<div class='collection'></div>");
-        // redraw history completely
-        var historyVisReduced = parseFloat((historyVis/unitLargest).toFixed(12)); // converts to number >0,<=100
-        if(Math.abs(historyVisReduced)>=1){
-          // display the "whole/round number" units
-          for(var i=0; i<Math.floor(Math.abs(historyVisReduced)); i++){
-            $("#visHistory .collection").append("<div class='circle bloopIn'>"+unitLargest+"</div>");
-          }
-        }
-        // Then visualize the "fractional" part last (based on visualizeFraction())
-        // set the leftover fractional part of new result aside
-        var wholeNum = Math.floor(Math.abs(historyVisReduced));
-        var fraction = Math.abs(historyVisReduced)-wholeNum;
-        var fxString = Math.round((1-fraction)*100).toString();
-        var x = "inset(" + fxString + "% 0px 0px 0px)";
-        $("#visHistory .collection").append("<div class='square fraction bloopIn'></div>");
-        $("#visHistory .fraction").css("clip-path", x);
-        // and change all the shapes to fractional shapes
-        $("#visHistory .collection>div").removeClass("circle").addClass("square");
-        // style history
-        styleUnits(historyVis,unitLargest,1);
-      });
+      revisualizeHistory(historyVis,unitLargest,timeAnimate);
     }
     // style results
     styleUnits(resultNew,unitLargest);
@@ -937,6 +930,36 @@ function vis(state, stateVis){ // (new state, old state)
       }
     }
   };
+
+  // This function is for redrawing whatever's shown in the history
+  function revisualizeHistory(historyVis,unit,timeAnimate){
+    $("#visHistory .collection").animate({opacity: "0"},timeAnimate,function(){
+      $("#visHistory").html("<div class='collection'></div>");
+      // redraw history completely
+      var historyVisReduced = parseFloat((historyVis/unit).toFixed(12)); // converts to number >0,<=100
+      if(Math.abs(historyVisReduced)>=1){
+        // display the "whole/round number" units
+        for(var i=0; i<Math.floor(Math.abs(historyVisReduced)); i++){
+          $("#visHistory .collection").append("<div class='circle bloopIn'>"+unit+"</div>");
+        }
+      }
+      // Then visualize the "fractional" part last if needed
+      // set the leftover fractional part of new result aside
+      var wholeNum = Math.floor(Math.abs(historyVisReduced));
+      var fraction = Math.abs(historyVisReduced)-wholeNum;
+      // if fraction exists
+      if(fraction>0){
+        var fxString = Math.round((1-fraction)*100).toString();
+        var x = "inset(" + fxString + "% 0px 0px 0px)";
+        $("#visHistory .collection").append("<div class='square fraction bloopIn'></div>");
+        $("#visHistory .fraction").css("clip-path", x);
+        // and change all the shapes to fractional shapes
+        $("#visHistory .collection>div").removeClass("circle").addClass("square");
+      }
+      // style history
+      styleUnits(historyVis,unit,1);
+    });
+  }
 
   // Deal w/ fractions
   function visualizeFraction(resultNew,resultVis){
