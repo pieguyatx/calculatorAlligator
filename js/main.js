@@ -284,7 +284,7 @@ function operatorPressed(operator,state,stateVis){
         // Assume (2nd num) = number on result
         state.history.numSecond = state.result;
         // Calculate (1st num) (operator) (2nd num); store as (ans)
-        equals(state); // calculate before updating operator
+        equals(state,stateVis); // calculate before updating operator
         // Replace history with (1st num) (operator) (2nd num) =
         state.history.operator = operator;
         // Assume (resultNum) = (1st num)
@@ -398,23 +398,23 @@ function sign(state,stateVis){
 }
 
 // EQUALS ======================================================================
-function listenForEquals(state){
+function listenForEquals(state,stateVis){
   // keyboard: = keyboard
   $(document).on('keyup', function(event){
     var charCode = (typeof event.which == "number") ? event.which : event.keyCode;
     if (charCode===187 && event.shiftKey===false){
       console.log("Key pressed (=): EQUALS"); // debug
-      equals(state);
+      equals(state,stateVis);
     }
   });
   // mouse click
   $("#equals").on('click', function(){
     console.log("Button pressed: EQUALS"); // debug
-    equals(state);
+    equals(state,stateVis);
   });
 }
 
-function equals(state,noDisplay){
+function equals(state,stateVis,noDisplay){
   var statements;
   // If (operatorExists) is false && (equalsExists) is false
   // OR if (equalsExists) in history already
@@ -510,6 +510,7 @@ function equals(state,noDisplay){
   // make the appropriate statement to user
   if(!noDisplay){
     displayHelp(randomStatement(statements));
+    vis(state,stateVis);
   }
 }
 
@@ -538,7 +539,7 @@ function squared(state){
       // If there is ONLY an operator and no EQUALS in the history
       if(state.operatorExists===true && state.equalsExists===false){
         // do the first operation before squaring
-        equals(state,true);
+        equals(state,stateVis,true);
         // show the full calculation in the history
         let symbol = getSymbol(state.history.operator,true);
         let secondNumber = state.history.numSecond;
@@ -654,11 +655,11 @@ function vis(state, stateVis){ // (new state, old state)
   var resultVis = stateVis.result.value;
   var historyVis = stateVis.history.value;
   // CLEAR
-  // If current history in the numbers is clear....
-  if(state.operatorExists===false && state.equalsExists===false){
+  // If current history in the numbers is clear, or there's an error....
+  if((state.operatorExists===false && state.equalsExists===false) || state.result==="error"){
     // console.log("Running vis() function now; history is clear."); // DEBUG
     // if result is 0, 0., 0.000, "error", etc AND it's new
-    if(state.result==="0" || state.result==="error"){
+    if(state.result==="0"){
       // if there's not already a zero displayed...
       if(stateVis.result.value!=0 || (stateVis.history.value!=0 && !isNaN(state.history.value)) || (stateVis.result.value===0 && !isNaN(stateVis.history.value) ) ){
         // fade all, clear, make opaque again
@@ -769,9 +770,10 @@ function vis(state, stateVis){ // (new state, old state)
       // animate according to operator types
       // add
         // same sign
-          // handle units one at a time - slide history right, add to result
+          // handle whole units one at a time - slide history right, add to result
+          // if decimal/fraction present,
         // opposite sign
-          // handle units one at a time - slide history right, remove from result
+          // handle whole units one at a time - slide history right, remove from result
             // if result has nothing, add unit to result w/ same sign as history
       // subtract
         // same sign
