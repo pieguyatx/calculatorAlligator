@@ -714,17 +714,46 @@ function vis(state, stateVis){ // (new state, old state)
           });
         });
       }
-      // and there is nothing visualized in the results now
-      else if(stateVis.result.value===undefined || isNaN(stateVis.result.value)){
-        console.log("Current visualized result is undefined; will update."); // DEBUG
-        // add digits
-        visResult(resultNew,0,timeAnimate,historyVis);
-      }
-      // and there is something in the results now
-      else if(stateVis.result.value || stateVis.result.value===0){
-        console.log("Current visualized result is defined; will update."); // DEBUG
-        // add digits, recognizing that some units are already visualized
-        visResult(resultNew,resultVis,timeAnimate,historyVis);
+      // otherwise if there is a number visualized in the history already...
+      else if(!isNaN(historyVis)){
+        var unitHistory = 1, unitNew = 1;
+        // ...and the units of the results and history are the same...
+        if(Math.abs(historyVis)>100||Math.abs(historyVis)<1){
+          unitHistory = determineUnit(historyVis);
+        }
+        if(Math.abs(resultNew)>100||Math.abs(resultNew)<1){
+          unitNew = determineUnit(resultNew);
+        }
+        // console.log("history exists... ", unitHistory,unitNew); // DEBUG
+        if(unitHistory===unitNew){
+          // and there is nothing visualized in the results now
+          if(stateVis.result.value===undefined || isNaN(stateVis.result.value)){
+            // console.log("Current visualized result is undefined; will update."); // DEBUG
+            // add digits
+            visResult(resultNew,0,timeAnimate);
+          }
+          // and there is something in the results now
+          else if(stateVis.result.value || stateVis.result.value===0){
+            // console.log("Current visualized result is defined; will update."); // DEBUG
+            // add digits, recognizing that some units are already visualized
+            visResult(resultNew,resultVis,timeAnimate);
+          }
+        }
+        // ...but if the units of the results and history are NOT same...
+        else{
+          // and there is nothing visualized in the results now
+          if(stateVis.result.value===undefined || isNaN(stateVis.result.value)){
+            console.log("Current visualized result is undefined; will update. History & result units different"); // DEBUG
+            // add digits
+            visHistoryAndResult(resultNew,0,timeAnimate,historyVis,unitHistory,unitNew);
+          }
+          // and there is something in the results now
+          else if(stateVis.result.value || stateVis.result.value===0){
+            console.log("Current visualized result is defined; will update. History & result units different"); // DEBUG
+            // add digits, recognizing that some units are already visualized
+            visHistoryAndResult(resultNew,resultVis,timeAnimate,historyVis,unitHistory,unitNew);
+          }
+        }
       }
       // display new units in results
       //update visHistory
@@ -751,7 +780,7 @@ function vis(state, stateVis){ // (new state, old state)
   // This function accepts numbers and displays then w/ animations of length defined in ms
   // It assumes resultVis is the number of units already displayed in the results
   // while resultNew is the new number to show in the results
-  function visResult(resultNew, resultVis, timeAnimate, historyVis){
+  function visResult(resultNew, resultVis, timeAnimate){
     if(resultNew===undefined){
       resultNew = 0;
     }
@@ -794,18 +823,78 @@ function vis(state, stateVis){ // (new state, old state)
           });
         }
       }
-      // if nonzero numbers are not already visualized in the results...
-      else if(resultVis<0.1){
-        // this should only happen with numbers <1... just visualize
+    }
+  };
+
+  // This function accepts numbers and displays then w/ animations of length defined in ms
+  // Only execute when the history and result have different visualization units.
+  function visHistoryAndResult(resultNew, resultVis, timeAnimate, historyVis, unitHistory, unitNew){
+    if(resultNew===undefined){
+      resultNew = 0;
+    }
+    if(resultVis===undefined){
+      resultVis = 0;
+    }
+    // get the common visualization units
+    var unitLargest = (unitNew>unitHistory) ? unitNew : unitHistory;
+    console.log("Largest unit: ",unitLargest); // DEBUG
+    // if history unit is bigger...
+    if(unitHistory===unitLargest){
+      console.log("History unit is larger."); // DEBUG
+      // if it's not just a sign change in the result...
+      if(!detectSignChange(resultNew,resultVis)){
+        // clear results visualization, then visualize new result w/ bigger unit
+        $("#visResult .collection").animate({opacity: "0"},timeAnimate,function(){
+          $("#visResult").html("<div class='collection'></div>");
+          visResultComplex(resultNew,resultVis,timeAnimate,unitLargest);
+        });
       }
     }
+    // else if result unit is bigger...
+    else if(unitNew===unitLargest){
+      console.log("Result unit is larger."); // DEBUG
+      // redraw results completely
+      // if it's not just a sign change in the result...
+      if(!detectSignChange(resultNew,resultVis)){
+        $("#visResult .collection").animate({opacity: "0"},timeAnimate,function(){
+          $("#visResult").html("<div class='collection'></div>");
+          visResultComplex(resultNew,resultVis,timeAnimate,unitLargest);
+        });
+      }
+      // clear history visualization, then visualize new history
+      $("#visHistory .collection").animate({opacity: "0"},timeAnimate,function(){
+        $("#visHistory").html("<div class='collection'></div>");
+        // redraw history completely
+        var historyVisReduced = parseFloat((historyVis/unitLargest).toFixed(12)); // converts to number >0,<=100
+        if(Math.abs(historyVisReduced)>=1){
+          // display the "whole/round number" units
+          for(var i=0; i<Math.floor(Math.abs(historyVisReduced)); i++){
+            $("#visHistory .collection").append("<div class='circle bloopIn'>"+unitLargest+"</div>");
+          }
+        }
+        // Then visualize the "fractional" part last (based on visualizeFraction())
+        // set the leftover fractional part of new result aside
+        var wholeNum = Math.floor(Math.abs(historyVisReduced));
+        var fraction = Math.abs(historyVisReduced)-wholeNum;
+        var fxString = Math.round((1-fraction)*100).toString();
+        var x = "inset(" + fxString + "% 0px 0px 0px)";
+        $("#visHistory .collection").append("<div class='square fraction bloopIn'></div>");
+        $("#visHistory .fraction").css("clip-path", x);
+        // and change all the shapes to fractional shapes
+        $(".collection>div").removeClass("circle").addClass("square");
+        // style history
+        styleUnits(historyVis,unitLargest,1);
+      });
+    }
+    // style results
+    styleUnits(resultNew,unitLargest);
   };
 
   // Deal w/ fractions
   function visualizeFraction(resultNew,resultVis){
     console.log("Running the visualizeFraction() function now: ", resultNew, resultVis); // DEBUG
     var unit = 1;
-    if(Math.abs(resultNew)<1 || Math.abs(resultNew)>100){
+    if(Math.abs(resultNew)<0.1 || Math.abs(resultNew)>100){
       unit = determineUnit(resultNew); // get unit for later
     }
     // set the leftover fractional part of new result aside
@@ -922,7 +1011,7 @@ function vis(state, stateVis){ // (new state, old state)
   }
 
   // Change the color to signify the appropriate sign; give appropriate look
-  function styleUnits(resultNew,unit){
+  function styleUnits(resultNew,unit,doHistoryInstead){
     var borderType = "none"; // default border
     var borderColor = "red"; // default color
     var unitLabel = "1"; // default
@@ -950,19 +1039,24 @@ function vis(state, stateVis){ // (new state, old state)
       else{unitLabel = unit.toExponential().toString();}
     }
     else{unit = unit.toExponential();} // not needed - just in case
+    // determine if affecting history or result
+    var target = "#visResult";
+    if(doHistoryInstead){
+      target = "#visHistory";
+    }
     // if positive
     if(resultNew>0){
-      $("#visResult .collection>div").removeClass("negative zero").addClass("positive");
-      $("#visResult .collection>div:not(.fraction)").html(unitLabel);
+      $(target + " .collection>div").removeClass("negative zero").addClass("positive");
+      $(target + " .collection>div:not(.fraction)").html(unitLabel);
     }
     // if negative
     else if(resultNew<0){
-      $("#visResult .collection>div").removeClass("positive zero").addClass("negative");
-      $("#visResult .collection>div:not(.fraction)").html("-"+unitLabel);
+      $(target + " .collection>div").removeClass("positive zero").addClass("negative");
+      $(target + " .collection>div:not(.fraction)").html("-"+unitLabel);
     }
     // if zero
     else if(resultNew===0){
-      $("#visResult .collection>div").removeClass("positive negative").addClass("zero");
+      $(target + " .collection>div").removeClass("positive negative").addClass("zero");
     }
     // set border thickness for small & large numbers
     if(unit!=1){
@@ -974,7 +1068,7 @@ function vis(state, stateVis){ // (new state, old state)
       borderThickness = borderThickness.toString() + "px";
       var borderString = borderType + " " + borderThickness + " " + borderColor;
       // console.log(borderString); // DEBUG
-      $("#visResult .collection>div").css("border",borderString);
+      $(target + " .collection>div").css("border",borderString);
     }
 
   }
