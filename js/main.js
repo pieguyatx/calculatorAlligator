@@ -837,67 +837,19 @@ function vis(state, stateVis){ // (new state, old state)
     }
     // get the common visualization units
     var unitLargest = (unitNew>unitHistory) ? unitNew : unitHistory;
-    console.log("Largest unit: ",unitLargest); // DEBUG
+    console.log("Largest unit: ",unitLargest, " unitNew, unitHistory: ", unitNew, unitHistory); // DEBUG
     // if history unit is bigger...
     if(unitHistory===unitLargest){
       console.log("History unit is larger or equal."); // DEBUG
       // if it's not just a sign change in the result, and it's not just a decimal added...
-      if(!detectSignChange(resultNew,resultVis) && resultNew!=resultVis){
-        $("#visResult .collection").animate({opacity: "0"},timeAnimate,function(){
-          $("#visResult").html("<div class='collection'></div>");
-          // redraw history completely
-          var resultVisReduced = parseFloat((resultVis/unitLargest).toFixed(12)); // converts to number >0,<=100
-          if(Math.abs(resultVisReduced)>=1){
-            // display the "whole/round number" units
-            for(var i=0; i<Math.floor(Math.abs(resultVisReduced)); i++){
-              $("#visResult .collection").append("<div class='circle bloopIn'>"+unitLargest+"</div>");
-            }
-          }
-          // Then visualize the "fractional" part last (based on visualizeFraction())
-          // set the leftover fractional part of new result aside
-          var wholeNum = Math.floor(Math.abs(resultVisReduced));
-          var fraction = Math.abs(resultVisReduced)-wholeNum;
-          var fxString = Math.round((1-fraction)*100).toString();
-          var x = "inset(" + fxString + "% 0px 0px 0px)";
-          $("#visResult .collection").append("<div class='square fraction bloopIn'></div>");
-          $("#visResult .fraction").css("clip-path", x);
-          // and change all the shapes to fractional shapes
-          $("#visResult .collection>div").removeClass("circle").addClass("square");
-          // style history
-          styleUnits(resultVis,unitLargest);
-        });
-      }
+      showResults(resultNew,resultVis,timeAnimate,unitLargest);
     }
     // else if result unit is bigger...
     else if(unitNew===unitLargest){
       console.log("Result unit is larger."); // DEBUG
       // redraw results completely
       // if it's not just a sign change in the result AND not the same number...
-      if(!detectSignChange(resultNew,resultVis) && resultNew!=resultVis){
-        $("#visResult .collection").animate({opacity: "0"},timeAnimate,function(){
-          $("#visResult").html("<div class='collection'></div>");
-          // redraw history completely
-          var resultVisReduced = parseFloat((resultVis/unitLargest).toFixed(12)); // converts to number >0,<=100
-          if(Math.abs(resultVisReduced)>=1){
-            // display the "whole/round number" units
-            for(var i=0; i<Math.floor(Math.abs(resultVisReduced)); i++){
-              $("#visResult .collection").append("<div class='circle bloopIn'>"+unitLargest+"</div>");
-            }
-          }
-          // Then visualize the "fractional" part last (based on visualizeFraction())
-          // set the leftover fractional part of new result aside
-          var wholeNum = Math.floor(Math.abs(resultVisReduced));
-          var fraction = Math.abs(resultVisReduced)-wholeNum;
-          var fxString = Math.round((1-fraction)*100).toString();
-          var x = "inset(" + fxString + "% 0px 0px 0px)";
-          $("#visResult .collection").append("<div class='square fraction bloopIn'></div>");
-          $("#visResult .fraction").css("clip-path", x);
-          // and change all the shapes to fractional shapes
-          $("#visResult .collection>div").removeClass("circle").addClass("square");
-          // style history
-          styleUnits(resultVis,unitLargest);
-        });
-      }
+      showResults(resultNew,resultVis,timeAnimate,unitLargest);
       // clear history visualization, then visualize new history
       $("#visHistory .collection").animate({opacity: "0"},timeAnimate,function(){
         $("#visHistory").html("<div class='collection'></div>");
@@ -925,6 +877,38 @@ function vis(state, stateVis){ // (new state, old state)
     }
     // style results
     styleUnits(resultNew,unitLargest);
+
+    function showResults(resultNew,resultVis,timeAnimate,unitLargest){
+      console.log("start: ", resultNew, resultVis, unitLargest); // DEBUG
+
+      if(!detectSignChange(resultNew,resultVis) && resultNew!=resultVis){
+        $("#visResult .collection").animate({opacity: "0"},timeAnimate,function(){
+          $("#visResult").html("<div class='collection'></div>");
+          // redraw results completely
+          var resultNewReduced = parseFloat((resultNew/unitLargest).toFixed(12)); // converts to number >0,<=100
+          console.log("reduced: ", resultNewReduced); // DEBUG
+          if(Math.abs(resultNewReduced)>=1){
+            // display the "whole/round number" units
+            for(var i=0; i<Math.floor(Math.abs(resultNewReduced)); i++){
+              $("#visResult .collection").append("<div class='circle bloopIn'>"+unitLargest+"</div>");
+            }
+          }
+          // Then visualize the "fractional" part last (based on visualizeFraction())
+          // set the leftover fractional part of new result aside
+          var wholeNum = Math.floor(Math.abs(resultNewReduced));
+          var fraction = Math.abs(resultNewReduced)-wholeNum;
+          var fxString = Math.round((1-fraction)*100).toString();
+          var x = "inset(" + fxString + "% 0px 0px 0px)";
+          $("#visResult .collection").append("<div class='square fraction bloopIn'></div>");
+          $("#visResult .fraction").css("clip-path", x);
+          // and change all the shapes to fractional shapes
+          $("#visResult .collection>div").removeClass("circle").addClass("square");
+          // style history
+          styleUnits(resultNew,unitLargest);
+        });
+      }
+    }
+
   };
 
   // Deal w/ fractions
