@@ -94,6 +94,9 @@ function listenToKeyboard(state,stateVis){
       operatorPressed(operator,state,stateVis);
       operator = NaN; // clear var so as not to trigger anything later
     }
+    // Stop any related animations
+    $(".collection").finish();
+    $(".collection>div").finish();
   });
 }
 
@@ -762,13 +765,17 @@ function vis(state, stateVis){ // (new state, old state)
       stateVis.result.value = resultNew;
     }
     // If there is an operator and equals in the history...
+    else if(state.operatorExists===true && state.equalsExists===true){
       // animate according to operator types
       // add
+
+
+
       // subtract
       // multiply
       // divide
       // square
-    //
+    }
     // update visualization state
     stateVis.result.value = resultNew;
   }
