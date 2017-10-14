@@ -840,13 +840,31 @@ function vis(state, stateVis){ // (new state, old state)
     console.log("Largest unit: ",unitLargest); // DEBUG
     // if history unit is bigger...
     if(unitHistory===unitLargest){
-      console.log("History unit is larger."); // DEBUG
-      // if it's not just a sign change in the result...
-      if(!detectSignChange(resultNew,resultVis)){
-        // clear results visualization, then visualize new result w/ bigger unit
+      console.log("History unit is larger or equal."); // DEBUG
+      // if it's not just a sign change in the result, and it's not just a decimal added...
+      if(!detectSignChange(resultNew,resultVis) && resultNew!=resultVis){
         $("#visResult .collection").animate({opacity: "0"},timeAnimate,function(){
           $("#visResult").html("<div class='collection'></div>");
-          visResultComplex(resultNew,resultVis,timeAnimate,unitLargest);
+          // redraw history completely
+          var resultVisReduced = parseFloat((resultVis/unitLargest).toFixed(12)); // converts to number >0,<=100
+          if(Math.abs(resultVisReduced)>=1){
+            // display the "whole/round number" units
+            for(var i=0; i<Math.floor(Math.abs(resultVisReduced)); i++){
+              $("#visResult .collection").append("<div class='circle bloopIn'>"+unitLargest+"</div>");
+            }
+          }
+          // Then visualize the "fractional" part last (based on visualizeFraction())
+          // set the leftover fractional part of new result aside
+          var wholeNum = Math.floor(Math.abs(resultVisReduced));
+          var fraction = Math.abs(resultVisReduced)-wholeNum;
+          var fxString = Math.round((1-fraction)*100).toString();
+          var x = "inset(" + fxString + "% 0px 0px 0px)";
+          $("#visResult .collection").append("<div class='square fraction bloopIn'></div>");
+          $("#visResult .fraction").css("clip-path", x);
+          // and change all the shapes to fractional shapes
+          $("#visResult .collection>div").removeClass("circle").addClass("square");
+          // style history
+          styleUnits(resultVis,unitLargest);
         });
       }
     }
@@ -854,11 +872,30 @@ function vis(state, stateVis){ // (new state, old state)
     else if(unitNew===unitLargest){
       console.log("Result unit is larger."); // DEBUG
       // redraw results completely
-      // if it's not just a sign change in the result...
-      if(!detectSignChange(resultNew,resultVis)){
+      // if it's not just a sign change in the result AND not the same number...
+      if(!detectSignChange(resultNew,resultVis) && resultNew!=resultVis){
         $("#visResult .collection").animate({opacity: "0"},timeAnimate,function(){
           $("#visResult").html("<div class='collection'></div>");
-          visResultComplex(resultNew,resultVis,timeAnimate,unitLargest);
+          // redraw history completely
+          var resultVisReduced = parseFloat((resultVis/unitLargest).toFixed(12)); // converts to number >0,<=100
+          if(Math.abs(resultVisReduced)>=1){
+            // display the "whole/round number" units
+            for(var i=0; i<Math.floor(Math.abs(resultVisReduced)); i++){
+              $("#visResult .collection").append("<div class='circle bloopIn'>"+unitLargest+"</div>");
+            }
+          }
+          // Then visualize the "fractional" part last (based on visualizeFraction())
+          // set the leftover fractional part of new result aside
+          var wholeNum = Math.floor(Math.abs(resultVisReduced));
+          var fraction = Math.abs(resultVisReduced)-wholeNum;
+          var fxString = Math.round((1-fraction)*100).toString();
+          var x = "inset(" + fxString + "% 0px 0px 0px)";
+          $("#visResult .collection").append("<div class='square fraction bloopIn'></div>");
+          $("#visResult .fraction").css("clip-path", x);
+          // and change all the shapes to fractional shapes
+          $("#visResult .collection>div").removeClass("circle").addClass("square");
+          // style history
+          styleUnits(resultVis,unitLargest);
         });
       }
       // clear history visualization, then visualize new history
@@ -881,7 +918,7 @@ function vis(state, stateVis){ // (new state, old state)
         $("#visHistory .collection").append("<div class='square fraction bloopIn'></div>");
         $("#visHistory .fraction").css("clip-path", x);
         // and change all the shapes to fractional shapes
-        $(".collection>div").removeClass("circle").addClass("square");
+        $("#visHistory .collection>div").removeClass("circle").addClass("square");
         // style history
         styleUnits(historyVis,unitLargest,1);
       });
