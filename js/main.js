@@ -660,7 +660,7 @@ function vis(state, stateVis){ // (new state, old state)
     // if result is 0, 0., 0.000, "error", etc AND it's new
     if(state.result==="0" || state.result==="error"){
       // if there's not already a zero displayed...
-      if(stateVis.result.value!=0 || (stateVis.history.value!=0 && !isNaN(state.history.value)) ){
+      if(stateVis.result.value!=0 || (stateVis.history.value!=0 && !isNaN(state.history.value)) || (stateVis.result.value===0 && !isNaN(stateVis.history.value) ) ){
         // fade all, clear, make opaque again
         $("#visHistory").animate({opacity: "0"},timeAnimate,function(){
           $(this).html("<div class='collection'></div>").animate({opacity: "1"},0);
@@ -768,10 +768,17 @@ function vis(state, stateVis){ // (new state, old state)
     else if(state.operatorExists===true && state.equalsExists===true){
       // animate according to operator types
       // add
-
-
-
+        // same sign
+          // handle units one at a time - slide history right, add to result
+        // opposite sign
+          // handle units one at a time - slide history right, remove from result
+            // if result has nothing, add unit to result w/ same sign as history
       // subtract
+        // same sign
+          // flip sign appearance of result
+          // treat it like addition animation w/ opposite signs
+        // opposite sign
+
       // multiply
       // divide
       // square
