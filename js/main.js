@@ -653,7 +653,7 @@ function vis(state, stateVis){ // (new state, old state)
   // CLEAR
   // If current history in the numbers is clear....
   if(state.operatorExists===false && state.equalsExists===false){
-    console.log("Running vis() function now; history is clear."); // DEBUG
+    // console.log("Running vis() function now; history is clear."); // DEBUG
     // if result is 0, 0., 0.000, "error", etc AND it's new
     if(state.result==="0" || state.result==="error"){
       // if there's not already a zero displayed...
@@ -700,7 +700,7 @@ function vis(state, stateVis){ // (new state, old state)
   // OPERATIONS
   // If there is a history now... if operator OR equals exists
   else{
-    console.log("Running vis() function now; there is a history."); // DEBUG
+    // console.log("Running vis() function now; there is a history."); // DEBUG
     // If first number & operator exists, but no equals...
     if(state.operatorExists===true && state.equalsExists===false){
       // and there isn't any number visualized in the history
@@ -879,14 +879,13 @@ function vis(state, stateVis){ // (new state, old state)
     styleUnits(resultNew,unitLargest);
 
     function showResults(resultNew,resultVis,timeAnimate,unitLargest){
-      console.log("start: ", resultNew, resultVis, unitLargest); // DEBUG
-
+      // console.log("start: ", resultNew, resultVis, unitLargest); // DEBUG
       if(!detectSignChange(resultNew,resultVis) && resultNew!=resultVis){
         $("#visResult .collection").animate({opacity: "0"},timeAnimate,function(){
           $("#visResult").html("<div class='collection'></div>");
           // redraw results completely
           var resultNewReduced = parseFloat((resultNew/unitLargest).toFixed(12)); // converts to number >0,<=100
-          console.log("reduced: ", resultNewReduced); // DEBUG
+          // console.log("reduced: ", resultNewReduced); // DEBUG
           if(Math.abs(resultNewReduced)>=1){
             // display the "whole/round number" units
             for(var i=0; i<Math.floor(Math.abs(resultNewReduced)); i++){
@@ -908,12 +907,11 @@ function vis(state, stateVis){ // (new state, old state)
         });
       }
     }
-
   };
 
   // Deal w/ fractions
   function visualizeFraction(resultNew,resultVis){
-    console.log("Running the visualizeFraction() function now: ", resultNew, resultVis); // DEBUG
+    // console.log("Running the visualizeFraction() function now: ", resultNew, resultVis); // DEBUG
     var unit = 1;
     if(Math.abs(resultNew)<0.1 || Math.abs(resultNew)>100){
       unit = determineUnit(resultNew); // get unit for later
