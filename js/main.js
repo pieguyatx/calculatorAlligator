@@ -226,6 +226,7 @@ function decimalPoint(state,stateVis){
     displayHelp("Making a small number, eh?");
   }
   // visualize
+  console.log("After decimal added... State.result: ", state.result); // DEBUG
   vis(state,stateVis);
 }
 
@@ -659,7 +660,7 @@ function vis(state, stateVis){ // (new state, old state)
   if((state.operatorExists===false && state.equalsExists===false) || state.result==="error"){
     // console.log("Running vis() function now; history is clear."); // DEBUG
     // if result is 0, 0., 0.000, "error", etc AND it's new
-    if(state.result==="0"){
+    if(state.result==="0" || state.result==="error"){
       // if there's not already a zero displayed...
       if(stateVis.result.value!=0 || (stateVis.history.value!=0 && !isNaN(state.history.value)) || (stateVis.result.value===0 && !isNaN(stateVis.history.value) ) ){
         // fade all, clear, make opaque again
