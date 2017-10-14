@@ -724,43 +724,52 @@ function vis(state, stateVis){ // (new state, old state)
       }
       // otherwise if there is a number visualized in the history already...
       else if(!isNaN(historyVis)){
-        var unitHistory = 1, unitNew = 1;
-        // ...and the units of the results and history are the same...
-        if(Math.abs(historyVis)>100||Math.abs(historyVis)<1){
-          unitHistory = determineUnit(historyVis);
-        }
-        if(Math.abs(resultNew)>100||Math.abs(resultNew)<1){
-          unitNew = determineUnit(resultNew);
-        }
-        // console.log("history exists... ", unitHistory,unitNew); // DEBUG
-        if(unitHistory===unitNew){
-          // and there is nothing visualized in the results now
-          if(stateVis.result.value===undefined || isNaN(stateVis.result.value)){
-            // console.log("Current visualized result is undefined; will update."); // DEBUG
-            // add digits
-            visResult(resultNew,0,timeAnimate);
+        // and the visualized history is the right number (1st time pressing operator)
+        if(historyVis===parseFloat(state.history.numFirst)){
+          var unitHistory = 1, unitNew = 1;
+          // ...and the units of the results and history are the same...
+          if(Math.abs(historyVis)>100||Math.abs(historyVis)<1){
+            unitHistory = determineUnit(historyVis);
           }
-          // and there is something in the results now
-          else if(stateVis.result.value || stateVis.result.value===0){
-            // console.log("Current visualized result is defined; will update."); // DEBUG
-            // add digits, recognizing that some units are already visualized
-            visResult(resultNew,resultVis,timeAnimate);
+          if(Math.abs(resultNew)>100||Math.abs(resultNew)<1){
+            unitNew = determineUnit(resultNew);
+          }
+          // console.log("history exists... ", unitHistory,unitNew); // DEBUG
+          if(unitHistory===unitNew){
+            // and there is nothing visualized in the results now
+            if(stateVis.result.value===undefined || isNaN(stateVis.result.value)){
+              // console.log("Current visualized result is undefined; will update."); // DEBUG
+              // add digits
+              visResult(resultNew,0,timeAnimate);
+            }
+            // and there is something in the results now
+            else if(stateVis.result.value || stateVis.result.value===0){
+              // console.log("Current visualized result is defined; will update."); // DEBUG
+              // add digits, recognizing that some units are already visualized
+              visResult(resultNew,resultVis,timeAnimate);
+            }
+          }
+          // ...but if the units of the results and history are NOT same...
+          else{
+            // and there is nothing visualized in the results now
+            if(stateVis.result.value===undefined || isNaN(stateVis.result.value)){
+              console.log("Current visualized result is undefined; will update. History & result units different"); // DEBUG
+              // add digits
+              visHistoryAndResult(resultNew,0,timeAnimate,historyVis,unitHistory,unitNew);
+            }
+            // and there is something in the results now
+            else if(stateVis.result.value || stateVis.result.value===0){
+              console.log("Current visualized result is defined; will update. History & result units different"); // DEBUG
+              // add digits, recognizing that some units are already visualized
+              visHistoryAndResult(resultNew,resultVis,timeAnimate,historyVis,unitHistory,unitNew);
+            }
           }
         }
-        // ...but if the units of the results and history are NOT same...
+        // otherwise the history is NOT the right number (i.e. digit-operator-digit-operator)
         else{
-          // and there is nothing visualized in the results now
-          if(stateVis.result.value===undefined || isNaN(stateVis.result.value)){
-            console.log("Current visualized result is undefined; will update. History & result units different"); // DEBUG
-            // add digits
-            visHistoryAndResult(resultNew,0,timeAnimate,historyVis,unitHistory,unitNew);
-          }
-          // and there is something in the results now
-          else if(stateVis.result.value || stateVis.result.value===0){
-            console.log("Current visualized result is defined; will update. History & result units different"); // DEBUG
-            // add digits, recognizing that some units are already visualized
-            visHistoryAndResult(resultNew,resultVis,timeAnimate,historyVis,unitHistory,unitNew);
-          }
+          console.log("Seems like an operator was pressed before pressing equals..."); // DEBUG
+          // Clear both history and result visualizations
+          // Display the new history (or the result of the last operation) without any special animations
         }
       }
       // display new units in results
