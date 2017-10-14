@@ -278,6 +278,7 @@ function operatorPressed(operator,state,stateVis){
         symbol = getSymbol(operator);
         state.history.text = state.history.numFirst.concat(" " + symbol);
         $("#history").html(state.history.text);
+        var repeatOperator = true;
       }
       // ...and if the number on result exists/not empty...
       else if(state.result!=""){
@@ -324,8 +325,10 @@ function operatorPressed(operator,state,stateVis){
       state.equalsExists = false;
     }
   }
-  // visualize
-  vis(state,stateVis);
+  // visualize if this is the 1st time an operator is pressed only
+  if(!repeatOperator){
+    vis(state,stateVis);
+  }
 };
 
 function getSymbol(operator,noDisplay){
