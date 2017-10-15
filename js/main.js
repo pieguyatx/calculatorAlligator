@@ -799,19 +799,40 @@ function vis(state, stateVis){ // (new state, old state)
     }
     // If there is an operator and equals in the history...
     else if(state.operatorExists===true && state.equalsExists===true){
-      // animate according to operator types
-      // add
-        // same sign
-          // handle whole units one at a time - slide history right, add to result
-          // if decimal/fraction present,
-        // opposite sign
+      // special animations according to operator types
+      // add (function)
+        // if history = 0
+          // keep result the same, refresh history
+        // if history != 0, result = 0
+          // move history to result (send to right), refresh history
+        // same sign (function)
+          // handle whole units one at a time - slide history right, prepend to result
+          // if decimal/fraction present in either history or result...
+            // get the clip-path 1st value of the fractional parts in history and result
+            // remove fractional parts from both history and result
+            // transform clip-path values to %full (1-%clippath)
+            // sum the %full values
+            // if sum > 1
+              // add single unit of same type in visualized result
+              // fractional remainder = sum - 1
+            // add fractional remainder to result visualization
+            // refresh history collection? check that animation classes are gone
+        // opposite sign (function)
           // handle whole units one at a time - slide history right, remove from result
-            // if result has nothing, add unit to result w/ same sign as history
+            // if result dwindles to no whole units, add remaining units from history to result, slower animation
+            // refresh history
+          // if decimal/fraction present in
       // subtract
-        // same sign
-          // flip sign appearance of result
-          // treat it like addition animation w/ opposite signs
-        // opposite sign
+        // flip sign appearance of result
+        // if units now have opposite signs... (subtract animation)
+          // overlay history units one at a time under result (change z-index?)
+            // send history units right to result
+          // whichever absolute value is smaller, fade those units out of history and result
+          // refresh smaller collection
+          // remove faded units from larger collection, one at a time
+          // if bigger abs value was in history, move history units to results w/o animation & refresh history
+        // if units now have the same signs...
+          // add units together using addition function
 
       // multiply
       // divide
