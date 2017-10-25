@@ -871,8 +871,19 @@ function vis(state, stateVis){ // (new state, old state)
       stateVis.history.value = undefined;
       stateVis.history.orientation = undefined;
     }
-    // if history != 0, result = 0
+    // if history firstNum != 0, secondNum = 0
+    else if(state.history.numFirst!=0 && state.history.numSecond==0){
       // move history to result (send to right), refresh history
+      var temp = $("#visHistory .collection").html();
+      $("#visHistory .collection").stop(true).addClass("sendRight").on("webkitAnimationEnd mozAnimationEnd oAnimationEnd oanimationend animationend",function(e){
+        $("#visHistory").html("<div class='collection'></div>");
+        $("#visResult .collection").html(temp).stop(true).addClass("receiveLeft").on("webkitAnimationEnd mozAnimationEnd oAnimationEnd oanimationend animationend",function(e){
+          $("#visResult .collection").removeClass("receiveLeft");
+        });
+      });
+      stateVis.history.value = undefined;
+      stateVis.history.orientation = undefined;
+    }
     // same sign (function)
       // handle whole units one at a time - slide history right, prepend to result
       // if decimal/fraction present in either history or result...

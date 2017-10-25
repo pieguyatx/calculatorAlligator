@@ -385,6 +385,22 @@ section#visualization>div{
 	50%  {opacity: 0.5; transform: translate(-50%,-7%);}
 	100% {opacity: 0; transform: translate(-100%,-10%) scale(1.1);}
 }
+.sendRight{
+  -webkit-animation-name: sendRight;
+  animation-name: sendRight;
+  -webkit-animation-duration: 0.15s;
+	animation-duration: 0.15s;
+}
+@-webkit-keyframes sendRight {
+	0%   {opacity: 1; transform: translate(0%,0%) scale(1);}
+	50%  {opacity: 0.5; transform: translate(50%,-7%);}
+	100% {opacity: 0; transform: translate(100%,-10%) scale(1.1);}
+}
+@keyframes sendRight {
+  0%   {opacity: 1; transform: translate(0%,0%) scale(1);}
+	50%  {opacity: 0.5; transform: translate(50%,-7%);}
+	100% {opacity: 0; transform: translate(100%,-10%) scale(1.1);}
+}
 .receiveRight{
   -webkit-animation-name: receiveRight;
   animation-name: receiveRight;
@@ -399,6 +415,22 @@ section#visualization>div{
 @keyframes receiveRight {
   0%   {opacity: 0; transform: translate(100%,-10%) scale(1.1);}
 	50%  {opacity: 0.5; transform: translate(50%,-7%);}
+	100% {opacity: 1; transform: translate(0%,0%) scale(1);}
+}
+.receiveLeft{
+  -webkit-animation-name: receiveLeft;
+  animation-name: receiveLeft;
+  -webkit-animation-duration: 0.15s;
+	animation-duration: 0.15s;
+}
+@-webkit-keyframes receiveLeft {
+	0%   {opacity: 0; transform: translate(-100%,-10%) scale(1.1);}
+	50%  {opacity: 0.5; transform: translate(-50%,-7%);}
+	100% {opacity: 1; transform: translate(0%,0%) scale(1);}
+}
+@keyframes receiveLeft {
+  0%   {opacity: 0; transform: translate(-100%,-10%) scale(1.1);}
+	50%  {opacity: 0.5; transform: translate(-50%,-7%);}
 	100% {opacity: 1; transform: translate(0%,0%) scale(1);}
 }
 .shrink{  /*EXTRA?*/
