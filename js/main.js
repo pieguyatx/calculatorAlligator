@@ -978,12 +978,15 @@ function vis(state, stateVis){ // (new state, old state)
           // set the leftover fractional part of new result aside
           var wholeNum = Math.floor(Math.abs(resultNewReduced));
           var fraction = Math.abs(resultNewReduced)-wholeNum;
-          var fxString = Math.round((1-fraction)*100).toString();
-          var x = "inset(" + fxString + "% 0px 0px 0px)";
-          $("#visResult .collection").append("<div class='square fraction bloopIn'></div>");
-          $("#visResult .fraction").css("clip-path", x);
-          // and change all the shapes to fractional shapes
-          $("#visResult .collection>div").removeClass("circle").addClass("square");
+          // console.log("fraction is... ", fraction); // DEBUG
+          if(fraction!=0){
+            var fxString = Math.round((1-fraction)*100).toString();
+            var x = "inset(" + fxString + "% 0px 0px 0px)";
+            $("#visResult .collection").append("<div class='square fraction bloopIn'></div>");
+            $("#visResult .fraction").css("clip-path", x);
+            // and change all the shapes to fractional shapes
+            $("#visResult .collection>div").removeClass("circle").addClass("square");
+          }
           // style history
           styleUnits(resultNew,unitLargest);
         });
