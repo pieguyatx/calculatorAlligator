@@ -800,28 +800,11 @@ function vis(state, stateVis){ // (new state, old state)
     // If there is an operator and equals in the history...
     else if(state.operatorExists===true && state.equalsExists===true){
       // special animations according to operator types
-      // add (function)
-        // if history = 0
-          // keep result the same, refresh history
-        // if history != 0, result = 0
-          // move history to result (send to right), refresh history
-        // same sign (function)
-          // handle whole units one at a time - slide history right, prepend to result
-          // if decimal/fraction present in either history or result...
-            // get the clip-path 1st value of the fractional parts in history and result
-            // remove fractional parts from both history and result
-            // transform clip-path values to %full (1-%clippath)
-            // sum the %full values
-            // if sum > 1
-              // add single unit of same type in visualized result
-              // fractional remainder = sum - 1
-            // add fractional remainder to result visualization
-            // refresh history collection? check that animation classes are gone
-        // opposite sign (function)
-          // handle whole units one at a time - slide history right, remove from result
-            // if result dwindles to no whole units, add remaining units from history to result, slower animation
-            // refresh history
-          // if decimal/fraction present in
+      if(state.history.operator==="add"){
+        // add (function)
+        visAdd(state,stateVis);
+      }
+      // TBD below! ===============================
       // subtract
         // flip sign appearance of result
         // if units now have opposite signs... (subtract animation)
@@ -845,6 +828,37 @@ function vis(state, stateVis){ // (new state, old state)
   // After new state has been analyzed, update the visualization state
   console.log("StateVis (end): ", stateVis); // DEBUG
   console.log("State (end): ", state); // DEBUG
+
+  function visAdd(state,stateVis){
+    // if history = 0, 0.0, 0.00 etc
+    if(state.history.numFirst==0){
+      // keep result the same, refresh history
+      $("#visHistory").animate({opacity: "0"},timeAnimate,function(){
+        $(this).html("<div class='collection'></div>").animate({opacity: "1"},0);
+      });
+      stateVis.history.value = undefined;
+      stateVis.history.orientation = undefined;
+    }
+    // if history != 0, result = 0
+      // move history to result (send to right), refresh history
+    // same sign (function)
+      // handle whole units one at a time - slide history right, prepend to result
+      // if decimal/fraction present in either history or result...
+        // get the clip-path 1st value of the fractional parts in history and result
+        // remove fractional parts from both history and result
+        // transform clip-path values to %full (1-%clippath)
+        // sum the %full values
+        // if sum > 1
+          // add single unit of same type in visualized result
+          // fractional remainder = sum - 1
+        // add fractional remainder to result visualization
+        // refresh history collection? check that animation classes are gone
+    // opposite sign (function)
+      // handle whole units one at a time - slide history right, remove from result
+        // if result dwindles to no whole units, add remaining units from history to result, slower animation
+        // refresh history
+      // if decimal/fraction present in
+  }
 
   // This function accepts numbers and displays then w/ animations of length defined in ms
   // It assumes resultVis is the number of units already displayed in the results
