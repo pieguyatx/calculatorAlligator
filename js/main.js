@@ -133,6 +133,9 @@ function listenForNumber(state,stateVis){
     console.log("Button pressed (digit): " + digit); // debug
     numberPressed(digit,state,stateVis);
     digit = NaN;
+    // Stop any related animations, during fast multiple clicks
+    $(".collection").finish();
+    $(".collection>div").finish();
   });
 }
 
