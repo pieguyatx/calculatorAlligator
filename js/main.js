@@ -14,7 +14,8 @@ $(document).ready(function(){
   // To be used for visualize [vis()] function
   var stateVis = {
     "history": {"value": undefined, "orientation": "add"},
-    "result": {"value": 0, "orientation": "add"}
+    "result": {"value": 0, "orientation": "add"},
+    "equalPressed": 0 // boolean denoting if a equals was the last button pressed
   };
 
   // Read in button presses (types: clear, square/operator, number, dec, sign, equals)
@@ -683,31 +684,47 @@ function vis(state, stateVis){ // (new state, old state)
         // update vis state
         stateVis.result.value = 0;
         stateVis.result.orientation = "add";
+        stateVis.equalPressed = 0;
       }
     }
     // DIGITS
     // if result !=0, there's a number to deal with
     else{
-      // if current visualized result is 0, clear the display, then display result
-      if(resultVis===0 || resultVis===undefined){
-        // clear visualized history
-        $("#visHistory .collection").animate({opacity: "0"},timeAnimate,function(){
-          $(this).remove();
-          $("#visHistory").html("<div class='collection'></div>");
-        });
-        // clear and update visualized result
-        $("#visResult .collection").animate({opacity: "0"},timeAnimate,function(){
-          $(this).remove();
-          $("#visResult").html("<div class='collection'></div>");
+      // if there was no equals sign pressed in the last calculation, it's a new number
+      if(stateVis.equalPressed===0){
+        // if current visualized result is 0, clear the display, then display result
+        if(resultVis===0 || resultVis===undefined){
+          // clear visualized history
+          $("#visHistory .collection").animate({opacity: "0"},timeAnimate,function(){
+            $(this).remove();
+            $("#visHistory").html("<div class='collection'></div>");
+          });
+          // clear and update visualized result
+          $("#visResult .collection").animate({opacity: "0"},timeAnimate,function(){
+            $(this).remove();
+            $("#visResult").html("<div class='collection'></div>");
+            visResult(resultNew,resultVis,timeAnimate);
+          });
+        }
+        else{
+          // if current displayed result !=0, just display result
           visResult(resultNew,resultVis,timeAnimate);
-        });
+        }
       }
-      else{
-        // if current displayed result !=0, just display result
-        visResult(resultNew,resultVis,timeAnimate);
+      // if there was an equals sign pressed in the previous calculation, reset everything
+      else if(stateVis.equalPressed===1){
+        // eat numbers in result
+        $("#visResult .collection").addClass("getEatenUpLeft").on("webkitAnimationEnd mozAnimationEnd oAnimationEnd oanimationend animationend",function(){
+          $("#visResult").html("<div class='collection'></div>");
+          // update visualization stateVis
+          stateVis.result.value = 0;
+          // display new numbers assuming results have been cleared
+          visResult(resultNew,0,timeAnimate);
+        });
       }
       // update visualization state
       stateVis.result.value = resultNew;
+      stateVis.equalPressed = 0;
     }
   }
   // OPERATIONS
@@ -796,6 +813,7 @@ function vis(state, stateVis){ // (new state, old state)
       stateVis.history.value = parseFloat(state.history.numFirst);
       stateVis.history.orientation = stateVis.result.orientation;
       stateVis.result.value = resultNew;
+      stateVis.equalPressed = 0;
     }
     // If there is an operator and equals in the history...
     else if(state.operatorExists===true && state.equalsExists===true){
@@ -816,13 +834,13 @@ function vis(state, stateVis){ // (new state, old state)
           // if bigger abs value was in history, move history units to results w/o animation & refresh history
         // if units now have the same signs...
           // add units together using addition function
-
       // multiply
       // divide
       // square
     }
     // update visualization state
     stateVis.result.value = resultNew;
+    stateVis.equalPressed = 1;
   }
 
   // After new state has been analyzed, update the visualization state
