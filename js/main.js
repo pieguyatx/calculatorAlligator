@@ -290,7 +290,7 @@ function operatorPressed(operator,state,stateVis){
         // Assume (2nd num) = number on result
         state.history.numSecond = state.result;
         // Calculate (1st num) (operator) (2nd num); store as (ans)
-        equals(state,stateVis); // calculate before updating operator
+        equals(state,stateVis,1); // calculate before updating operator
         // Replace history with (1st num) (operator) (2nd num) =
         state.history.operator = operator;
         // Assume (resultNum) = (1st num)
@@ -670,7 +670,7 @@ function vis(state, stateVis){ // (new state, old state)
   // CLEAR
   // If current history in the numbers is clear, or there's an error....
   if((state.operatorExists===false && state.equalsExists===false) || state.result==="error"){
-    // console.log("Running vis() function now; history is clear."); // DEBUG
+    console.log("Running vis() function now; history is clear."); // DEBUG
     // if result is 0, 0., 0.000, "error", etc AND it's new
     if(state.result==="0" || state.result==="error"){
       // if there's not already a zero displayed...
@@ -724,6 +724,12 @@ function vis(state, stateVis){ // (new state, old state)
           // display new numbers assuming results have been cleared
           visResult(resultNew,0,timeAnimate);
         });
+        // reset history
+        $("#visHistory").animate({opacity: "0"},timeAnimate,function(){
+          $(this).html("<div class='collection'></div>").animate({opacity: "1"},0);
+        });
+        stateVis.history.value = undefined;
+        stateVis.history.orientation = undefined;
       }
       // update visualization state
       stateVis.result.value = resultNew;
@@ -733,10 +739,12 @@ function vis(state, stateVis){ // (new state, old state)
   // OPERATIONS
   // If there is a history now... if operator OR equals exists
   else{
-    // console.log("Running vis() function now; there is a history."); // DEBUG
+    console.log("Running vis() function now; there is a history."); // DEBUG
+    console.log("visualized history value, operatorExists, equalsExists ",stateVis.history.value, state.operatorExists, state.equalsExists); // DEBUG
     // If first number & operator exists, but no equals...
     if(state.operatorExists===true && state.equalsExists===false){
       // and there isn't any number visualized in the history
+      console.log("visualized history value ",stateVis.history.value); // DEBUG
       if(stateVis.history.value===undefined || stateVis.history.value===""){
         // move units in results to the history
         var temp = $("#visResult .collection").html();
@@ -749,8 +757,10 @@ function vis(state, stateVis){ // (new state, old state)
       }
       // otherwise if there is a number visualized in the history already...
       else if(!isNaN(historyVis)){
+        console.log(historyVis, parseFloat(state.history.numFirst)); // DEBUG
         // and the visualized history is the right number (1st time pressing operator)
         if(historyVis===parseFloat(state.history.numFirst)){
+          console.log("visualized history is :",historyVis); // DEBUG
           var unitHistory = 1, unitNew = 1;
           // ...and the units of the results and history are the same...
           if(Math.abs(historyVis)>100||Math.abs(historyVis)<1){
@@ -840,10 +850,11 @@ function vis(state, stateVis){ // (new state, old state)
       // multiply
       // divide
       // square
+      // update visualization state
+      stateVis.equalPressed = 1;
     }
     // update visualization state
     stateVis.result.value = resultNew;
-    stateVis.equalPressed = 1;
   }
 
   // After new state has been analyzed, update the visualization state
