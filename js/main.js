@@ -888,7 +888,9 @@ function vis(state, stateVis){ // (new state, old state)
     else{
       if( (stateVis.history.value>0 && stateVis.result.value>0)||(stateVis.history.value<0 && stateVis.result.value<0) ){
         // same sign (function)
-        visAddSameSign(state,stateVis);
+        let timeAnimate = 5; // time for unit to animate in ms
+        console.log("Time to animate: ", timeAnimate); // DEBUG
+        visAddSameSign(state,stateVis,timeAnimate);
       }
       else if( (stateVis.history.value>0 && stateVis.result.value<0)||(stateVis.history.value<0 && stateVis.result.value>0) ){
         // opposite sign (function)
@@ -898,9 +900,22 @@ function vis(state, stateVis){ // (new state, old state)
   }
 
   // Visualize the addition of non-zero numbers with the same sign
-  function visAddSameSign(state,stateVis){
+  function visAddSameSign(state,stateVis,timeAnimate){
     console.log("Adding same sign!"); // DEBUG
     // handle whole units one at a time - slide history right, prepend to result
+    if($('#visHistory .collection div:first-child').hasClass("fraction")===false){ // if not a fraction unit...
+      $('#visHistory .collection div:first-child').stop(true).animate({opacity: "0", left: "100%"},timeAnimate,function(){
+        console.log("Sending history to result...");
+        $("#visHistory .collection div:first-child").prependTo("#visResult .collection");
+        $("#visResult .collection div:first-child").css("left","-100%").stop(true).animate({opacity: "1", left: "0"},100,function(){
+          // check remaining divs
+          console.log("test length: ", $('#visHistory .collection div').length); // DEBUG
+          if($('#visHistory .collection div').length>0){
+            visAddSameSign(state,stateVis,timeAnimate);
+          }
+        });
+      });
+    }
     // if decimal/fraction present in either history or result...
       // get the clip-path 1st value of the fractional parts in history and result
       // remove fractional parts from both history and result
