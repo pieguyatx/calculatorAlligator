@@ -884,23 +884,42 @@ function vis(state, stateVis){ // (new state, old state)
       stateVis.history.value = undefined;
       stateVis.history.orientation = undefined;
     }
-    // same sign (function)
-      // handle whole units one at a time - slide history right, prepend to result
-      // if decimal/fraction present in either history or result...
-        // get the clip-path 1st value of the fractional parts in history and result
-        // remove fractional parts from both history and result
-        // transform clip-path values to %full (1-%clippath)
-        // sum the %full values
-        // if sum > 1
-          // add single unit of same type in visualized result
-          // fractional remainder = sum - 1
-        // add fractional remainder to result visualization
-        // refresh history collection? check that animation classes are gone
-    // opposite sign (function)
-      // handle whole units one at a time - slide history right, remove from result
-        // if result dwindles to no whole units, add remaining units from history to result, slower animation
-        // refresh history
-      // if decimal/fraction present in
+    // otherwise if numbers are !=0
+    else{
+      if( (stateVis.history.value>0 && stateVis.result.value>0)||(stateVis.history.value<0 && stateVis.result.value<0) ){
+        // same sign (function)
+        visAddSameSign(state,stateVis);
+      }
+      else if( (stateVis.history.value>0 && stateVis.result.value<0)||(stateVis.history.value<0 && stateVis.result.value>0) ){
+        // opposite sign (function)
+        visAddOppSign(state,stateVis);
+      }
+    }
+  }
+
+  // Visualize the addition of non-zero numbers with the same sign
+  function visAddSameSign(state,stateVis){
+    console.log("Adding same sign!"); // DEBUG
+    // handle whole units one at a time - slide history right, prepend to result
+    // if decimal/fraction present in either history or result...
+      // get the clip-path 1st value of the fractional parts in history and result
+      // remove fractional parts from both history and result
+      // transform clip-path values to %full (1-%clippath)
+      // sum the %full values
+      // if sum > 1
+        // add single unit of same type in visualized result
+        // fractional remainder = sum - 1
+      // add fractional remainder to result visualization
+      // refresh history collection? check that animation classes are gone
+  }
+
+  // Visualize the addition of non-zero numbers with the opposite sign
+  function visAddOppSign(state,stateVis){
+    console.log("Adding opposite sign!"); // DEBUG
+    // handle whole units one at a time - slide history right, remove from result
+      // if result dwindles to no whole units, add remaining units from history to result, slower animation
+      // refresh history
+    // if decimal/fraction present in
   }
 
   // This function accepts numbers and displays then w/ animations of length defined in ms
