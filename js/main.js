@@ -757,10 +757,10 @@ function vis(state, stateVis){ // (new state, old state)
       }
       // otherwise if there is a number visualized in the history already...
       else if(!isNaN(historyVis)){
-        console.log(historyVis, parseFloat(state.history.numFirst)); // DEBUG
+        console.log("History visualization has something: ",historyVis, parseFloat(state.history.numFirst)); // DEBUG
         // and the visualized history is the right number (1st time pressing operator)
         if(historyVis===parseFloat(state.history.numFirst)){
-          console.log("visualized history is :",historyVis); // DEBUG
+          // console.log("visualized history is :",historyVis); // DEBUG
           var unitHistory = 1, unitNew = 1;
           // ...and the units of the results and history are the same...
           if(Math.abs(historyVis)>100||Math.abs(historyVis)<1){
@@ -769,19 +769,27 @@ function vis(state, stateVis){ // (new state, old state)
           if(Math.abs(resultNew)>100||Math.abs(resultNew)<1){
             unitNew = determineUnit(resultNew);
           }
-          // console.log("history exists... ", unitHistory,unitNew); // DEBUG
+          console.log("Units for history, new: ", unitHistory,unitNew); // DEBUG
           if(unitHistory===unitNew){
             // and there is nothing visualized in the results now
             if(stateVis.result.value===undefined || isNaN(stateVis.result.value)){
               // console.log("Current visualized result is undefined; will update."); // DEBUG
               // add digits
               visResult(resultNew,0,timeAnimate);
+              // if history has fractions, though, then make it look like fractions
+              if(state.history.numFirst.toString().indexOf(".")>0 || state.history.numFirst.toString().indexOf(".")>0){
+                $("#visResult .collection>div").removeClass("circle").addClass("square");
+              }
             }
             // and there is something in the results now
             else if(stateVis.result.value || stateVis.result.value===0){
               // console.log("Current visualized result is defined; will update."); // DEBUG
               // add digits, recognizing that some units are already visualized
               visResult(resultNew,resultVis,timeAnimate);
+              // if history has fractions, though, then make it look like fractions
+              if(state.history.numFirst.toString().indexOf(".")>0 || state.history.numFirst.toString().indexOf(".")>0){
+                $("#visResult .collection>div").removeClass("circle").addClass("square");
+              }
             }
           }
           // ...but if the units of the results and history are NOT same...
@@ -917,6 +925,8 @@ function vis(state, stateVis){ // (new state, old state)
       });
     }
     // if decimal/fraction present in either history or result...
+    else if($('#visHistory .collection div:first-child').hasClass("fraction")===true){
+      console.log("Moving the fractional part over!"); // DEBUG
       // get the clip-path 1st value of the fractional parts in history and result
       // remove fractional parts from both history and result
       // transform clip-path values to %full (1-%clippath)
@@ -926,6 +936,7 @@ function vis(state, stateVis){ // (new state, old state)
         // fractional remainder = sum - 1
       // add fractional remainder to result visualization
       // refresh history collection? check that animation classes are gone
+    }
   }
 
   // Visualize the addition of non-zero numbers with the opposite sign
@@ -941,6 +952,7 @@ function vis(state, stateVis){ // (new state, old state)
   // It assumes resultVis is the number of units already displayed in the results
   // while resultNew is the new number to show in the results
   function visResult(resultNew, resultVis, timeAnimate){
+    console.log("Running visResult function...");
     if(resultNew===undefined){
       resultNew = 0;
     }
