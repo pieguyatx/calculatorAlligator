@@ -695,45 +695,65 @@ function vis(state, stateVis){ // (new state, old state)
     else{
       // if there was no equals sign pressed in the last calculation, it's a new number
       if(stateVis.equalPressed===0){
+        console.log("Assuming equals sign NOT pressed. resultVis:", resultVis); // DEBUG
         // if current visualized result is 0, clear the display, then display result
         if(resultVis===0 || resultVis===undefined){
           // clear visualized history
           $("#visHistory .collection").animate({opacity: "0"},timeAnimate,function(){
             $(this).remove();
             $("#visHistory").html("<div class='collection'></div>");
+            // update visualization state
+            stateVis.history.value = undefined;
+            stateVis.history.orientation = undefined;
           });
           // clear and update visualized result
           $("#visResult .collection").animate({opacity: "0"},timeAnimate,function(){
             $(this).remove();
             $("#visResult").html("<div class='collection'></div>");
             visResult(resultNew,resultVis,timeAnimate);
+            // update visualization state
+            stateVis.result.value = resultNew;
           });
         }
         else{
           // if current displayed result !=0, just display result
           visResult(resultNew,resultVis,timeAnimate);
+          // update visualization state
+          stateVis.result.value = resultNew;
         }
       }
       // if there was an equals sign pressed in the previous calculation, reset everything
       else if(stateVis.equalPressed===1){
-        // eat numbers in result
-        $("#visResult .collection").addClass("getEatenUpLeft").on("webkitAnimationEnd mozAnimationEnd oAnimationEnd oanimationend animationend",function(){
-          $("#visResult").html("<div class='collection'></div>");
-          // update visualization stateVis
-          stateVis.result.value = 0;
-          // display new numbers assuming results have been cleared
-          visResult(resultNew,0,timeAnimate);
-        });
+        console.log("Assuming equals sign pressed. resultNew:", resultNew); // DEBUG
+        // if it's a sign change after the equals, then show it
+        if(detectSignChange(resultNew,resultVis)){
+          visResult(resultNew,resultVis,timeAnimate);
+          // update visualization state
+          stateVis.result.value = resultNew;
+          stateVis.equalPressed = 0;
+        }
+        // otherwise if it's a new number:
+        else{
+          // eat numbers in result
+          $("#visResult .collection").addClass("getEatenUpLeft").on("webkitAnimationEnd mozAnimationEnd oAnimationEnd oanimationend animationend",function(){
+            $("#visResult").html("<div class='collection'></div>");
+            // update visualization stateVis
+            stateVis.result.value = 0;
+            // display new numbers assuming results have been cleared
+            visResult(resultNew,0,timeAnimate);
+            // update visualization state
+            stateVis.result.value = resultNew;
+            stateVis.equalPressed = 0;
+          });
+        }
         // reset history
         $("#visHistory").animate({opacity: "0"},timeAnimate,function(){
           $(this).html("<div class='collection'></div>").animate({opacity: "1"},0);
+          // update visualization state
+          stateVis.history.value = undefined;
+          stateVis.history.orientation = undefined;
         });
-        stateVis.history.value = undefined;
-        stateVis.history.orientation = undefined;
       }
-      // update visualization state
-      stateVis.result.value = resultNew;
-      stateVis.equalPressed = 0;
     }
   }
   // OPERATIONS
@@ -913,11 +933,11 @@ function vis(state, stateVis){ // (new state, old state)
     // handle whole units one at a time - slide history right, prepend to result
     if($('#visHistory .collection div:first-child').hasClass("fraction")===false){ // if not a fraction unit...
       $('#visHistory .collection div:first-child').stop(true).animate({opacity: "0", left: "100%"},timeAnimate,function(){
-        console.log("Sending history to result...");
+        // console.log("Sending history to result...");
         $("#visHistory .collection div:first-child").prependTo("#visResult .collection");
         $("#visResult .collection div:first-child").css("left","-100%").stop(true).animate({opacity: "1", left: "0"},100,function(){
           // check remaining divs
-          console.log("test length: ", $('#visHistory .collection div').length); // DEBUG
+          // console.log("test length: ", $('#visHistory .collection div').length); // DEBUG
           if($('#visHistory .collection div').length>0){
             visAddSameSign(state,stateVis,timeAnimate);
           }
@@ -987,7 +1007,7 @@ function vis(state, stateVis){ // (new state, old state)
   // It assumes resultVis is the number of units already displayed in the results
   // while resultNew is the new number to show in the results
   function visResult(resultNew, resultVis, timeAnimate){
-    console.log("Running visResult function...");
+    console.log("Running visResult function... resultNew, resultVis:", resultNew, resultVis);
     if(resultNew===undefined){
       resultNew = 0;
     }
@@ -998,11 +1018,12 @@ function vis(state, stateVis){ // (new state, old state)
     if(Math.abs(resultNew)<=100 && Math.abs(resultNew)>=0.1 || resultNew===0){
       // check if decimals present in result...
       if(resultNew.toString().indexOf(".")>0 || resultVis.toString().indexOf(".")>0){
-        console.log("Running visualizeFraction() function from visResult()");
+        console.log("Running visualizeFraction() function from visResult()"); // DEBUG
         visualizeFraction(resultNew,resultVis);
       }
       // if no decimals present (just whole numbers)
       else{
+        console.log("Running visualizeBasic() function from visResult()"); // DEBUG
         visResultBasic(resultNew,resultVis,timeAnimate);
       }
     }
@@ -1136,7 +1157,7 @@ function vis(state, stateVis){ // (new state, old state)
 
   // Deal w/ fractions
   function visualizeFraction(resultNew,resultVis){
-    // console.log("Running the visualizeFraction() function now: ", resultNew, resultVis); // DEBUG
+    console.log("Running the visualizeFraction() function now: ", resultNew, resultVis); // DEBUG
     var unit = 1;
     if(Math.abs(resultNew)<0.1 || Math.abs(resultNew)>100){
       unit = determineUnit(resultNew); // get unit for later
