@@ -924,18 +924,33 @@ function vis(state, stateVis){ // (new state, old state)
         });
       });
     }
-    // if decimal/fraction present in either history or result...
+    // if decimal/fraction present in history...
     else if($('#visHistory .collection div:first-child').hasClass("fraction")===true){
       console.log("Moving the fractional part over!"); // DEBUG
-      // get the clip-path 1st value of the fractional parts in history and result
-      // remove fractional parts from both history and result
-      // transform clip-path values to %full (1-%clippath)
-      // sum the %full values
-      // if sum > 1
-        // add single unit of same type in visualized result
-        // fractional remainder = sum - 1
-      // add fractional remainder to result visualization
-      // refresh history collection? check that animation classes are gone
+      // if there is NO fraction in the result, just move the fraction over
+      if($("#visResult .collection .fraction").length===0){
+        $('#visHistory .collection .fraction').stop(true).animate({opacity: "0", left: "100%"},timeAnimate,function(){
+          $("#visHistory .collection .fraction").appendTo("#visResult .collection");
+          $("#visResult .collection .fraction").css("left","-100%").stop(true).animate({opacity: "1", left: "0"},timeAnimate)
+        })
+      }
+      // if there is a fraction in the result, then take that into account
+      else{
+        // get the clip-path 1st value of the fractional parts in history (in %clipped)
+        var fractionHistory = $("#visHistory .collection .fraction").css("clip-path").split(" ")[0].match(/\d+/)[0];
+        var fractionResult = $("#visResult .collection .fraction").css("clip-path").split(" ")[0].match(/\d+/)[0];
+
+        let temp = fractinoHistory; // DEBUG
+        console.log(temp); // DEBUG
+        // remove fractional parts from both history and result
+        // transform clip-path values to %full (1-%clippath)
+        // sum the %full values
+        // if sum > 1
+          // add single unit of same type in visualized result
+          // fractional remainder = sum - 1
+        // add fractional remainder to result visualization
+        // refresh history collection? check that animation classes are gone
+      }
     }
   }
 
