@@ -17,6 +17,7 @@ These are known bugs that should be fixed over time. They haven't been fixed yet
 * Long strings of 9's in fractions (decimal numbers) causes visualization errors, due to rounding errors, especially in the visResultComplex() function. Fortunately this shouldn't be a common occurrence for most users. (10/13/17)
 * "Number Operator 0 Operator" changes style inappropriately to fraction style (10/25/17)
 * Small fraction operations are not visualized with appropriate units. Example: "0.3 + 0.9 =" (10/31/17)
+* Negative sign on the fractional result of a mathematical operation doesn't visualize properly. e.g. 2+3.3=5.3 then ~ (10/31/17)
 
 ## Miscellaneous
 *The original project was named "Calculator Alligator" before I found out that a children's book already existed by that name.  I've changed it to "Calculator Gator" to disambiguate the names and because it is easier to say.

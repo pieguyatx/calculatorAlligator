@@ -939,16 +939,36 @@ function vis(state, stateVis){ // (new state, old state)
         // get the clip-path 1st value of the fractional parts in history (in %clipped)
         var fractionHistory = $("#visHistory .collection .fraction").css("clip-path").split(" ")[0].match(/\d+/)[0];
         var fractionResult = $("#visResult .collection .fraction").css("clip-path").split(" ")[0].match(/\d+/)[0];
-
-        let temp = fractinoHistory; // DEBUG
-        console.log(temp); // DEBUG
         // remove fractional parts from both history and result
-        // transform clip-path values to %full (1-%clippath)
-        // sum the %full values
+        $(".collection .fraction").remove();
+        // transform clip-path values to %full (1-%clippath), sum the %full values
+        fractionHistory = 100 - fractionHistory;
+        fractionResult = 100 - fractionResult;
+        console.log("Fraction history, fraction result: ", fractionHistory, fractionResult); // DEBUG
+        fractionNew = fractionHistory + fractionResult; // Says how much 1 unit should be %full
         // if sum > 1
+        if(fractionNew >= 100){
           // add single unit of same type in visualized result
+          $("#visResult .collection").append("<div class='square bloopIn'>1</div>");
           // fractional remainder = sum - 1
-        // add fractional remainder to result visualization
+          fractionNew-=100;
+          console.log("New fraction value after subtracting whole number: ", fractionNew); // DEBUG
+        }
+        // add fractional remainder to result visualization, if appropriate
+        if(fractionNew>0){
+          let fxString = 100-fractionNew;
+          console.log("new fraction clip value? ", fxString);
+          $("#visResult .collection").append("<div class='square fraction bloopIn'></div>");
+          let x = "inset(" + fxString + "% 0px 0px 0px)";
+          $("#visResult .fraction").css("clip-path", x);
+        }
+        // style units appropriately
+        let resultNew = parseFloat(state.result)
+        let unit = 1;
+        if(Math.abs(resultNew)<0.1 || Math.abs(resultNew)>100){
+          determineUnit(resultNew);
+        }
+        styleUnits(resultNew,unit);
         // refresh history collection? check that animation classes are gone
       }
     }
