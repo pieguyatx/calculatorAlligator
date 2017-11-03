@@ -797,7 +797,7 @@ function vis(state, stateVis){ // (new state, old state)
           if(unitHistory===unitNew){
             // and there is nothing visualized in the results now
             if(stateVis.result.value===undefined || isNaN(stateVis.result.value)){
-              // console.log("Current visualized result is undefined; will update."); // DEBUG
+              console.log("Current visualized result is undefined; will update."); // DEBUG
               // add digits
               visResult(resultNew,0,timeAnimate);
               // if history has fractions, though, then make it look like fractions
@@ -807,7 +807,8 @@ function vis(state, stateVis){ // (new state, old state)
             }
             // and there is something in the results now
             else if(stateVis.result.value || stateVis.result.value===0){
-              // console.log("Current visualized result is defined; will update."); // DEBUG
+              console.log("Current visualized result is defined; will update."); // DEBUG
+              if(isNaN(resultNew)){ resultNew = 0; } // Fixing errors if newResult is NaN
               // add digits, recognizing that some units are already visualized
               visResult(resultNew,resultVis,timeAnimate);
               // if history has fractions, though, then make it look like fractions
