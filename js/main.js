@@ -783,10 +783,10 @@ function vis(state, stateVis){ // (new state, old state)
           // console.log("visualized history is :",historyVis); // DEBUG
           var unitHistory = 1, unitNew = 1;
           // ...and the units of the results and history are the same...
-          if(Math.abs(historyVis)>100||Math.abs(historyVis)<1){
+          if(Math.abs(historyVis)>100||Math.abs(historyVis)<.1){
             unitHistory = determineUnit(historyVis);
           }
-          if(Math.abs(resultNew)>100||Math.abs(resultNew)<1){
+          if(Math.abs(resultNew)>100||Math.abs(resultNew)<.1){
             unitNew = determineUnit(resultNew);
           }
           console.log("Units for history, new: ", unitHistory,unitNew); // DEBUG
