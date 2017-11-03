@@ -990,8 +990,9 @@ function vis(state, stateVis){ // (new state, old state)
         let resultNew = parseFloat(state.result)
         let unit = 1;
         if(Math.abs(resultNew)<0.1 || Math.abs(resultNew)>100){
-          determineUnit(resultNew);
+          unit = determineUnit(resultNew);
         }
+        console.log("resultNew, unit? ", resultNew, unit); // DEBUG
         styleUnits(resultNew,unit);
         // refresh history collection? check that animation classes are gone
       }
