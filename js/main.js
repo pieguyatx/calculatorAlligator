@@ -788,6 +788,10 @@ function vis(state, stateVis){ // (new state, old state)
           }
           if(Math.abs(resultNew)>100||Math.abs(resultNew)<.1){
             unitNew = determineUnit(resultNew);
+            // In special case of just "0.", keep the same unit as in the history
+            if(resultNew==0){
+              unitNew = unitHistory;
+            }
           }
           console.log("Units for history, new: ", unitHistory,unitNew); // DEBUG
           if(unitHistory===unitNew){
