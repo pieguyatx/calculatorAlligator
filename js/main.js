@@ -1113,10 +1113,26 @@ function vis(state, stateVis){ // (new state, old state)
               // send&remove fraction from history; remove fraction from result
               $('#visHistory .collection .fraction').stop(true).animate({opacity: "0", left: "100%"},timeAnimate,function(){
                 $('#visHistory .collection .fraction').remove();
-                // create new fractional unit in result representing (historyFx-resultFx)
-                // style results unit/fraction appropriately
-                // send&remove remaining whole units from history; prepend to results
-                // refresh history
+                $('#visResult .collection .fraction').stop(true).animate({opacity: "0"},timeAnimate,function(){
+                  $('#visResult .collection .fraction').remove();
+                  // create new fractional unit in result representing (historyFx-resultFx)
+                  var fractionNew = fractionHistory-fractionResult;
+                  if(fractionNew>0){
+                    let fxString = 100-fractionNew;
+                    $("#visResult .collection").append("<div class='square fraction bloopIn'></div>");
+                    let x = "inset(" + fxString + "% 0px 0px 0px)";
+                    $("#visResult .fraction").css("clip-path", x);
+                  }
+                  // style results unit/fraction appropriately
+                  let resultNew = parseFloat(state.result)
+                  let unit = 1;
+                  if(Math.abs(resultNew)<0.1 || Math.abs(resultNew)>100){
+                    unit = determineUnit(resultNew);
+                  }
+                  styleUnits(resultNew,unit);
+                  // send&remove remaining whole units from history; prepend to results
+                  sendRemainingHistory(50);
+                });
               });
             }
             // else if result's fraction has bigger abs value
@@ -1135,6 +1151,7 @@ function vis(state, stateVis){ // (new state, old state)
                 // create new fractional unit in result representing (resultFx-historyFx)
                 // style results unit/fraction appropriately
                 // refresh history
+              }
             }
             // else if history's and result's fractions have equal abs values
             else if(fractionHistory===fractionResult){
