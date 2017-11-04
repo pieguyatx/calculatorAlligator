@@ -896,6 +896,7 @@ function vis(state, stateVis){ // (new state, old state)
 
   // Visualize the addition of two numbers
   function visAdd(state,stateVis){
+    let timeAnimate = 5; // time for unit to animate in ms
     // if history = 0, 0.0, 0.00 etc
     if(state.history.numFirst==0){
       // keep result the same, refresh history
@@ -919,7 +920,6 @@ function vis(state, stateVis){ // (new state, old state)
       stateVis.history.orientation = undefined;
     }
     // otherwise if numbers are !=0
-    let timeAnimate = 5; // time for unit to animate in ms
     else{
       console.log("Time to animate: ", timeAnimate); // DEBUG
       if( (stateVis.history.value>0 && stateVis.result.value>0)||(stateVis.history.value<0 && stateVis.result.value<0) ){
@@ -1005,6 +1005,7 @@ function vis(state, stateVis){ // (new state, old state)
   function visAddOppSign(state,stateVis,timeAnimate){
     console.log("Adding opposite sign!"); // DEBUG
     // if history has any units visualized still...
+    if($("#visHistory .collection div").length>0){
       // if result has whole units visualized still...
         // handle whole units one at a time - slide history right, remove from result
       // else if result has NO whole units visualized anymore...
@@ -1044,8 +1045,11 @@ function vis(state, stateVis){ // (new state, old state)
             // else if history's and result's fractions have equal abs values
               // send&remove fractions from history; remove fraction from result
               // refresh history
+    }
     // if history has NO units visualized anymore...
+    else if($("#visResult .collection div").length===0){
       // stop, refresh history
+    }
   }
 
   // This function accepts numbers and displays then w/ animations of length defined in ms
