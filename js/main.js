@@ -896,7 +896,8 @@ function vis(state, stateVis){ // (new state, old state)
 
   // Visualize the addition of two numbers
   function visAdd(state,stateVis){
-    let timeAnimate = 5; // time for unit to animate in ms
+    // determine animation time (more units animate faster)
+    let timeAnimate = 10; // default times for unit to animate in ms
     // if history = 0, 0.0, 0.00 etc
     if(state.history.numFirst==0){
       // keep result the same, refresh history
@@ -925,10 +926,14 @@ function vis(state, stateVis){ // (new state, old state)
       if( (stateVis.history.value>0 && stateVis.result.value>0)||(stateVis.history.value<0 && stateVis.result.value<0) ){
         // same sign (function)
         visAddSameSign(state,stateVis,timeAnimate);
+        // update visualization state
+        stateVis.history.value = undefined;
       }
       else if( (stateVis.history.value>0 && stateVis.result.value<0)||(stateVis.history.value<0 && stateVis.result.value>0) ){
         // opposite sign (function)
         visAddOppSign(state,stateVis,timeAnimate);
+        // update visualization state
+        stateVis.history.value = undefined;
       }
     }
   }
@@ -1004,11 +1009,25 @@ function vis(state, stateVis){ // (new state, old state)
   // Visualize the addition of non-zero numbers with the opposite sign
   function visAddOppSign(state,stateVis,timeAnimate){
     console.log("Adding opposite sign!"); // DEBUG
+    timeAnimate=100; // This fixes the timing to better match additino animations
     // if history has any units visualized still...
     if($("#visHistory .collection div").length>0){
       // if result has whole units visualized still...
+      if($("#visResult .collection div").length - $("#visResult .collection .fraction").length>0){
         // handle whole units one at a time - slide history right, remove from result
+        if($('#visHistory .collection div:first-child').hasClass("fraction")===false){ // if not a fraction unit...
+          $('#visHistory .collection div:first-child').stop(true).animate({opacity: "0", left: "100%"},timeAnimate,function(){
+            // console.log("Sending history to result..."); // DEBUG
+            $("#visHistory .collection div:first-child").remove();
+            $("#visResult .collection div:first-child").remove();
+            if($('#visHistory .collection div').length>0){
+              visAddOppSign(state,stateVis,timeAnimate);
+            }
+          });
+        }
+      }
       // else if result has NO whole units visualized anymore...
+      else{
         // and decimal/fraction is NOT present in result, either
           // add remaining units from history to result in one chunk, slower animation
           // refresh history (end)
@@ -1045,6 +1064,7 @@ function vis(state, stateVis){ // (new state, old state)
             // else if history's and result's fractions have equal abs values
               // send&remove fractions from history; remove fraction from result
               // refresh history
+      }
     }
     // if history has NO units visualized anymore...
     else if($("#visResult .collection div").length===0){
