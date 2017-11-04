@@ -1163,12 +1163,18 @@ function vis(state, stateVis){ // (new state, old state)
       var timeAnimate = 100;
     }
     $('#visHistory .collection div:first-child').stop(true).animate({opacity: "0", left: "100%"},timeAnimate,function(){
-      $("#visHistory .collection div:first-child").prependTo("#visResult .collection");
-      $("#visResult .collection div:first-child").css("left","-100%").stop(true).animate({opacity: "1", left: "0"},timeAnimate,function(){
-        if($('#visHistory .collection div').length>0){ // if there are any units in the history...
-          sendRemainingHistory(timeAnimate);
-        }
-      });
+      if($("#visHistory .collection div:first-child").hasClass("fraction")){
+        $("#visHistory .collection div:first-child").appendTo("#visResult .collection");
+        $("#visResult .collection .fraction").css("left","-100%").stop(true).animate({opacity: "1", left: "0"},timeAnimate);
+      }
+      else{
+        $("#visHistory .collection div:first-child").prependTo("#visResult .collection");
+        $("#visResult .collection div:first-child").css("left","-100%").stop(true).animate({opacity: "1", left: "0"},timeAnimate,function(){
+          if($('#visHistory .collection div').length>0){ // if there are any units in the history...
+            sendRemainingHistory(timeAnimate);
+          }
+        });
+      }
     });
   }
 
