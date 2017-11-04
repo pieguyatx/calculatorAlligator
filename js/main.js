@@ -1025,6 +1025,33 @@ function vis(state, stateVis){ // (new state, old state)
             }
           });
         }
+        // if the last unit in the history is a fraction...
+        else if($("#visHistory .collection .fraction").length>0){
+          console.log("Down to the last fraction in the history...");  // DEBUG
+          // send&remove fraction in history
+          $('#visHistory .collection .fraction').stop(true).animate({opacity: "0", left: "100%"},timeAnimate,function(){
+            // Get the clip-path value for the fractional part of the history
+            var fractionHistory = $("#visHistory .collection .fraction").css("clip-path").split(" ")[0].match(/\d+/)[0];
+            // remove fraction from history
+            $('#visHistory .collection .fraction').remove();
+            // create new fractional unit in result representing (1-fraction), if appropriate
+            fractionHistory = 100 - (100-fractionHistory); //New %full (100- (100-fractionResult))
+            if(fractionHistory>=0){
+              let fxString = 100-fractionHistory;
+              // change last unit to the correct fractional unit
+              $("#visResult .collection div:last-child").html("").removeClass("circle").addClass("square fraction");
+              let x = "inset(" + fxString + "% 0px 0px 0px)";
+              $("#visResult .fraction").css("clip-path", x);
+            }
+            // style results unit/fraction appropriately
+            let resultNew = parseFloat(state.result);
+            let unit = 1;
+            if(Math.abs(resultNew)<0.1 || Math.abs(resultNew)>100){
+              unit = determineUnit(resultNew);
+            }
+            styleUnits(resultNew,unit);
+          });
+        }
       }
       // else if result has NO whole units visualized anymore...
       else{
