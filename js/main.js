@@ -1028,10 +1028,19 @@ function vis(state, stateVis){ // (new state, old state)
       }
       // else if result has NO whole units visualized anymore...
       else{
+        console.log("No more whole units detected in results."); // DEBUG
         // and decimal/fraction is NOT present in result, either
+        if($("#visResult .collection .fraction").length===0){
           // add remaining units from history to result in one chunk, slower animation
-          // refresh history (end)
+          let temp = $("#visHistory .collection").html();
+          $("#visHistory .collection").stop(true).addClass("sendRight").on("webkitAnimationEnd mozAnimationEnd oAnimationEnd oanimationend animationend",function(e){
+            $("#visResult .collection").prepend(temp);
+            // refresh history (end)
+            $("#visHistory").html("<div class='collection'></div>");
+          });
+        }
         // else a decimal/fraction is present in result...
+        else if($("#visResult .collection .fraction").length>0){
           // if decimal/fraction is NOT also present in history...
             // if history has at least one whole unit remaining, too...
               // send&remove 1 whole unit from history; remove fraction from result
@@ -1064,6 +1073,7 @@ function vis(state, stateVis){ // (new state, old state)
             // else if history's and result's fractions have equal abs values
               // send&remove fractions from history; remove fraction from result
               // refresh history
+        }
       }
     }
     // if history has NO units visualized anymore...
