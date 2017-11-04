@@ -894,6 +894,7 @@ function vis(state, stateVis){ // (new state, old state)
   console.log("StateVis (end): ", stateVis); // DEBUG
   console.log("State (end): ", state); // DEBUG
 
+  // Visualize the addition of two numbers
   function visAdd(state,stateVis){
     // if history = 0, 0.0, 0.00 etc
     if(state.history.numFirst==0){
@@ -918,16 +919,16 @@ function vis(state, stateVis){ // (new state, old state)
       stateVis.history.orientation = undefined;
     }
     // otherwise if numbers are !=0
+    let timeAnimate = 5; // time for unit to animate in ms
     else{
+      console.log("Time to animate: ", timeAnimate); // DEBUG
       if( (stateVis.history.value>0 && stateVis.result.value>0)||(stateVis.history.value<0 && stateVis.result.value<0) ){
         // same sign (function)
-        let timeAnimate = 5; // time for unit to animate in ms
-        console.log("Time to animate: ", timeAnimate); // DEBUG
         visAddSameSign(state,stateVis,timeAnimate);
       }
       else if( (stateVis.history.value>0 && stateVis.result.value<0)||(stateVis.history.value<0 && stateVis.result.value>0) ){
         // opposite sign (function)
-        visAddOppSign(state,stateVis);
+        visAddOppSign(state,stateVis,timeAnimate);
       }
     }
   }
@@ -1001,12 +1002,50 @@ function vis(state, stateVis){ // (new state, old state)
   }
 
   // Visualize the addition of non-zero numbers with the opposite sign
-  function visAddOppSign(state,stateVis){
+  function visAddOppSign(state,stateVis,timeAnimate){
     console.log("Adding opposite sign!"); // DEBUG
-    // handle whole units one at a time - slide history right, remove from result
-      // if result dwindles to no whole units, add remaining units from history to result, slower animation
-      // refresh history
-    // if decimal/fraction present in
+    // if history has any units visualized still...
+      // if result has whole units visualized still...
+        // handle whole units one at a time - slide history right, remove from result
+      // else if result has NO whole units visualized anymore...
+        // and decimal/fraction is NOT present in result, either
+          // add remaining units from history to result in one chunk, slower animation
+          // refresh history (end)
+        // else a decimal/fraction is present in result...
+          // if decimal/fraction is NOT also present in history...
+            // if history has at least one whole unit remaining, too...
+              // send&remove 1 whole unit from history; remove fraction from result
+              // create new fractional unit in result representing 1-fraction
+              // style results unit/fraction appropriately
+              // send&remove remaining whole units from history; prepend to results
+              // refresh history
+            // if history has NO whole units remaining
+              // refresh history (end) // DEBUG this branch should never actually occur!
+          // else if decimal/fraction is also present in history...
+            // get fraction clip sizes for history and result
+            // if history's fraction has bigger abs value
+              // send&remove fraction from history; remove fraction from result
+              // create new fractional unit in result representing (historyFx-resultFx)
+              // style results unit/fraction appropriately
+              // send&remove remaining whole units from history; prepend to results
+              // refresh history
+            // else if result's fraction has bigger abs value
+              // if history also has at least one whole unit, too...
+                // send&remove fraction + one whole unit from history; remove fraction from result
+                // create new fractional unit in result representing (1-resultFx+historyFx)
+                // style results unit/fraction appropriately
+                // send&remove remaining whole units from history; prepend to results
+                // refresh history
+              // else if history does not have any whole units...
+                // send&remove fraction; remove fraction from result
+                // create new fractional unit in result representing (resultFx-historyFx)
+                // style results unit/fraction appropriately
+                // refresh history
+            // else if history's and result's fractions have equal abs values
+              // send&remove fractions from history; remove fraction from result
+              // refresh history
+    // if history has NO units visualized anymore...
+      // stop, refresh history
   }
 
   // This function accepts numbers and displays then w/ animations of length defined in ms
