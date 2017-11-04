@@ -1066,7 +1066,7 @@ function vis(state, stateVis){ // (new state, old state)
           // if decimal/fraction is NOT also present in history...
           if($("#visHistory .collection .fraction").length===0){
             // if history has at least one whole unit remaining, too...
-            if($("#visHistory .collection div").length - $("#visResult .collection .fraction").length > 0){
+            if($("#visHistory .collection div").length - $("#visHistory .collection .fraction").length > 0){
               // send&remove 1 whole unit from history
               $('#visHistory .collection div:first-child').stop(true).animate({opacity: "0", left: "100%"},timeAnimate,function(){
                 $('#visHistory .collection div:first-child').remove();
@@ -1122,6 +1122,7 @@ function vis(state, stateVis){ // (new state, old state)
             // else if result's fraction has bigger abs value
             else if(fractionHistory<fractionResult){
               // if history also has at least one whole unit, too...
+              if($("#visHistory .collection div").length - $("#visHistory .collection .fraction").length > 0){
                 // send&remove fraction + one whole unit from history; remove fraction from result
                 $("#visHistory .collection div:first-child").prependTo("#visResult .collection");
                 $("#visResult .collection div:first-child").css({opacity: "1", left: "0"});
