@@ -706,6 +706,7 @@ function vis(state, stateVis){ // (new state, old state)
         });
         stateVis.history.value = undefined;
         stateVis.history.orientation = undefined;
+        $("#visResult .collection div").stop(true);
         $("#visResult .collection").addClass("getEatenUpLeft").on("webkitAnimationEnd mozAnimationEnd oAnimationEnd oanimationend animationend",function(){
           $("#visResult").html("<div class='collection'><div class='circle zero'></div></div>");
         });
