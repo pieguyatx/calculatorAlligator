@@ -1117,6 +1117,33 @@ function vis(state, stateVis){ // (new state, old state)
               });
             }
           }
+          // if result does NOT have a fraction, even if it has a whole unit...
+          else if($("#visResult .collection .fraction").length===0){
+            var fractionHistory = $("#visHistory .collection .fraction").css("clip-path").split(" ")[0].match(/\d+/)[0];
+            fractionHistory = 100-fractionHistory;
+            // send&remove fraction in history, result
+            $('#visHistory .collection .fraction').stop(true).animate({opacity: "0", left: "100%"},timeAnimate,function(){
+              $('#visHistory .collection .fraction').remove();
+              // change last unit in result to fractional unit; %full = 1-fractionHistory+fractionResult
+              var fractionNew = 100-fractionHistory;
+              if(fractionNew>=0){
+                let fxString = 100-fractionNew;
+                $("#visResult .collection div:last-child").html("").removeClass("circle").addClass("square fraction");
+                let x = "inset(" + fxString + "% 0px 0px 0px)";
+                $("#visResult .fraction").css("clip-path", x);
+              }
+              // style results unit/fraction appropriately
+              $("#visResult .collection div").removeClass("circle").addClass("square");
+              /*
+              let resultNew = parseFloat(state.result);
+              let unit = 1;
+              if(Math.abs(resultNew)<0.1 || Math.abs(resultNew)>100){
+                unit = determineUnit(resultNew);
+              }
+              styleUnits(resultNew,unit);
+              */
+            });
+          }
         }
       }
       // else if result has NO whole units visualized anymore...
