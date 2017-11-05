@@ -12,7 +12,6 @@ This web app is meant to be a basic visual calculator that allows users to add, 
 
 ## Known Bugs
 These are known bugs that should be fixed over time. They haven't been fixed yet due to being lower priorities:
-* Subtraction animations not complete
 * No multiplication animations
 * No division animations
 * No squaring animations
