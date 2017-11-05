@@ -1008,38 +1008,46 @@ function vis(state, stateVis){ // (new state, old state)
         // get the clip-path 1st value of the fractional parts in history (in %clipped)
         var fractionHistory = $("#visHistory .collection .fraction").css("clip-path").split(" ")[0].match(/\d+/)[0];
         var fractionResult = $("#visResult .collection .fraction").css("clip-path").split(" ")[0].match(/\d+/)[0];
-        // remove fractional parts from both history and result
-        $(".collection .fraction").remove();
         // transform clip-path values to %full (1-%clippath), sum the %full values
         fractionHistory = 100 - fractionHistory;
         fractionResult = 100 - fractionResult;
+        var fractionNew = fractionHistory + fractionResult; // Says how much 1 unit should be %full
         console.log("Fraction history, fraction result: ", fractionHistory, fractionResult); // DEBUG
-        fractionNew = fractionHistory + fractionResult; // Says how much 1 unit should be %full
-        // if sum > 1
-        if(fractionNew >= 100){
-          // add single unit of same type in visualized result
-          $("#visResult .collection").append("<div class='square bloopIn'>1</div>");
-          // fractional remainder = sum - 1
-          fractionNew-=100;
-          console.log("New fraction value after subtracting whole number: ", fractionNew); // DEBUG
-        }
-        // add fractional remainder to result visualization, if appropriate
-        if(fractionNew>0){
-          let fxString = 100-fractionNew;
-          console.log("new fraction clip value? ", fxString);
-          $("#visResult .collection").append("<div class='square fraction bloopIn'></div>");
-          let x = "inset(" + fxString + "% 0px 0px 0px)";
-          $("#visResult .fraction").css("clip-path", x);
-        }
-        // style units appropriately
-        let resultNew = parseFloat(state.result)
-        let unit = 1;
-        if(Math.abs(resultNew)<0.1 || Math.abs(resultNew)>100){
-          unit = determineUnit(resultNew);
-        }
-        console.log("resultNew, unit? ", resultNew, unit); // DEBUG
-        styleUnits(resultNew,unit);
-        // refresh history collection? check that animation classes are gone
+        // remove fractional parts from history
+        $("#visHistory .collection .fraction").stop(true).animate({opacity: "0", left: "100%"},timeAnimate,function(){
+          $("#visHistory .collection .fraction").remove();
+          // if sum >= 1
+          if(fractionNew >= 100){
+            // add single unit of same type in visualized result
+            $("#visResult .collection").prepend("<div class='square bloopIn'>1</div>");
+            // fractional remainder = sum - 1
+            fractionNew-=100;
+            console.log("New fraction value after subtracting whole number: ", fractionNew); // DEBUG
+            // change fractional remainder to result visualization, if appropriate
+            if(fractionNew>0){
+              let fxString = 100-fractionNew;
+              let x = "inset(" + fxString + "% 0px 0px 0px)";
+              $("#visResult .fraction").css("clip-path", x);
+            }
+          }
+          // if sum <1
+          else{
+            // change existing fraction
+            if(fractionNew>0){
+              let fxString = 100-fractionNew;
+              let x = "inset(" + fxString + "% 0px 0px 0px)";
+              $("#visResult .fraction").css("clip-path", x);
+            }
+          }
+          // style units appropriately
+          let resultNew = parseFloat(state.result)
+          let unit = 1;
+          if(Math.abs(resultNew)<0.1 || Math.abs(resultNew)>100){
+            unit = determineUnit(resultNew);
+          }
+          console.log("resultNew, unit? ", resultNew, unit); // DEBUG
+          styleUnits(resultNew,unit);
+        });
       }
     }
   }
@@ -1439,6 +1447,43 @@ function vis(state, stateVis){ // (new state, old state)
     }
   };
 
+  // This function is for redrawing whatever's shown in the results
+  function revisualizeResult(resultVis,unit,timeAnimate){
+    $("#visResult .collection").animate({opacity: "0"},timeAnimate,function(){
+      // redraw result completely
+      $("#visResult").html("<div class='collection'></div>");
+      // if new Result is zero...
+      if(resultVis===0){
+        $("#visResult .collection").append("<div class='circle zero'></div>");
+      }
+      // otherwise add units
+      else{
+        var resultVisReduced = parseFloat((resultVis/unit).toFixed(12)); // converts to number >0,<=100
+        if(Math.abs(resultVisReduced)>=1){
+          // display the "whole/round number" units
+          for(var i=0; i<Math.floor(Math.abs(resultVisReduced)); i++){
+            $("#visResult .collection").append("<div class='circle bloopIn'>"+unit+"</div>");
+          }
+        }
+        // Then visualize the "fractional" part last if needed
+        // set the leftover fractional part of new result aside
+        var wholeNum = Math.floor(Math.abs(resultVisReduced));
+        var fraction = Math.abs(resultVisReduced)-wholeNum;
+        // if fraction exists
+        if(fraction>0){
+          var fxString = Math.round((1-fraction)*100).toString();
+          var x = "inset(" + fxString + "% 0px 0px 0px)";
+          $("#visResult .collection").append("<div class='square fraction bloopIn'></div>");
+          $("#visResult .fraction").css("clip-path", x);
+          // and change all the shapes to fractional shapes
+          $("#visResult .collection>div").removeClass("circle").addClass("square");
+        }
+      }
+      // style history
+      styleUnits(resultVis,unit);
+    });
+  }
+
   // This function is for redrawing whatever's shown in the history
   function revisualizeHistory(historyVis,unit,timeAnimate){
     $("#visHistory .collection").animate({opacity: "0"},timeAnimate,function(){
@@ -1491,6 +1536,19 @@ function vis(state, stateVis){ // (new state, old state)
       console.log("Assuming number is the same value as before, or no fraction exists.");
       // check for sign change
       if(detectSignChange(resultNew,resultVis)){
+        // if units displayed are different from what they should be, OR if it's just a fraction displayed...
+        let unitVisResult = 1;
+        let resultVisTarget = parseFloat(state.result);
+        if( Math.abs(resultVisTarget)<0.1 || Math.abs(resultVisTarget)>100){
+          unitVisResult = determineUnit(resultVisTarget);
+        }
+        console.log(unitVisResult,resultVisTarget);
+        if( ($("#visResult .collection div:first-child").html()!=unitVisResult) ||
+          ($("#visResult .collection div").length===1&&$("#visHistory .collection .fraction").length===1) ){
+          console.log("Redisplaying the results...", resultVisTarget); // DEBUG
+          // clear result & redisplay it
+          revisualizeResult(resultVisTarget,unitVisResult,timeAnimate);
+        }
         styleUnits(resultNew,unit);
       }
     }
@@ -1522,6 +1580,20 @@ function vis(state, stateVis){ // (new state, old state)
     if(!signChange){
       for(var i=0; i<(Math.abs(resultNew)-Math.abs(resultVis)); i++){
         $("#visResult .collection").append("<div class='circle bloopIn'>1</div>");
+      }
+    }
+    else{
+      // if units displayed are different from what they should be, OR if it's just a fraction displayed...
+      let unitVisResult = 1;
+      let resultVisTarget = parseFloat(state.result);
+      if( Math.abs(resultVisTarget)<0.1 || Math.abs(resultVisTarget)>100){
+        unitVisResult = determineUnit(resultVisTarget);
+      }
+      console.log(unitVisResult,resultVisTarget);
+      if( ($("#visResult .collection div:first-child").html()!=unitVisResult) ||
+        ($("#visResult .collection div").length===1&&$("#visHistory .collection .fraction").length===1) ){
+        console.log("Redisplaying the results...", resultVisTarget); // DEBUG
+        revisualizeResult(resultVisTarget,unitVisResult,timeAnimate);
       }
     }
     styleUnits(resultNew);
@@ -1564,6 +1636,20 @@ function vis(state, stateVis){ // (new state, old state)
       // Then visualize the "fractional" part last
       console.log("Running visualizeFraction() function from visResultComplex()");
       visualizeFraction(resultNew,resultVis);
+    }
+    else{
+      // if units displayed are different from what they should be, OR if it's just a fraction displayed...
+      let unitVisResult = 1;
+      let resultVisTarget = parseFloat(state.result);
+      if( Math.abs(resultVisTarget)<0.1 || Math.abs(resultVisTarget)>100){
+        unitVisResult = determineUnit(resultVisTarget);
+      }
+      console.log(resultVisTarget,unitVisResult);
+      if( ($("#visResult .collection div:first-child").html()!=unitVisResult) ||
+        ($("#visResult .collection div").length===1&&$("#visHistory .collection .fraction").length===1) ){
+        console.log("Redisplaying the results...", resultVisTarget); // DEBUG
+        revisualizeResult(resultVisTarget,unitVisResult,timeAnimate);
+      }
     }
     // console.log("visResultComplex(): ", resultNew,resultVis,unit); // DEBUG
     styleUnits(resultNew,unit);
