@@ -963,12 +963,8 @@ function vis(state, stateVis){ // (new state, old state)
     // else if history!=0 && result!=0
     else{
       // flip sign appearance of result
-      if($("#visResult .collection .positive").length>0){
-        $("#visResult .collection .positive").removeClass("positive").addClass("negative shake");
-      }
-      else if($("#visResult .collection .negative").length>0){
-        $("#visResult .collection .negative").removeClass("negative").addClass("positive shake");
-      }
+      styleUnitsFlip();
+      // get the values to operate on
       let compareHistory = stateVis.history.value;
       let compareResult = -stateVis.result.value;
       // delay for a bit (using jquery) (state values will update before this), then subtract
@@ -1813,7 +1809,39 @@ function vis(state, stateVis){ // (new state, old state)
       // console.log(borderString); // DEBUG
       $(target + " .collection>div").css("border",borderString);
     }
+  }
 
+  // Change the results appearance to the opposite sign ONLY (don't change units)
+  function styleUnitsFlip(){
+    // find current state
+    var borderType = $("#visResult .collection div:first-child").css("border-style"); // none, inset, outset
+    if($("#visResult .collection div:first-child").hasClass("positive")){
+      var oldSign = "positive";
+    }
+    else if($("#visResult .collection div:first-child").hasClass("negative")){
+      var oldSign = "negative";
+    };
+    var unitLabel = $("#visResult .collection div:first-child").html().toString(); // only works if there's a whole unit...
+    // set new visualized state to opposite
+    // switch label sign
+    if(unitLabel===""){unitLabel = "";} // default if undefined, for fractions, zeros
+    else if(unitLabel.charAt(0)==="-"){
+      unitLabel = unitLabel.slice(1,unitLabel.length);
+    }
+    else{
+      unitLabel = "-" + unitLabel;
+    }
+    $("#visResult .collection div:not(.fraction)").html(unitLabel);
+    // change color of background and border
+    var borderColor;
+    if(oldSign==="negative"){
+      borderColor = "#e50000";
+      $("#visResult .collection>div").removeClass("negative").addClass("positive shake").css("border-color",borderColor);
+    }
+    else if(oldSign==="positive"){
+      borderColor = "#1C2833";
+      $("#visResult .collection>div").removeClass("positive").addClass("negative shake").css("border-color",borderColor);
+    }
   }
 
 }
