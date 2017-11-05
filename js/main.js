@@ -602,12 +602,12 @@ function squared(state){
 // Handle rounding errors that arise w/ Javascript multiplication===============
 function reduceErrors(number){
   // If semi-small number, decimal present, and lots of zeros, cut the number short
-  if(number<1e20){
+  if(Math.abs(number)<1e20){
     var numStr = number.toString();
     var indexDecimal = numStr.indexOf(".");
     if(indexDecimal>0){
       // look for several zeros after the decimal pt
-      if(number>100){
+      if(Math.abs(number)>100){
         var indexZeros = numStr.indexOf("00000000",indexDecimal);
       }
       else{
@@ -627,7 +627,7 @@ function reduceErrors(number){
       }
       else{ // If no zero-strings found
         // look for several nines after decimal pt
-        if(number<1000000){
+        if(Math.abs(number)<1000000){
           var indexNines = numStr.indexOf("9999999999999",indexDecimal);
           if(indexNines>0){
             console.log("Found lots of 9's; cutting it out..."); // DEBUG
