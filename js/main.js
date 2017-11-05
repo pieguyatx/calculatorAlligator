@@ -1053,29 +1053,70 @@ function vis(state, stateVis){ // (new state, old state)
         // if the last unit in the history is a fraction...
         else if($("#visHistory .collection .fraction").length>0){
           console.log("Down to the last fraction in the history...");  // DEBUG
-          // send&remove fraction in history
-          $('#visHistory .collection .fraction').stop(true).animate({opacity: "0", left: "100%"},timeAnimate,function(){
-            // Get the clip-path value for the fractional part of the history
+          // if result has a fraction, in addition to a whole unit...
+          if($("#visResult .collection .fraction").length>0){
+            // get fraction clip sizes for history and result; then get %full
             var fractionHistory = $("#visHistory .collection .fraction").css("clip-path").split(" ")[0].match(/\d+/)[0];
-            // remove fraction from history
-            $('#visHistory .collection .fraction').remove();
-            // create new fractional unit in result representing (1-fraction), if appropriate
-            fractionHistory = 100 - (100-fractionHistory); //New %full (100- (100-fractionResult))
-            if(fractionHistory>=0){
-              let fxString = 100-fractionHistory;
-              // change last unit to the correct fractional unit
-              $("#visResult .collection div:last-child").html("").removeClass("circle").addClass("square fraction");
-              let x = "inset(" + fxString + "% 0px 0px 0px)";
-              $("#visResult .fraction").css("clip-path", x);
+            var fractionResult = $("#visResult .collection .fraction").css("clip-path").split(" ")[0].match(/\d+/)[0];
+            fractionHistory = 100-fractionHistory;
+            fractionResult = 100-fractionResult;
+            // if fractionHistory > fractionResult
+            if(fractionHistory>fractionResult){
+              // send&remove fraction in history, result; remove unit in result too
+              $('#visHistory .collection .fraction').stop(true).animate({opacity: "0", left: "100%"},timeAnimate,function(){
+                $('#visHistory .collection .fraction').remove();
+                $('#visResult .collection .fraction').stop(true).animate({opacity: "0"},timeAnimate,function(){
+                  $('#visResult .collection .fraction').remove();
+                  // change last unit in result to fractional unit; %full = 1-fractionHistory+fractionResult
+                  var fractionNew = 100-fractionHistory+fractionResult;
+                  if(fractionNew>=0){
+                    let fxString = 100-fractionNew;
+                    $("#visResult .collection div:last-child").html("").removeClass("circle").addClass("square fraction");
+                    let x = "inset(" + fxString + "% 0px 0px 0px)";
+                    $("#visResult .fraction").css("clip-path", x);
+                  }
+                  // style results unit/fraction appropriately
+                  let resultNew = parseFloat(state.result);
+                  let unit = 1;
+                  if(Math.abs(resultNew)<0.1 || Math.abs(resultNew)>100){
+                    unit = determineUnit(resultNew);
+                  }
+                  styleUnits(resultNew,unit);
+                });
+              });
             }
-            // style results unit/fraction appropriately
-            let resultNew = parseFloat(state.result);
-            let unit = 1;
-            if(Math.abs(resultNew)<0.1 || Math.abs(resultNew)>100){
-              unit = determineUnit(resultNew);
+            // if fractionHistory < fractionResult
+            else if(fractionHistory<fractionResult){
+              // send&remove fraction in history, result;
+              $('#visHistory .collection .fraction').stop(true).animate({opacity: "0", left: "100%"},timeAnimate,function(){
+                $('#visHistory .collection .fraction').remove();
+                // change last unit in result to fractional unit; %full = fractionResult-fractionHistory
+                var fractionNew = fractionResult-fractionHistory;
+                if(fractionNew>=0){
+                  let fxString = 100-fractionNew;
+                  let x = "inset(" + fxString + "% 0px 0px 0px)";
+                  $("#visResult .fraction").css("clip-path", x);
+                }
+                // style results unit/fraction appropriately
+                let resultNew = parseFloat(state.result);
+                let unit = 1;
+                if(Math.abs(resultNew)<0.1 || Math.abs(resultNew)>100){
+                  unit = determineUnit(resultNew);
+                }
+                styleUnits(resultNew,unit);
+              });
             }
-            styleUnits(resultNew,unit);
-          });
+            // if fractionHistory = fractionResult
+            else if(fractionHistory===fractionResult){
+              // send&remove fraction in history, result; remove unit in result too
+              $('#visHistory .collection .fraction').stop(true).animate({opacity: "0", left: "100%"},timeAnimate,function(){
+                $('#visHistory .collection .fraction').remove();
+                $('#visResult .collection .fraction').stop(true).animate({opacity: "0"},timeAnimate,function(){
+                  $('#visResult .collection .fraction').remove();
+                });
+              });
+            }
+          }
         }
       }
       // else if result has NO whole units visualized anymore...
@@ -1193,9 +1234,24 @@ function vis(state, stateVis){ // (new state, old state)
               // else if history does not have any whole units...
               else if($("#visHistory .collection div").length - $("#visHistory .collection .fraction").length===0){
                 // send&remove fraction; remove fraction from result
-                // create new fractional unit in result representing (resultFx-historyFx)
-                // style results unit/fraction appropriately
-                // refresh history
+                $('#visHistory .collection .fraction').stop(true).animate({opacity: "0", left: "100%"},timeAnimate,function(){
+                  $('#visHistory .collection .fraction').remove();
+                  // create new fractional unit in result representing (1-fraction), if appropriate
+                  var fractionNew = fractionResult-fractionHistory;
+                  if(fractionNew>=0){
+                    let fxString = 100-fractionNew;
+                    // change last fraction to the correct size
+                    let x = "inset(" + fxString + "% 0px 0px 0px)";
+                    $("#visResult .fraction").css("clip-path", x);
+                  }
+                  // style results unit/fraction appropriately
+                  let resultNew = parseFloat(state.result);
+                  let unit = 1;
+                  if(Math.abs(resultNew)<0.1 || Math.abs(resultNew)>100){
+                    unit = determineUnit(resultNew);
+                  }
+                  styleUnits(resultNew,unit);
+                });
               }
             }
             // else if history's and result's fractions have equal abs values
