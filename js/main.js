@@ -701,8 +701,8 @@ function vis(state, stateVis){ // (new state, old state)
       // if there's not already a zero displayed...
       if(stateVis.result.value!=0 || (stateVis.history.value!=0 && !isNaN(state.history.value)) || (stateVis.result.value===0 && !isNaN(stateVis.history.value) ) ){
         // fade all, clear, make opaque again
-        $("#visHistory").animate({opacity: "0"},timeAnimate,function(){
-          $(this).html("<div class='collection'></div>").animate({opacity: "1"},0);
+        $("#visHistory .collection").animate({opacity: "0"},timeAnimate,function(){
+          $("#visHistory").html("<div class='collection'></div>");
         });
         stateVis.history.value = undefined;
         stateVis.history.orientation = undefined;
@@ -969,22 +969,26 @@ function vis(state, stateVis){ // (new state, old state)
       else if($("#visResult .collection .negative").length>0){
         $("#visResult .collection .negative").removeClass("negative").addClass("positive shake");
       }
-      // delay for a bit (using jquer), then subtract
-      $("#visResult .collection").animate({color: "white"},300,function(){
-        stateVis.result.value = -stateVis.result.value;
-        console.log(stateVis.history.value,stateVis.result.value); // DEBUG
+      let compareHistory = stateVis.history.value;
+      let compareResult = -stateVis.result.value;
+      // delay for a bit (using jquery) (state values will update before this), then subtract
+      $("#visResult .collection").animate({color: "white"},500,function(){
+        // console.log(compareHistory,compareResult); // DEBUG
         // if history numbers now have the same signs...
-        if( (stateVis.history.value>0&&stateVis.result.value>0) || (stateVis.history.value<0&&stateVis.result.value<0) ){
+        if( (compareHistory>0&&compareResult>0) || (compareHistory<0&&compareResult<0) ){
           console.log("Subtraction: Like adding numbers with the same sign."); //debug
           // add units together using addition function
           visAddSameSign(state,stateVis,timeAnimate);
         }
         // if history numbers now have opposite signs... (subtract animation)
-        else if( (stateVis.history.value>0&&stateVis.result.value<0) || (stateVis.history.value<0&&stateVis.result.value>0) ){
+        else if( (compareHistory>0&&compareResult<0) || (compareHistory<0&&compareResult>0) ){
           console.log("Subtraction: Like adding numbers with opposite signs."); //debug
           // add units together using addition function
           visAddOppSign(state,stateVis,timeAnimate);
-        }        
+        }
+        // update visualization state
+        stateVis.history.value = undefined;
+        stateVis.history.orientation = "add";
       });
     }
   }
