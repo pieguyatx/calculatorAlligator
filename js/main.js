@@ -904,21 +904,12 @@ function vis(state, stateVis){ // (new state, old state)
     else if(state.operatorExists===true && state.equalsExists===true){
       // special animations according to operator types
       if(state.history.operator==="add"){
-        // add (function)
         visAdd(state,stateVis);
       }
+      else if(state.history.operator==="subtract"){
+        visSubtract(state,stateVis);
+      }
       // TBD below! ===============================
-      // subtract
-        // flip sign appearance of result
-        // if units now have opposite signs... (subtract animation)
-          // overlay history units one at a time under result (change z-index?)
-            // send history units right to result
-          // whichever absolute value is smaller, fade those units out of history and result
-          // refresh smaller collection
-          // remove faded units from larger collection, one at a time
-          // if bigger abs value was in history, move history units to results w/o animation & refresh history
-        // if units now have the same signs...
-          // add units together using addition function
       // multiply
       // divide
       // square
@@ -932,6 +923,27 @@ function vis(state, stateVis){ // (new state, old state)
   // After new state has been analyzed, update the visualization state
   console.log("StateVis (end): ", stateVis); // DEBUG
   console.log("State (end): ", state); // DEBUG
+
+  // Visualize the subtraction of two numbers
+  // Method A: Treat it like addition of the appropriate +/- numbers
+  function visSubtract(state,stateVis){
+    // if history=0
+      // keep results the same; clear history
+    // else if result=0
+      // put history into result; clear history
+    // else if history!=0 && result!=0
+      // flip sign appearance of result
+      if($("#visResult .collection .positive"))
+      // if units now have opposite signs... (subtract animation)
+        // overlay history units one at a time under result (change z-index?)
+          // send history units right to result
+        // whichever absolute value is smaller, fade those units out of history and result
+        // refresh smaller collection
+        // remove faded units from larger collection, one at a time
+        // if bigger abs value was in history, move history units to results w/o animation & refresh history
+      // if units now have the same signs...
+        // add units together using addition function
+  }
 
   // Visualize the addition of two numbers
   function visAdd(state,stateVis){
