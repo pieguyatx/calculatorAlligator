@@ -1217,7 +1217,7 @@ function vis(state, stateVis){ // (new state, old state)
         // and decimal/fraction is NOT present in result, either
         if($("#visResult .collection .fraction").length===0){
           // console.log("No fraction detected in results."); // DEBUG
-          // add remaining units from history to result in one chunk, slower animation
+          // add remaining units from history to result
           sendRemainingHistory(50);
         }
         // else a decimal/fraction is present in result...
@@ -1370,24 +1370,37 @@ function vis(state, stateVis){ // (new state, old state)
   }
 
   // Send the remaining history units one at a time
-  function sendRemainingHistory(timeAnimate){
+  function sendRemainingHistory(timeAnimate,noDelay){
     if(!timeAnimate){
-      var timeAnimate = 100;
+      var timeAnimate = 100; // default timing of each unit movement
     }
-    $('#visHistory .collection div:first-child').stop(true).animate({opacity: "0", left: "100%"},timeAnimate,function(){
-      if($("#visHistory .collection div:first-child").hasClass("fraction")){
-        $("#visHistory .collection div:first-child").appendTo("#visResult .collection");
-        $("#visResult .collection .fraction").css("left","-100%").stop(true).animate({opacity: "1", left: "0"},timeAnimate);
-      }
-      else{
-        $("#visHistory .collection div:first-child").prependTo("#visResult .collection");
-        $("#visResult .collection div:first-child").css("left","-100%").stop(true).animate({opacity: "1", left: "0"},timeAnimate,function(){
-          if($('#visHistory .collection div').length>0){ // if there are any units in the history...
-            sendRemainingHistory(timeAnimate);
-          }
-        });
-      }
-    });
+    if(!noDelay){
+      noDelay = 0; // delay in start by default
+    }
+    if(noDelay){
+      moveUnit(timeAnimate,0);
+    }
+    else{
+      $("#visResult .collection").animate({color: "white"},700,function(){
+        moveUnit(timeAnimate,0);
+      });
+    }
+    function moveUnit(){
+      $('#visHistory .collection div:first-child').stop(true).animate({opacity: "0", left: "100%"},timeAnimate,function(){
+        if($("#visHistory .collection div:first-child").hasClass("fraction")){
+          $("#visHistory .collection div:first-child").appendTo("#visResult .collection");
+          $("#visResult .collection .fraction").css("left","-100%").stop(true).animate({opacity: "1", left: "0"},timeAnimate);
+        }
+        else{
+          $("#visHistory .collection div:first-child").prependTo("#visResult .collection");
+          $("#visResult .collection div:first-child").css("left","-100%").stop(true).animate({opacity: "1", left: "0"},timeAnimate,function(){
+            if($('#visHistory .collection div').length>0){ // if there are any units in the history...
+              sendRemainingHistory(timeAnimate,1);
+            }
+          });
+        }
+      });
+    }
   }
 
   // This function accepts numbers and displays then w/ animations of length defined in ms
