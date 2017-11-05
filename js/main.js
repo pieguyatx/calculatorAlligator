@@ -1019,7 +1019,12 @@ function vis(state, stateVis){ // (new state, old state)
           // if sum >= 1
           if(fractionNew >= 100){
             // add single unit of same type in visualized result
-            $("#visResult .collection").prepend("<div class='square bloopIn'>1</div>");
+            if(stateVis.result.value>0){
+              $("#visResult .collection").prepend("<div class='square positive bloopIn'>1</div>");
+            }
+            else if(stateVis.result.value<0){
+              $("#visResult .collection").prepend("<div class='square negative bloopIn'>1</div>");
+            }
             // fractional remainder = sum - 1
             fractionNew-=100;
             console.log("New fraction value after subtracting whole number: ", fractionNew); // DEBUG
@@ -1039,14 +1044,6 @@ function vis(state, stateVis){ // (new state, old state)
               $("#visResult .fraction").css("clip-path", x);
             }
           }
-          // style units appropriately
-          let resultNew = parseFloat(state.result)
-          let unit = 1;
-          if(Math.abs(resultNew)<0.1 || Math.abs(resultNew)>100){
-            unit = determineUnit(resultNew);
-          }
-          console.log("resultNew, unit? ", resultNew, unit); // DEBUG
-          styleUnits(resultNew,unit);
         });
       }
     }
