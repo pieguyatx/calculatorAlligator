@@ -427,12 +427,13 @@ function listenForEquals(state,stateVis){
 }
 
 function equals(state,stateVis,noDisplay){
+  // initialize
   var statements;
   // If (operatorExists) is false && (equalsExists) is false
   // OR if (equalsExists) in history already
   if(state.equalsExists===true || (state.operatorExists===false && state.equalsExists===false)){
     // do nothing; or just do some silly animation? "Are you calculating something?"
-    statements = ["That equals itself, doesn't it?","What is the calculation?"];
+    statements = ["That equals itself, doesn't it?","What is the calculation?","Equals, equals, equals...","Yep, same number.","Still the same!","Hey, 2 = 2, too!","Did you know that 1 = 1?","Let's speed up these calculations.","I believe in equality!"];
   }
   // If (operatorExists) is true && (equalsExists) is false...
   else if(state.operatorExists===true && state.equalsExists===false){
@@ -680,6 +681,9 @@ function displayHelp(statement){
 // =============================================================================
 // One giant function with lots of internal subfunctions/methods
 function vis(state, stateVis){ // (new state, old state)
+  // Complete any animations in history/results
+  $(".collection").finish().finish();
+  $(".collection>div").finish().finish();
   console.log("Running vis() function now...");  // DEBUG
   // This function takes in the state of the calculator and compares it to the
   // old state (global obj). Depending on the changes, animations are performed.
@@ -902,12 +906,15 @@ function vis(state, stateVis){ // (new state, old state)
     }
     // If there is an operator and equals in the history...
     else if(state.operatorExists===true && state.equalsExists===true){
-      // special animations according to operator types
-      if(state.history.operator==="add"){
-        visAdd(state,stateVis);
-      }
-      else if(state.history.operator==="subtract"){
-        visSubtract(state,stateVis);
+      // only run these if the visualizations don't match what they should be; avoids extra processing
+      if( (parseFloat(state.result)!=stateVis.result.value) && (stateVis.history.value!=undefined) ){
+        // special animations according to operator types
+        if(state.history.operator==="add"){
+          visAdd(state,stateVis);
+        }
+        else if(state.history.operator==="subtract"){
+          visSubtract(state,stateVis);
+        }
       }
       // TBD below! ===============================
       // multiply
@@ -1821,11 +1828,16 @@ function vis(state, stateVis){ // (new state, old state)
     else if($("#visResult .collection div:first-child").hasClass("negative")){
       var oldSign = "negative";
     };
-    var unitLabel = $("#visResult .collection div:first-child").html().toString(); // only works if there's a whole unit...
+    var unitLabel = $("#visResult .collection div:first-child").html(); // only works if there's a whole unit...
+    if(typeof unitLabel != undefined){
+      unitLabel = unitLabel.toString();
+    }
+    else{
+      unitLabel = ""; // default if undefined, for fractions, zeros
+    }
     // set new visualized state to opposite
     // switch label sign
-    if(unitLabel===""){unitLabel = "";} // default if undefined, for fractions, zeros
-    else if(unitLabel.charAt(0)==="-"){
+    if(unitLabel.charAt(0)==="-"){
       unitLabel = unitLabel.slice(1,unitLabel.length);
     }
     else{
