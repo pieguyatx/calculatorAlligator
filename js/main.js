@@ -797,6 +797,19 @@ function vis(state, stateVis){ // (new state, old state)
           $("#visResult").html("<div class='collection'></div>");
           $("#visHistory .collection").html(temp).stop(true).addClass("receiveRight").on("webkitAnimationEnd mozAnimationEnd oAnimationEnd oanimationend animationend",function(e){
             $("#visHistory .collection").removeClass("receiveRight");
+            // if necessary, redraw the new history into basic units
+            // if units displayed are different from what they should be, OR if it's just a fraction displayed...
+            let unitVisHistory = 1;
+            let historyVisTarget = parseFloat(state.history.numFirst);
+            if( Math.abs(historyVisTarget)<0.1 || Math.abs(historyVisTarget)>100){
+              unitVisHistory = determineUnit(parseFloat(state.history.numFirst));
+            }
+            if( ($("#visHistory .collection div:first-child").html()!=unitVisHistory) ||
+              ($("#visHistory .collection div").length===1&&$("#visHistory .collection .fraction").length===1) ){
+              console.log("Redisplaying the history...", stateVis.history.value); // DEBUG
+              // clear result & redisplay it
+              revisualizeHistory(historyVisTarget,unitVisHistory,timeAnimate);
+            }
           });
         });
       }
@@ -1075,13 +1088,6 @@ function vis(state, stateVis){ // (new state, old state)
                     let x = "inset(" + fxString + "% 0px 0px 0px)";
                     $("#visResult .fraction").css("clip-path", x);
                   }
-                  // style results unit/fraction appropriately
-                  let resultNew = parseFloat(state.result);
-                  let unit = 1;
-                  if(Math.abs(resultNew)<0.1 || Math.abs(resultNew)>100){
-                    unit = determineUnit(resultNew);
-                  }
-                  styleUnits(resultNew,unit);
                 });
               });
             }
@@ -1097,13 +1103,6 @@ function vis(state, stateVis){ // (new state, old state)
                   let x = "inset(" + fxString + "% 0px 0px 0px)";
                   $("#visResult .fraction").css("clip-path", x);
                 }
-                // style results unit/fraction appropriately
-                let resultNew = parseFloat(state.result);
-                let unit = 1;
-                if(Math.abs(resultNew)<0.1 || Math.abs(resultNew)>100){
-                  unit = determineUnit(resultNew);
-                }
-                styleUnits(resultNew,unit);
               });
             }
             // if fractionHistory = fractionResult
@@ -1151,11 +1150,13 @@ function vis(state, stateVis){ // (new state, old state)
         console.log("No more whole units detected in results."); // DEBUG
         // and decimal/fraction is NOT present in result, either
         if($("#visResult .collection .fraction").length===0){
+          // console.log("No fraction detected in results."); // DEBUG
           // add remaining units from history to result in one chunk, slower animation
           sendRemainingHistory(50);
         }
         // else a decimal/fraction is present in result...
         else if($("#visResult .collection .fraction").length>0){
+          // console.log("Fraction detected in results."); // DEBUG
           // if decimal/fraction is NOT also present in history...
           if($("#visHistory .collection .fraction").length===0){
             // if history has at least one whole unit remaining, too...
@@ -1287,11 +1288,10 @@ function vis(state, stateVis){ // (new state, old state)
               $("#visHistory .collection .fraction").stop(true).addClass("sendRight").on("webkitAnimationEnd mozAnimationEnd oAnimationEnd oanimationend animationend",function(e){
                 $("#visResult .collection .fraction").animate({opacity: "0"},timeAnimate,function(){
                   $("#visResult .collection .fraction").remove();
+                  // send&remove remaining whole units from history; prepend to results
+                  sendRemainingHistory(50);
                 });
-                // refresh history (end)
-                $("#visHistory").html("<div class='collection'></div>");
               });
-              // refresh history
             }
           }
         }
