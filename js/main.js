@@ -450,6 +450,7 @@ function equals(state,stateVis,noDisplay){
       var calc, symbol;
       if(state.history.operator==="add"){
          calc = parseFloat(state.history.numFirst) + parseFloat(state.history.numSecond);
+         calc = reduceErrors(calc); // deal with rounding error
          symbol="+";
          statements = ["This is SUM meal!","Great addition to the menu.","More, more, more!","Add this to my bill."];
       }
@@ -613,6 +614,7 @@ function reduceErrors(number){
         var indexZeros = numStr.indexOf("0000000000",indexDecimal);
       }
       if(indexZeros>0){
+        console.log("Found lots of 0's; cutting it out..."); // DEBUG
         // if scientific notation present, keep it
         var indexE = numStr.indexOf("e",indexDecimal);
         if(indexE>0){
@@ -622,6 +624,29 @@ function reduceErrors(number){
           numStr = numStr.slice(0,indexZeros);
         }
         number = parseFloat(numStr);
+      }
+      else{ // If no zero-strings found
+        // look for several nines after decimal pt
+        if(number<1000000){
+          var indexNines = numStr.indexOf("9999999999999",indexDecimal);
+          if(indexNines>0){
+            console.log("Found lots of 9's; cutting it out..."); // DEBUG
+            numStr = numStr.slice(0,indexNines); // cut off nines
+            // what's the last character before the nines?
+            // if last character is a decimal, round the number up
+            if(numStr.charAt(numStr.length-1)==="."){
+              number = Math.round(number);
+            }
+            else{ // if last character is a digit
+              let digit = parseInt(numStr.charAt(numStr.length-1));
+              // if last character is a digit<9, add 1 to the trailing digit
+              if(digit<9){
+                numStr = numStr.slice(0,indexNines-1) + (digit+1).toString();
+                number = parseFloat(numStr);
+              }
+            }
+          }
+        }
       }
     }
   }
