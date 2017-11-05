@@ -529,15 +529,15 @@ function equals(state,stateVis,noDisplay){
 }
 
 // SQUARED =====================================================================
-function listenForSquared(state){
+function listenForSquared(state,stateVis){
   // mouse click
   $("#squared").on('click', function(){
     console.log("Button pressed: SQUARED"); // debug
-    squared(state);
+    squared(state,stateVis);
   });
 }
 
-function squared(state){
+function squared(state,stateVis){
   // If result = error, do nothing, give message
   if(state.result==="error"){
     displayHelp("Press the ESC key or AC button to reset this meal.");
@@ -596,6 +596,8 @@ function squared(state){
       // give a message
       let statements = ["Eat a SQUARE meal every day, I always say.","Here's TO THE POWER OF TWO people eating!","I've got this eating challenge SQUARED away."];
       displayHelp(randomStatement(statements));
+      // visualize the result
+      vis(state,stateVis);
     }
   }
 }
@@ -907,19 +909,30 @@ function vis(state, stateVis){ // (new state, old state)
     // If there is an operator and equals in the history...
     else if(state.operatorExists===true && state.equalsExists===true){
       // only run these if the visualizations don't match what they should be; avoids extra processing
+      console.log(parseFloat(state.result),stateVis.result.value); // DEBUG
       if( (parseFloat(state.result)!=stateVis.result.value) && (stateVis.history.value!=undefined) ){
         // special animations according to operator types
         if(state.history.operator==="add"){
           visAdd(state,stateVis);
+          stateVis.result.orientation = "add";
         }
         else if(state.history.operator==="subtract"){
           visSubtract(state,stateVis);
+          stateVis.result.orientation = "add";
+        }
+        else if(state.history.operator==="multiply"){
+          visMultiply(state,stateVis);
+          stateVis.result.orientation = "multiply";
+        }
+        else if(state.history.operator==="divide"){
+          visDivide(state,stateVis);
+          stateVis.result.orientation = "divide";
         }
       }
-      // TBD below! ===============================
-      // multiply
-      // divide
-      // square
+      else if( state.history.operator==="squared" && (parseFloat(state.result)!=stateVis.result.value) ){
+        visSquare(state,stateVis);
+        stateVis.result.orientation = "squared";
+      }
       // update visualization state
       stateVis.equalPressed = 1;
     }
@@ -930,6 +943,28 @@ function vis(state, stateVis){ // (new state, old state)
   // After new state has been analyzed, update the visualization state
   console.log("StateVis (end): ", stateVis); // DEBUG
   console.log("State (end): ", state); // DEBUG
+
+  // Visualize the squaring of a number
+  function visSquare(state,stateVis){
+    console.log(determineUnit(resultNew));
+    $(".collection div").remove(); // DEBUG placeholder code TBD!
+    let unit = (Math.abs(resultNew)>0.1&&Math.abs(resultNew)<100) ? 1 : determineUnit(resultNew);
+    revisualizeResult(resultNew,unit,timeAnimate);
+  }
+
+  // Visualize the division of two numbers
+  function visDivide(state,stateVis){
+    $(".collection div").remove(); // DEBUG placeholder code TBD!
+    let unit = (Math.abs(resultNew)>0.1&&Math.abs(resultNew)<100) ? 1 : determineUnit(resultNew);
+    revisualizeResult(resultNew,unit,timeAnimate);
+  }
+
+  // Visualize the multiplication of two numbers
+  function visMultiply(state,stateVis){
+    $(".collection div").remove(); // DEBUG placeholder code TBD!
+    let unit = (Math.abs(resultNew)>0.1&&Math.abs(resultNew)<100) ? 1 : determineUnit(resultNew);
+    revisualizeResult(resultNew,unit,timeAnimate);
+  }
 
   // Visualize the subtraction of two numbers
   // Method A: Treat it like addition of the appropriate +/- numbers
@@ -1776,7 +1811,11 @@ function vis(state, stateVis){ // (new state, old state)
       else if(unit===10000000000){unitLabel = "10B";}
       else if(unit===100000000000){unitLabel = "100B";}
       else if(unit===1000000000000){unitLabel = "1Tr";}
-      else{unitLabel = unit.toExponential().toString();}
+      else if(unit<1e30){unitLabel = unit.toExponential().toString();}
+      else{
+        if(resultNew>0){unitLabel = "+"}
+        else if(resultNew<0){unitLabel = ""}
+      }
     }
     else if(unit<1){
       borderType = "inset";
