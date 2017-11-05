@@ -1165,13 +1165,33 @@ function vis(state, stateVis){ // (new state, old state)
               // if history also has at least one whole unit, too...
               if($("#visHistory .collection div").length - $("#visHistory .collection .fraction").length > 0){
                 // send&remove fraction + one whole unit from history; remove fraction from result
-                $("#visHistory .collection div:first-child").prependTo("#visResult .collection");
-                $("#visResult .collection div:first-child").css({opacity: "1", left: "0"});
-                // create new fractional unit in result representing (1-resultFx+historyFx)
-                // style results unit/fraction appropriately
-                // send&remove remaining whole units from history; prepend to results
-                // refresh history
+                $('#visHistory .collection .fraction').stop(true).animate({opacity: "0", left: "100%"},timeAnimate,function(){
+                  $('#visHistory .collection .fraction').remove();
+                  $('#visHistory .collection div:first-child').remove();
+                  $('#visResult .collection .fraction').stop(true).animate({opacity: "0"},timeAnimate,function(){
+                    $('#visResult .collection .fraction').remove();
+                    // create new fractional unit in result representing (1-(resultFx-historyFx))
+                    var fractionNew = 100+fractionHistory-fractionResult;
+                    if(fractionNew>0){
+                      let fxString = 100-fractionNew;
+                      $("#visResult .collection").append("<div class='square fraction bloopIn'></div>");
+                      let x = "inset(" + fxString + "% 0px 0px 0px)";
+                      $("#visResult .fraction").css("clip-path", x);
+                    }
+                    // style results unit/fraction appropriately
+                    let resultNew = parseFloat(state.result)
+                    let unit = 1;
+                    if(Math.abs(resultNew)<0.1 || Math.abs(resultNew)>100){
+                      unit = determineUnit(resultNew);
+                    }
+                    styleUnits(resultNew,unit);
+                    // send&remove remaining whole units from history; prepend to results
+                    sendRemainingHistory(50);
+                  });
+                });
+              }
               // else if history does not have any whole units...
+              else if($("#visHistory .collection div").length - $("#visHistory .collection .fraction").length===0){
                 // send&remove fraction; remove fraction from result
                 // create new fractional unit in result representing (resultFx-historyFx)
                 // style results unit/fraction appropriately
