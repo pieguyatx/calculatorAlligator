@@ -969,15 +969,23 @@ function vis(state, stateVis){ // (new state, old state)
       else if($("#visResult .collection .negative").length>0){
         $("#visResult .collection .negative").removeClass("negative").addClass("positive shake");
       }
-      // if units now have opposite signs... (subtract animation)
-        // overlay history units one at a time under result (change z-index?)
-          // send history units right to result
-        // whichever absolute value is smaller, fade those units out of history and result
-        // refresh smaller collection
-        // remove faded units from larger collection, one at a time
-        // if bigger abs value was in history, move history units to results w/o animation & refresh history
-      // if units now have the same signs...
-        // add units together using addition function
+      // delay for a bit (using jquer), then subtract
+      $("#visResult .collection").animate({color: "white"},300,function(){
+        stateVis.result.value = -stateVis.result.value;
+        console.log(stateVis.history.value,stateVis.result.value); // DEBUG
+        // if history numbers now have the same signs...
+        if( (stateVis.history.value>0&&stateVis.result.value>0) || (stateVis.history.value<0&&stateVis.result.value<0) ){
+          console.log("Subtraction: Like adding numbers with the same sign."); //debug
+          // add units together using addition function
+          visAddSameSign(state,stateVis,timeAnimate);
+        }
+        // if history numbers now have opposite signs... (subtract animation)
+        else if( (stateVis.history.value>0&&stateVis.result.value<0) || (stateVis.history.value<0&&stateVis.result.value>0) ){
+          console.log("Subtraction: Like adding numbers with opposite signs."); //debug
+          // add units together using addition function
+          visAddOppSign(state,stateVis,timeAnimate);
+        }        
+      });
     }
   }
 
