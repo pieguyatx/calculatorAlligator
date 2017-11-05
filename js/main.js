@@ -927,13 +927,48 @@ function vis(state, stateVis){ // (new state, old state)
   // Visualize the subtraction of two numbers
   // Method A: Treat it like addition of the appropriate +/- numbers
   function visSubtract(state,stateVis){
-    // if history=0
-      // keep results the same; clear history
-    // else if result=0
-      // put history into result; clear history
-    // else if history!=0 && result!=0
+    // determine animation time (more units animate faster)
+    let timeAnimate = 10; // default times for unit to animate in ms
+    // if history = 0, 0.0, 0.00 etc
+    if(state.history.numFirst==0){
       // flip sign appearance of result
-      if($("#visResult .collection .positive"))
+      let unitVis = 1;
+      let target = parseFloat(state.result);
+      if( Math.abs(target)<0.1 || Math.abs(target)>100){
+        unitVis = determineUnit(target);
+      }
+      detectSignChange(parseFloat(state.history.numSecond),target);
+      styleUnits(target,unitVis);
+      // clear history
+      $("#visHistory").animate({opacity: "0"},timeAnimate,function(){
+        $(this).html("<div class='collection'></div>").animate({opacity: "1"},0);
+      });
+      stateVis.result.value = target;
+      stateVis.history.value = undefined;
+      stateVis.history.orientation = undefined;
+    }
+    // if history firstNum != 0, secondNum = 0
+    else if(state.history.numFirst!=0 && state.history.numSecond==0){
+      // move history to result (send to right), refresh history
+      var temp = $("#visHistory .collection").html();
+      $("#visHistory .collection").stop(true).addClass("sendRight").on("webkitAnimationEnd mozAnimationEnd oAnimationEnd oanimationend animationend",function(e){
+        $("#visHistory").html("<div class='collection'></div>");
+        $("#visResult .collection").html(temp).stop(true).addClass("receiveLeft").on("webkitAnimationEnd mozAnimationEnd oAnimationEnd oanimationend animationend",function(e){
+          $("#visResult .collection").removeClass("receiveLeft");
+        });
+      });
+      stateVis.history.value = undefined;
+      stateVis.history.orientation = undefined;
+    }
+    // else if history!=0 && result!=0
+    else{
+      // flip sign appearance of result
+      if($("#visResult .collection .positive").length>0){
+        $("#visResult .collection .positive").removeClass("positive").addClass("negative shake");
+      }
+      else if($("#visResult .collection .negative").length>0){
+        $("#visResult .collection .negative").removeClass("negative").addClass("positive shake");
+      }
       // if units now have opposite signs... (subtract animation)
         // overlay history units one at a time under result (change z-index?)
           // send history units right to result
@@ -943,6 +978,7 @@ function vis(state, stateVis){ // (new state, old state)
         // if bigger abs value was in history, move history units to results w/o animation & refresh history
       // if units now have the same signs...
         // add units together using addition function
+    }
   }
 
   // Visualize the addition of two numbers
