@@ -910,7 +910,7 @@ function vis(state, stateVis){ // (new state, old state)
     else if(state.operatorExists===true && state.equalsExists===true){
       // only run these if the visualizations don't match what they should be; avoids extra processing
       console.log(parseFloat(state.result),stateVis.result.value); // DEBUG
-      if( (parseFloat(state.result)!=stateVis.result.value) && (stateVis.history.value!=undefined) ){
+      if( stateVis.history.value!=undefined ){
         // special animations according to operator types
         if(state.history.operator==="add"){
           visAdd(state,stateVis);
