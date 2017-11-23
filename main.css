@@ -211,8 +211,10 @@ section#visualization>div{
 }
 .collection>div{
   margin:0.95%;
+  -webkit-transition: margin 0.2s;
   transition: margin 0.2s;
   position: relative;
+  width: 8%;
 }
 .circle{
   display: flex;
@@ -222,7 +224,6 @@ section#visualization>div{
   color: white;
   background: white;
   border-radius: 50%;
-  width: 8%;
 }
 .circle:after {
   display: block;
@@ -237,7 +238,6 @@ section#visualization>div{
   color: white;
   background: white;
   border-radius: 4px;
-  width: 8%;
   -webkit-transition: border-radius 0.2s;
   transition: border-radius 0.2s;
 }
@@ -433,6 +433,11 @@ section#visualization>div{
   0%   {opacity: 0; transform: translate(-100%,-10%) scale(1.1);}
 	50%  {opacity: 0.5; transform: translate(-50%,-7%);}
 	100% {opacity: 1; transform: translate(0%,0%) scale(1);}
+}
+.rotate90cw{
+  -webkit-transition: all 0.5s ease-in;
+  transition: all 0.5s ease-in;
+  transform: rotate(90deg);
 }
 .shrink{  /*EXTRA?*/
   -webkit-animation-name: shrink;

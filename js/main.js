@@ -715,6 +715,7 @@ function vis(state, stateVis){ // (new state, old state)
         $("#visResult .collection div").stop(true);
         $("#visResult .collection").addClass("getEatenUpLeft").on("webkitAnimationEnd mozAnimationEnd oAnimationEnd oanimationend animationend",function(){
           $("#visResult").html("<div class='collection'><div class='circle zero'></div></div>");
+          console.log("Cleared!");
         });
         // update vis state
         stateVis.result.value = 0;
@@ -950,6 +951,7 @@ function vis(state, stateVis){ // (new state, old state)
     $(".collection div").remove(); // DEBUG placeholder code TBD!
     let unit = (Math.abs(resultNew)>0.1&&Math.abs(resultNew)<100) ? 1 : determineUnit(resultNew);
     revisualizeResult(resultNew,unit,timeAnimate);
+    stateVis.history.value = undefined;
   }
 
   // Visualize the division of two numbers
@@ -957,13 +959,34 @@ function vis(state, stateVis){ // (new state, old state)
     $(".collection div").remove(); // DEBUG placeholder code TBD!
     let unit = (Math.abs(resultNew)>0.1&&Math.abs(resultNew)<100) ? 1 : determineUnit(resultNew);
     revisualizeResult(resultNew,unit,timeAnimate);
+    stateVis.history.value = undefined;
   }
 
   // Visualize the multiplication of two numbers
   function visMultiply(state,stateVis){
-    $(".collection div").remove(); // DEBUG placeholder code TBD!
-    let unit = (Math.abs(resultNew)>0.1&&Math.abs(resultNew)<100) ? 1 : determineUnit(resultNew);
-    revisualizeResult(resultNew,unit,timeAnimate);
+    var numFirst = parseFloat(state.history.numFirst);
+    var numSecond = parseFloat(state.history.numSecond);
+    // if both multipliers have abs value <=10 and integers
+    if( (Math.abs(numFirst)<=10 && Math.abs(numSecond)<=10) && (Number.isInteger(numFirst)&&Number.isInteger(numSecond)) ){
+      console.log("Special multiplication case will be animated!"); // DEBUG
+      // Arrange history units into a column
+      $("#visHistory .collection").animate({width: "10%"},700,function(){
+        $("#visHistory .collection>div").animate({width: "80%", margin:"9.5%"},timeAnimate,function(){});
+      });
+      //$("#visHistory .collection").css("flex-direction","column");
+      // Move history into results; overlap first unit
+      // Populate result section
+      // Remove extra elements
+      // reshape results to standard "addition" orientation
+    }
+    // default animation: do a simple revisualization
+    else{
+      $(".collection div").remove(); // DEBUG placeholder code TBD!
+      let unit = (Math.abs(resultNew)>0.1&&Math.abs(resultNew)<100) ? 1 : determineUnit(resultNew);
+      revisualizeResult(resultNew,unit,timeAnimate);
+      stateVis.history.value = undefined;
+      stateVis.result.orientation = "add";
+    }
   }
 
   // Visualize the subtraction of two numbers
