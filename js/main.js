@@ -993,6 +993,7 @@ function vis(state, stateVis){ // (new state, old state)
             // Create new result section, sized appropriately
             $("#visResult").append("<div class='collection multiplyResult'></div>");
             $(".multiplyResult").css("height",hheight);
+            $(".multiplyRow").css("top","0px");
             // Populate result section, while highlighting multiplier
             // Deal with negative multiplier/multiplicand
             displayProductRow(tempRow,numFirst,1);
