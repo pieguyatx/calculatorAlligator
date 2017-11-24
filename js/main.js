@@ -966,13 +966,14 @@ function vis(state, stateVis){ // (new state, old state)
   function visMultiply(state,stateVis){
     var numFirst = parseFloat(state.history.numFirst);
     var numSecond = parseFloat(state.history.numSecond);
-    // if both multipliers have abs value <=10 and integers
-    if( (Math.abs(numFirst)<=10 && Math.abs(numSecond)<=10) && (Number.isInteger(numFirst)&&Number.isInteger(numSecond)) ){
+    // if both multipliers have abs value <=10 and whole numbers
+    if( (Math.abs(numFirst)<=10 && Math.abs(numSecond)<=10) && (Math.abs(numFirst)>0 && Math.abs(numSecond)>0)  && (Number.isInteger(numFirst)&&Number.isInteger(numSecond)) ){
       console.log("Special multiplication case will be animated!"); // DEBUG
       // Arrange history units into a column
       $("#visHistory .collection").animate({width: "10%"},700,function(){
         $("#visHistory .collection>div").animate({width: "80%", margin:"9.5%"},timeAnimate,function(){});
       });
+      stateVis.history.orientation = "multiply";
       //$("#visHistory .collection").css("flex-direction","column");
       // Move history into results; overlap first unit
       // Populate result section
