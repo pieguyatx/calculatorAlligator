@@ -995,7 +995,7 @@ function vis(state, stateVis){ // (new state, old state)
             $(".multiplyResult").css("height",hheight);
             // Populate result section, while highlighting multiplier
             // Deal with negative multiplier/multiplicand
-            displayProductRow(tempRow,numFirst);
+            displayProductRow(tempRow,numFirst,1);
           });
           // Remove extra elements
           // reshape results to standard "addition" orientation
@@ -1010,18 +1010,24 @@ function vis(state, stateVis){ // (new state, old state)
       stateVis.history.value = undefined;
       stateVis.result.orientation = "add";
     }
-
-    function displayProductRow(tempRow,rowsRemaining){
+    // Recursive function to display products "row by row"
+    function displayProductRow(tempRow,rowsRemaining,unitToHighlight){
       console.log("rows left to show: ", rowsRemaining); // DEBUG
       // add row
       $(".multiplyResult").append(tempRow);
       $(".multiplyResult>div").addClass("bloopIn");
       rowsRemaining--;
-      if(rowsRemaining>0){
-        $("#visResult").animate({color: "white"},300,function(){ // delay
-          displayProductRow(tempRow,rowsRemaining);
-        });
-      }
+      // highlight column unit
+      var tempSelector = "#visHistory .collection div:nth-child(" + parseInt(unitToHighlight) + ")";
+      $(tempSelector).removeClass("ghost").addClass("spotlight");
+      unitToHighlight++;
+      // add more rows?
+      $("#visResult").animate({color: "white"},500,function(){ // delay
+        $(tempSelector).removeClass("spotlight").addClass("ghost");
+        if(rowsRemaining>0){
+          displayProductRow(tempRow,rowsRemaining,unitToHighlight);
+        }
+      });
     }
   }
 
