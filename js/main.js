@@ -970,12 +970,18 @@ function vis(state, stateVis){ // (new state, old state)
     if( (Math.abs(numFirst)<=10 && Math.abs(numSecond)<=10) && (Math.abs(numFirst)>0 && Math.abs(numSecond)>0)  && (Number.isInteger(numFirst)&&Number.isInteger(numSecond)) ){
       console.log("Special multiplication case will be animated!"); // DEBUG
       // Arrange history units into a column
-      $("#visHistory .collection").animate({width: "10%"},700,function(){
-        $("#visHistory .collection>div").animate({width: "80%", margin:"9.5%"},timeAnimate,function(){});
+      $("#visHistory .collection").animate({width: "9.5%"},700,function(){
+        $("#visHistory .collection>div").animate({width: "80%", margin:"9.5%"},timeAnimate,function(){
+          stateVis.history.orientation = "multiply";
+          // make the results "ghost" or start to fade out (after a delay)
+          $("#visResult .collection").animate({color: "white"},300,function(){
+            $("#visResult .collection>div").addClass("ghost");
+          });
+        });
       });
-      stateVis.history.orientation = "multiply";
-      //$("#visHistory .collection").css("flex-direction","column");
+
       // Move history into results; overlap first unit
+
       // Populate result section
       // Remove extra elements
       // reshape results to standard "addition" orientation

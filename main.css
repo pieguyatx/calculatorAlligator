@@ -439,6 +439,27 @@ section#visualization>div{
   transition: all 0.5s ease-in;
   transform: rotate(90deg);
 }
+.ghost{
+  -webkit-transition: opacity 0.5s ease-in;
+  transition: opacity 0.5s ease-in;
+  opacity: 0.3;
+  -webkit-animation-name: pulse;
+  animation-name: pulse;
+  -webkit-animation-duration: 0.5s;
+	animation-duration: 0.5s;
+  -webkit-animation-iteration-count: infinite;
+  animation-iteration-count: infinite;
+}
+@keyframes pulse {
+	0% {transform: scale(0.9);}
+	50% {transform: scale(1);}
+	100% {transform: scale(0.9);}
+}
+@-webkit-keyframes pulse {
+	0% {-webkit-transform: scale(0.95);}
+	50% {-webkit-transform: scale(1);}
+	100% {-webkit-transform: scale(0.95);}
+}
 .shrink{  /*EXTRA?*/
   -webkit-animation-name: shrink;
   animation-name: shrink;
