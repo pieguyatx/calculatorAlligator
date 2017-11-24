@@ -262,6 +262,12 @@ section#visualization>div{
 .zero{
   background: radial-gradient(circle at 18px 18px, #eaeaea, #fff);
 }
+section#visualization .multiplyAnimate{
+  display: inline;
+}
+.multiplyRow{
+  align-items: flex-start;
+}
 
 /* Transitions */
 .getEatenUpLeft{
@@ -440,9 +446,9 @@ section#visualization>div{
   transform: rotate(90deg);
 }
 .ghost{
+  opacity: 0.3;
   -webkit-transition: opacity 0.5s ease-in;
   transition: opacity 0.5s ease-in;
-  opacity: 0.3;
   -webkit-animation-name: pulse;
   animation-name: pulse;
   -webkit-animation-duration: 0.5s;
@@ -459,6 +465,62 @@ section#visualization>div{
 	0% {-webkit-transform: scale(0.95);}
 	50% {-webkit-transform: scale(1);}
 	100% {-webkit-transform: scale(0.95);}
+}
+.sendUpSmall{
+  -webkit-animation-name: sendUpSmall;
+  animation-name: sendUpSmall;
+  -webkit-animation-duration: 0.2s;
+	animation-duration: 0.2s;
+}
+@-webkit-keyframes sendUpSmall {
+	0%   {opacity: 1; transform: translate(0%,0%) scale(1);}
+	100% {opacity: 0; transform: translate(0%,-30%) scale(1.1);}
+}
+@keyframes sendUpSmall {
+  0%   {opacity: 1; transform: translate(0%,0%) scale(1);}
+	100% {opacity: 0; transform: translate(0%,-30%) scale(1.1);}
+}
+.receiveDownSmall{
+  -webkit-animation-name: receiveDownSmall;
+  animation-name: receiveDownSmall;
+  -webkit-animation-duration: 0.2s;
+	animation-duration: 0.2s;
+}
+@-webkit-keyframes receiveDownSmall {
+	0%   {opacity: 0; transform: translate(0%,30%) scale(1.1);}
+	100% {opacity: 1; transform: translate(0%,0%) scale(1);}
+}
+@keyframes receiveDownSmall {
+  0%   {opacity: 0; transform: translate(0%,30%) scale(1.1);}
+	100% {opacity: 1; transform: translate(0%,0%) scale(1);}
+}
+.sendRightSlow{
+  -webkit-animation-name: sendRight;
+  animation-name: sendRight;
+  -webkit-animation-duration: 0.5s;
+	animation-duration: 0.5s;
+}
+@-webkit-keyframes sendRightSlow {
+	0%   {opacity: 1; transform: translate(0%,0%) scale(1);}
+	100% {opacity: 0; transform: translate(50%,-10%) scale(1.1);}
+}
+@keyframes sendRightSlow {
+  0%   {opacity: 1; transform: translate(0%,0%) scale(1);}
+	100% {opacity: 0; transform: translate(50%,-10%) scale(1.1);}
+}
+.receiveLeftSlow{
+  -webkit-animation-name: receiveLeft;
+  animation-name: receiveLeft;
+  -webkit-animation-duration: 0.5s;
+	animation-duration: 0.5s;
+}
+@-webkit-keyframes receiveLeftSlow {
+	0%   {opacity: 0; transform: translate(-50%,-10%) scale(1.1);}
+	100% {opacity: 1; transform: translate(0%,0%) scale(1);}
+}
+@keyframes receiveLeftSlow {
+  0%   {opacity: 0; transform: translate(-50%,-10%) scale(1.1);}
+	100% {opacity: 1; transform: translate(0%,0%) scale(1);}
 }
 .shrink{  /*EXTRA?*/
   -webkit-animation-name: shrink;

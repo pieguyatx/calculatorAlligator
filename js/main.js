@@ -973,18 +973,26 @@ function vis(state, stateVis){ // (new state, old state)
       $("#visHistory .collection").animate({width: "9.5%"},700,function(){
         $("#visHistory .collection>div").animate({width: "80%", margin:"9.5%"},timeAnimate,function(){
           stateVis.history.orientation = "multiply";
-          // make the results "ghost" or start to fade out (after a delay)
-          $("#visResult .collection").animate({color: "white"},300,function(){
-            $("#visResult .collection>div").addClass("ghost");
-          });
         });
       });
-
-      // Move history into results; overlap first unit
-
-      // Populate result section
-      // Remove extra elements
-      // reshape results to standard "addition" orientation
+      // make the history and results "ghost" or start to fade out (after a delay)
+      $("#visResult .collection").animate({color: "white"},1000,function(){
+        $(".collection>div").addClass("ghost");
+      });
+      // make results visualization the same height as history visualization
+      $("#visResult .collection").animate({color: "white"},1000,function(){
+        let hheight = $("#visHistory").css("height");
+        $("#visResult .collection").css("height",hheight);
+        // Move ghost results and history into position
+        $("#visResult").addClass("multiplyAnimate");
+        $("#visResult .collection").addClass("sendUpSmall").on("webkitAnimationEnd mozAnimationEnd oAnimationEnd oanimationend animationend",function(e){
+          $("#visResult .collection").removeClass("sendUpSmall").addClass("multiplyRow receiveDownSmall");
+        });
+        // Create new result section, sized appropriately
+        // Populate result section
+        // Remove extra elements
+        // reshape results to standard "addition" orientation
+      });
     }
     // default animation: do a simple revisualization
     else{
