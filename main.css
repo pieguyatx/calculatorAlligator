@@ -263,11 +263,18 @@ section#visualization>div{
   background: radial-gradient(circle at 18px 18px, #eaeaea, #fff);
 }
 section#visualization .multiplyAnimate{
-  display: inline;
+  display: block;
 }
 .multiplyRow{
   align-items: flex-start;
+  position: relative;
 }
+.multiplyResult{
+  position: relative;
+  top: -100%;
+  left: 0;
+}
+
 
 /* Transitions */
 .getEatenUpLeft{
@@ -465,34 +472,6 @@ section#visualization .multiplyAnimate{
 	0% {-webkit-transform: scale(0.95);}
 	50% {-webkit-transform: scale(1);}
 	100% {-webkit-transform: scale(0.95);}
-}
-.sendUpSmall{
-  -webkit-animation-name: sendUpSmall;
-  animation-name: sendUpSmall;
-  -webkit-animation-duration: 0.2s;
-	animation-duration: 0.2s;
-}
-@-webkit-keyframes sendUpSmall {
-	0%   {opacity: 1; transform: translate(0%,0%) scale(1);}
-	100% {opacity: 0; transform: translate(0%,-30%) scale(1.1);}
-}
-@keyframes sendUpSmall {
-  0%   {opacity: 1; transform: translate(0%,0%) scale(1);}
-	100% {opacity: 0; transform: translate(0%,-30%) scale(1.1);}
-}
-.receiveDownSmall{
-  -webkit-animation-name: receiveDownSmall;
-  animation-name: receiveDownSmall;
-  -webkit-animation-duration: 0.2s;
-	animation-duration: 0.2s;
-}
-@-webkit-keyframes receiveDownSmall {
-	0%   {opacity: 0; transform: translate(0%,30%) scale(1.1);}
-	100% {opacity: 1; transform: translate(0%,0%) scale(1);}
-}
-@keyframes receiveDownSmall {
-  0%   {opacity: 0; transform: translate(0%,30%) scale(1.1);}
-	100% {opacity: 1; transform: translate(0%,0%) scale(1);}
 }
 .sendRightSlow{
   -webkit-animation-name: sendRight;

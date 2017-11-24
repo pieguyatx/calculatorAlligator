@@ -970,28 +970,36 @@ function vis(state, stateVis){ // (new state, old state)
     if( (Math.abs(numFirst)<=10 && Math.abs(numSecond)<=10) && (Math.abs(numFirst)>0 && Math.abs(numSecond)>0)  && (Number.isInteger(numFirst)&&Number.isInteger(numSecond)) ){
       console.log("Special multiplication case will be animated!"); // DEBUG
       // Arrange history units into a column
-      $("#visHistory .collection").animate({width: "9.5%"},700,function(){
+      $("#visHistory .collection").animate({width: "9.5%"},500,function(){
         $("#visHistory .collection>div").animate({width: "80%", margin:"9.5%"},timeAnimate,function(){
           stateVis.history.orientation = "multiply";
         });
       });
+      // save multiplicand (results) codes
+      var tempRow = $("#visResult .collection").html();
       // make the history and results "ghost" or start to fade out (after a delay)
-      $("#visResult .collection").animate({color: "white"},1000,function(){
+      $("#visResult").animate({color: "white"},600,function(){
         $(".collection>div").addClass("ghost");
       });
       // make results visualization the same height as history visualization
-      $("#visResult .collection").animate({color: "white"},1000,function(){
+      $("#visResult").animate({color: "white"},600,function(){
         let hheight = $("#visHistory").css("height");
         $("#visResult .collection").css("height",hheight);
+        $("#visResult").css("height",hheight); // set height to allow relative positioning of child elements
         // Move ghost results and history into position
         $("#visResult").addClass("multiplyAnimate");
-        $("#visResult .collection").addClass("sendUpSmall").on("webkitAnimationEnd mozAnimationEnd oAnimationEnd oanimationend animationend",function(e){
-          $("#visResult .collection").removeClass("sendUpSmall").addClass("multiplyRow receiveDownSmall");
+        $("#visResult .collection").css("position","relative").animate({"opacity":0,"top":"-30px"},200,function(e){
+          $("#visResult .collection").addClass("multiplyRow").animate({"opacity":1,"top":"30px"},200,function(e2){
+            // Create new result section, sized appropriately
+            $("#visResult").append("<div class='collection multiplyResult'></div>");
+            $(".multiplyResult").css("height",hheight);
+            // Populate result section, while highlighting multiplier
+            // Deal with negative multiplier/multiplicand
+            displayProductRow(tempRow,numFirst);
+          });
+          // Remove extra elements
+          // reshape results to standard "addition" orientation
         });
-        // Create new result section, sized appropriately
-        // Populate result section
-        // Remove extra elements
-        // reshape results to standard "addition" orientation
       });
     }
     // default animation: do a simple revisualization
@@ -1001,6 +1009,19 @@ function vis(state, stateVis){ // (new state, old state)
       revisualizeResult(resultNew,unit,timeAnimate);
       stateVis.history.value = undefined;
       stateVis.result.orientation = "add";
+    }
+
+    function displayProductRow(tempRow,rowsRemaining){
+      console.log("rows left to show: ", rowsRemaining); // DEBUG
+      // add row
+      $(".multiplyResult").append(tempRow);
+      $(".multiplyResult>div").addClass("bloopIn");
+      rowsRemaining--;
+      if(rowsRemaining>0){
+        $("#visResult").animate({color: "white"},300,function(){ // delay
+          displayProductRow(tempRow,rowsRemaining);
+        });
+      }
     }
   }
 
