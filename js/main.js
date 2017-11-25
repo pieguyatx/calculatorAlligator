@@ -990,17 +990,23 @@ function vis(state, stateVis){ // (new state, old state)
         $("#visResult").addClass("multiplyAnimate");
         $("#visResult .collection").css("position","relative").animate({"opacity":0,"top":"-30px"},250,function(e){
           $("#visResult .collection").addClass("multiplyRow").animate({"opacity":0.3,"top":"30px"},250,function(e2){
+            $(".multiplyRow").css("top","0px"); //position multiplicand row on top
             // Create new result section, sized appropriately
             $("#visResult").append("<div class='collection multiplyResult'></div>");
+            // Set the height
             $(".multiplyResult").css("height","auto");
             let rheight = parseInt($("#visHistory .collection").css("height"));
             let offset = (-Math.floor(parseInt(hheight)/2 + rheight/2)).toString() + "px";
-            console.log(hheight,rheight,offset); // DEBUG
             $(".multiplyResult").css("top",offset);
-            $(".multiplyRow").css("top","0px");
+            // Set the width
+            let rwidth = (9.5*numSecond).toString() + "%";
+            $(".multiplyResult").css("width",rwidth); // container
+            // Set horizontal position
+            let rHoriz = (( parseFloat($(".multiplyRow").css("width")) - parseFloat($(".multiplyResult").css("width")) )/2).toString() + "px";
+            $(".multiplyResult").css("margin-left",rHoriz);
             // Populate result section, while highlighting multiplier
             // Deal with negative multiplier/multiplicand
-            displayProductRow(tempRow,numFirst,1);
+            displayProductRow(tempRow,numFirst,numSecond,1);
           });
           // Remove extra elements
           // reshape results to standard "addition" orientation
@@ -1016,12 +1022,16 @@ function vis(state, stateVis){ // (new state, old state)
       stateVis.result.orientation = "add";
     }
     // Recursive function to display products "row by row"
-    function displayProductRow(tempRow,rowsRemaining,unitToHighlight){
-      console.log("rows left to show: ", rowsRemaining); // DEBUG
+    function displayProductRow(tempRow,rowsRemaining,unitsPerRow,unitToHighlight){
       // add row
       $(".multiplyResult").append(tempRow);
       $(".multiplyResult>div").addClass("bloopIn");
       rowsRemaining--;
+      // Set the appropriate unit size
+      let rUnitWidth = (0.8*100/numSecond).toString() + "%";
+      let rUnitMargin = (0.095*100/numSecond).toString() + "%";
+      console.log(rUnitWidth,rUnitMargin);
+      $(".multiplyResult>div").css({"width": rUnitWidth, "margin":rUnitMargin});
       // highlight column unit
       var tempSelector = "#visHistory .collection div:nth-child(" + parseInt(unitToHighlight) + ")";
       $(tempSelector).removeClass("ghost").addClass("spotlight");
@@ -1030,7 +1040,7 @@ function vis(state, stateVis){ // (new state, old state)
       $("#visResult").animate({color: "white"},500,function(){ // delay
         $(tempSelector).removeClass("spotlight").addClass("ghost");
         if(rowsRemaining>0){
-          displayProductRow(tempRow,rowsRemaining,unitToHighlight);
+          displayProductRow(tempRow,rowsRemaining,unitsPerRow,unitToHighlight);
         }
       });
     }
