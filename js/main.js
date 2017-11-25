@@ -976,6 +976,7 @@ function vis(state, stateVis){ // (new state, old state)
         });
       });
       // save multiplicand (results) codes
+      $("#visResult .collection>div").removeClass("shake");
       var tempRow = $("#visResult .collection").html();
       // make the history and results "ghost" or start to fade out (after a delay)
       $("#visResult").animate({color: "white"},600,function(){
@@ -999,14 +1000,17 @@ function vis(state, stateVis){ // (new state, old state)
             let offset = (-Math.floor(parseInt(hheight)/2 + rheight/2)).toString() + "px";
             $(".multiplyResult").css("top",offset);
             // Set the width
-            let rwidth = (9.5*numSecond).toString() + "%";
+            let rwidth = (9.5*Math.abs(numSecond)).toString() + "%";
             $(".multiplyResult").css("width",rwidth); // container
             // Set horizontal position
             let rHoriz = (( parseFloat($(".multiplyRow").css("width")) - parseFloat($(".multiplyResult").css("width")) )/2).toString() + "px";
             $(".multiplyResult").css("margin-left",rHoriz);
-            // Populate result section, while highlighting multiplier
             // Deal with negative multiplier/multiplicand
-            displayProductRow(tempRow,numFirst,numSecond,1);
+            tempRow = adjustRowSign(tempRow,numFirst,numSecond);
+            // Populate result section, while highlighting multiplier
+            let rUnitWidth = (0.8*100/Math.abs(numSecond)).toString() + "%";
+            let rUnitMargin = (0.095*100/Math.abs(numSecond)).toString() + "%";
+            displayProductRow(tempRow,Math.abs(numFirst),Math.abs(numSecond),1,rUnitWidth,rUnitMargin);
           });
           // Remove extra elements
           // reshape results to standard "addition" orientation
@@ -1021,16 +1025,21 @@ function vis(state, stateVis){ // (new state, old state)
       stateVis.history.value = undefined;
       stateVis.result.orientation = "add";
     }
+    // Adjust the sign of the product row
+    function adjustRowSign(tempRow,numFirst,numSecond){
+      // If + x + --> + // Do nothing; input row is already positive
+      // If + x - --> - // Do nothing; input row is already negative
+      // If - x + --> -
+      // If - x - --> +
+      return tempRow;
+    }
     // Recursive function to display products "row by row"
-    function displayProductRow(tempRow,rowsRemaining,unitsPerRow,unitToHighlight){
+    function displayProductRow(tempRow,rowsRemaining,unitsPerRow,unitToHighlight,rUnitWidth,rUnitMargin){
       // add row
       $(".multiplyResult").append(tempRow);
       $(".multiplyResult>div").addClass("bloopIn");
       rowsRemaining--;
       // Set the appropriate unit size
-      let rUnitWidth = (0.8*100/numSecond).toString() + "%";
-      let rUnitMargin = (0.095*100/numSecond).toString() + "%";
-      console.log(rUnitWidth,rUnitMargin);
       $(".multiplyResult>div").css({"width": rUnitWidth, "margin":rUnitMargin});
       // highlight column unit
       var tempSelector = "#visHistory .collection div:nth-child(" + parseInt(unitToHighlight) + ")";
@@ -1040,7 +1049,7 @@ function vis(state, stateVis){ // (new state, old state)
       $("#visResult").animate({color: "white"},500,function(){ // delay
         $(tempSelector).removeClass("spotlight").addClass("ghost");
         if(rowsRemaining>0){
-          displayProductRow(tempRow,rowsRemaining,unitsPerRow,unitToHighlight);
+          displayProductRow(tempRow,rowsRemaining,unitsPerRow,unitToHighlight,rUnitWidth,rUnitMargin);
         }
       });
     }
