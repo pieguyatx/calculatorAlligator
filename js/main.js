@@ -988,11 +988,15 @@ function vis(state, stateVis){ // (new state, old state)
         $("#visResult").css("height",hheight); // set height to allow relative positioning of child elements
         // Move ghost results and history into position
         $("#visResult").addClass("multiplyAnimate");
-        $("#visResult .collection").css("position","relative").animate({"opacity":0,"top":"-30px"},200,function(e){
-          $("#visResult .collection").addClass("multiplyRow").animate({"opacity":1,"top":"30px"},200,function(e2){
+        $("#visResult .collection").css("position","relative").animate({"opacity":0,"top":"-30px"},250,function(e){
+          $("#visResult .collection").addClass("multiplyRow").animate({"opacity":0.3,"top":"30px"},250,function(e2){
             // Create new result section, sized appropriately
             $("#visResult").append("<div class='collection multiplyResult'></div>");
-            $(".multiplyResult").css("height",hheight);
+            $(".multiplyResult").css("height","auto");
+            let rheight = parseInt($("#visHistory .collection").css("height"));
+            let offset = (-Math.floor(parseInt(hheight)/2 + rheight/2)).toString() + "px";
+            console.log(hheight,rheight,offset); // DEBUG
+            $(".multiplyResult").css("top",offset);
             $(".multiplyRow").css("top","0px");
             // Populate result section, while highlighting multiplier
             // Deal with negative multiplier/multiplicand
