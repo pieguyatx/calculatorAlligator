@@ -1029,8 +1029,20 @@ function vis(state, stateVis){ // (new state, old state)
     function adjustRowSign(tempRow,numFirst,numSecond){
       // If + x + --> + // Do nothing; input row is already positive
       // If + x - --> - // Do nothing; input row is already negative
-      // If - x + --> -
-      // If - x - --> +
+      console.log("before",tempRow); // debug
+      if(numFirst<0){
+        // If - x + --> -
+        if(numSecond>0){
+          tempRow = tempRow.replace(/positive/g, "negative");
+          tempRow = tempRow.replace(/1/g, "-1");
+        }
+        // If - x - --> +
+        else if(numSecond<0){
+          tempRow = tempRow.replace(/negative/g,"positive");
+          tempRow = tempRow.replace(/-1/g, "1");
+        }
+      }
+      console.log("after",tempRow); // debug
       return tempRow;
     }
     // Recursive function to display products "row by row"
