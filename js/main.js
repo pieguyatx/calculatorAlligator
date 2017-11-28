@@ -96,8 +96,9 @@ function listenToKeyboard(state,stateVis){
       operator = NaN; // clear var so as not to trigger anything later
     }
     // Stop any related animations
-    $(".collection").finish();
-    $(".collection>div").finish();
+    $.fx.off = true;
+    $("#visualization, #visResult, #visHistory, .collection, .collection>div").finish();
+    $.fx.off = false;
   });
 }
 
@@ -134,8 +135,9 @@ function listenForNumber(state,stateVis){
     numberPressed(digit,state,stateVis);
     digit = NaN;
     // Stop any related animations, during fast multiple clicks
-    $(".collection").finish();
-    $(".collection>div").finish();
+    $.fx.off = true;
+    $("#visualization, #visResult, #visHistory, .collection, .collection>div").finish();
+    $.fx.off = false;
   });
 }
 
@@ -684,8 +686,9 @@ function displayHelp(statement){
 // One giant function with lots of internal subfunctions/methods
 function vis(state, stateVis){ // (new state, old state)
   // Complete any animations in history/results
-  $(".collection").finish().finish();
-  $(".collection>div").finish().finish();
+  $.fx.off = true;
+  $("#visualization, #visResult, #visHistory, .collection, .collection>div").finish();
+  $.fx.off = false;
   console.log("Running vis() function now...");  // DEBUG
   // This function takes in the state of the calculator and compares it to the
   // old state (global obj). Depending on the changes, animations are performed.
@@ -910,7 +913,7 @@ function vis(state, stateVis){ // (new state, old state)
     // If there is an operator and equals in the history...
     else if(state.operatorExists===true && state.equalsExists===true){
       // only run these if the visualizations don't match what they should be; avoids extra processing
-      console.log(parseFloat(state.result),stateVis.result.value); // DEBUG
+      console.log(parseFloat(state.result),stateVis.result.value,stateVis.history.value); // DEBUG
       if( stateVis.history.value!=undefined ){
         // special animations according to operator types
         if(state.history.operator==="add"){
@@ -1011,10 +1014,9 @@ function vis(state, stateVis){ // (new state, old state)
           let rUnitWidth = (0.8*100/Math.abs(numSecond)).toString() + "%";
           let rUnitMargin = (0.095*100/Math.abs(numSecond)).toString() + "%";
           displayProductRow(tempRow,Math.abs(numFirst),Math.abs(numSecond),1,rUnitWidth,rUnitMargin,stateVis);
-          // update visState
-          stateVis.history.orientation = "add";
         });
       });
+      stateVis.history.value = undefined;
     }
     // default animation: do a simple revisualization
     else{
@@ -1044,6 +1046,24 @@ function vis(state, stateVis){ // (new state, old state)
     }
     // Recursive function to display products "row by row"
     function displayProductRow(tempRow,rowsRemaining,unitsPerRow,unitToHighlight,rUnitWidth,rUnitMargin,stateVis){
+      console.log("Displaying product row...", rowsRemaining, unitToHighlight); // DEBUG
+      // set delay to emphasize first rows
+      var timeDelay = 200;
+      if(unitToHighlight===1){
+        timeDelay = 800;
+      }
+      // interrupt this if animations are ending
+      if($.fx.off === true){
+        timeDelay = 0;
+        $("#visHistory").html("<div class='collection'></div>");
+        $("#visResult").html("<div class='collection'></div>");
+        $("#visResult").removeClass("multiplyAnimate");
+        $('#visResult').css("height","");
+        $("#visualization, #visResult, #visHistory, .collection, .collection>div").finish().finish().finish();
+        revisualizeResult(stateVis.result.value,1,300);
+        stateVis.history.orientation = "add";
+        return;
+      }
       // add row
       $(".multiplyResult").append(tempRow);
       $(".multiplyResult>div").addClass("bloopIn");
@@ -1053,11 +1073,6 @@ function vis(state, stateVis){ // (new state, old state)
       // highlight column unit
       var tempSelector = "#visHistory .collection div:nth-child(" + parseInt(unitToHighlight) + ")";
       $(tempSelector).removeClass("ghost").addClass("spotlight");
-      // set delay to emphasize first rows
-      var timeDelay = 500;
-      if(unitToHighlight===1){
-        timeDelay = 800;
-      }
       unitToHighlight++;
       // add more rows?
       $("#visResult").animate({color: "white"},timeDelay,function(){ // delay
@@ -1069,16 +1084,18 @@ function vis(state, stateVis){ // (new state, old state)
       // Do final cleanup if it's the last rows
       if(rowsRemaining===0){
         // Remove extra elements (ghosts)
-        $("#visHistory .collection>div").animate({"opacity": "0"},1500,function(){
+        $("#visHistory .collection>div").animate({"opacity": "0"},timeDelay*7,function(){
           $("#visHistory").html("<div class='collection'></div>");
         });
-        $("#visResult").animate({color: "white"},1400,function(){
+        $("#visResult").animate({color: "white"},timeDelay*7,function(){
           // reshape results to standard "addition" orientation
           $("#visResult").html("<div class='collection'></div>");
           $("#visResult").removeClass("multiplyAnimate");
           $('#visResult').css("height","");
           revisualizeResult(stateVis.result.value,1,300);
         });
+        // update visState
+        stateVis.history.orientation = "add";
       }
     }
   }
