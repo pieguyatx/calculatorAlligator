@@ -980,40 +980,39 @@ function vis(state, stateVis){ // (new state, old state)
       var tempRow = $("#visResult .collection").html();
       // make the history and results "ghost" or start to fade out (after a delay)
       $("#visResult").animate({color: "white"},600,function(){
-        $(".collection>div").addClass("ghost");
+        $("#visHistory .collection>div").addClass("ghost");
       });
       // make results visualization the same height as history visualization
-      $("#visResult").animate({color: "white"},600,function(){
+      $("#visResult").animate({color: "white"},1000,function(){
         let hheight = $("#visHistory").css("height");
         $("#visResult .collection").css("height",hheight);
         $("#visResult").css("height",hheight); // set height to allow relative positioning of child elements
         // Move ghost results and history into position
         $("#visResult").addClass("multiplyAnimate");
-        $("#visResult .collection").css("position","relative").animate({"opacity":0,"top":"-30px"},250,function(e){
-          $("#visResult .collection").addClass("multiplyRow").animate({"opacity":0.3,"top":"30px"},250,function(e2){
-            $(".multiplyRow").css("top","0px"); //position multiplicand row on top
-            // Create new result section, sized appropriately
-            $("#visResult").append("<div class='collection multiplyResult'></div>");
-            // Set the height
-            $(".multiplyResult").css("height","auto");
-            let rheight = parseInt($("#visHistory .collection").css("height"));
-            let offset = (-Math.floor(parseInt(hheight)/2 + rheight/2)).toString() + "px";
-            $(".multiplyResult").css("top",offset);
-            // Set the width
-            let rwidth = (9.5*Math.abs(numSecond)).toString() + "%";
-            $(".multiplyResult").css("width",rwidth); // container
-            // Set horizontal position
-            let rHoriz = (( parseFloat($(".multiplyRow").css("width")) - parseFloat($(".multiplyResult").css("width")) )/2).toString() + "px";
-            $(".multiplyResult").css("margin-left",rHoriz);
-            // Deal with negative multiplier/multiplicand
-            tempRow = adjustRowSign(tempRow,numFirst,numSecond);
-            // Populate result section, while highlighting multiplier
-            let rUnitWidth = (0.8*100/Math.abs(numSecond)).toString() + "%";
-            let rUnitMargin = (0.095*100/Math.abs(numSecond)).toString() + "%";
-            displayProductRow(tempRow,Math.abs(numFirst),Math.abs(numSecond),1,rUnitWidth,rUnitMargin);
-          });
-          // Remove extra elements
-          // reshape results to standard "addition" orientation
+        $("#visResult .collection").css("position","relative").animate({"opacity":0,"top":"-20%"},300,function(e){
+          $("#visResult .collection").addClass("multiplyRow");
+          $(".multiplyRow").css("top","0px"); //position multiplicand row on top
+          // Create new result section, sized appropriately
+          $("#visResult").append("<div class='collection multiplyResult'></div>");
+          // Set the height
+          $(".multiplyResult").css("height","auto");
+          let rheight = parseInt($("#visHistory .collection").css("height"));
+          let offset = (-Math.floor(parseInt(hheight)/2 + rheight/2)).toString() + "px";
+          $(".multiplyResult").css("top",offset);
+          // Set the width
+          let rwidth = (9.5*Math.abs(numSecond)).toString() + "%";
+          $(".multiplyResult").css("width",rwidth); // container
+          // Set horizontal position
+          let rHoriz = (( parseFloat($(".multiplyRow").css("width")) - parseFloat($(".multiplyResult").css("width")) )/2).toString() + "px";
+          $(".multiplyResult").css("margin-left",rHoriz);
+          // Deal with negative multiplier/multiplicand
+          tempRow = adjustRowSign(tempRow,numFirst,numSecond);
+          // Populate result section, while highlighting multiplier
+          let rUnitWidth = (0.8*100/Math.abs(numSecond)).toString() + "%";
+          let rUnitMargin = (0.095*100/Math.abs(numSecond)).toString() + "%";
+          displayProductRow(tempRow,Math.abs(numFirst),Math.abs(numSecond),1,rUnitWidth,rUnitMargin,stateVis);
+          // update visState
+          stateVis.history.orientation = "add";
         });
       });
     }
@@ -1029,7 +1028,6 @@ function vis(state, stateVis){ // (new state, old state)
     function adjustRowSign(tempRow,numFirst,numSecond){
       // If + x + --> + // Do nothing; input row is already positive
       // If + x - --> - // Do nothing; input row is already negative
-      console.log("before",tempRow); // debug
       if(numFirst<0){
         // If - x + --> -
         if(numSecond>0){
@@ -1042,11 +1040,10 @@ function vis(state, stateVis){ // (new state, old state)
           tempRow = tempRow.replace(/-1/g, "1");
         }
       }
-      console.log("after",tempRow); // debug
       return tempRow;
     }
     // Recursive function to display products "row by row"
-    function displayProductRow(tempRow,rowsRemaining,unitsPerRow,unitToHighlight,rUnitWidth,rUnitMargin){
+    function displayProductRow(tempRow,rowsRemaining,unitsPerRow,unitToHighlight,rUnitWidth,rUnitMargin,stateVis){
       // add row
       $(".multiplyResult").append(tempRow);
       $(".multiplyResult>div").addClass("bloopIn");
@@ -1056,14 +1053,33 @@ function vis(state, stateVis){ // (new state, old state)
       // highlight column unit
       var tempSelector = "#visHistory .collection div:nth-child(" + parseInt(unitToHighlight) + ")";
       $(tempSelector).removeClass("ghost").addClass("spotlight");
+      // set delay to emphasize first rows
+      var timeDelay = 500;
+      if(unitToHighlight===1){
+        timeDelay = 800;
+      }
       unitToHighlight++;
       // add more rows?
-      $("#visResult").animate({color: "white"},500,function(){ // delay
+      $("#visResult").animate({color: "white"},timeDelay,function(){ // delay
         $(tempSelector).removeClass("spotlight").addClass("ghost");
         if(rowsRemaining>0){
-          displayProductRow(tempRow,rowsRemaining,unitsPerRow,unitToHighlight,rUnitWidth,rUnitMargin);
+          displayProductRow(tempRow,rowsRemaining,unitsPerRow,unitToHighlight,rUnitWidth,rUnitMargin,stateVis);
         }
       });
+      // Do final cleanup if it's the last rows
+      if(rowsRemaining===0){
+        // Remove extra elements (ghosts)
+        $("#visHistory .collection>div").animate({"opacity": "0"},1500,function(){
+          $("#visHistory").html("<div class='collection'></div>");
+        });
+        $("#visResult").animate({color: "white"},1400,function(){
+          // reshape results to standard "addition" orientation
+          $("#visResult").html("<div class='collection'></div>");
+          $("#visResult").removeClass("multiplyAnimate");
+          $('#visResult').css("height","");
+          revisualizeResult(stateVis.result.value,1,300);
+        });
+      }
     }
   }
 
