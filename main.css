@@ -699,6 +699,20 @@ section#visualization .multiplyAnimate{
     width: 154px;
   }
 }
+@media only screen and (max-width: 650px){
+  section#visualization{
+    top: 0px;
+  }
+  section#visualization>div{
+    min-height: 300px;
+  }
+  #visHistory{
+    padding-right: 10px;
+  }
+  #visResult{
+    padding-left: 10px;
+  }
+}
 @media only screen and (max-width: 320px){
   section#calculator #display{
     width: 286px;
