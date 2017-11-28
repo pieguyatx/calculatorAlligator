@@ -479,12 +479,12 @@ section#visualization .multiplyAnimate{
   -webkit-animation-duration: 0.3s;
 	animation-duration: 0.3s;
 }
-@keyframes spotlight {
+@-webkit-keyframes spotlight {
 	0% {opacity: 0.3; transform: scale(1);}
 	50% {opacity: 1; transform: scale(1.5);}
-	100% {opacity: 0.3; {transform: scale(1);}
+	100% {opacity: 0.3; transform: scale(1);}
 }
-@-webkit-keyframes spotlight {
+@keyframes spotlight {
 	0% {opacity: 0.3; transform: scale(1);}
 	50% {opacity: 1; transform: scale(1.5);}
 	100% {opacity: 0.3; transform: scale(1);}
