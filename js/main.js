@@ -1104,7 +1104,7 @@ function vis(state, stateVis){ // (new state, old state)
   // Method A: Treat it like addition of the appropriate +/- numbers
   function visSubtract(state,stateVis){
     // determine animation time (more units animate faster)
-    let timeAnimate = 10; // default times for unit to animate in ms
+    var timeAnimate = 100; // default times for unit to animate in ms
     // if history = 0, 0.0, 0.00 etc
     if(state.history.numFirst==0){
       // flip sign appearance of result
@@ -1168,7 +1168,7 @@ function vis(state, stateVis){ // (new state, old state)
   // Visualize the addition of two numbers
   function visAdd(state,stateVis){
     // determine animation time (more units animate faster)
-    let timeAnimate = 10; // default times for unit to animate in ms
+    let timeAnimate = 100; // default times for unit to animate in ms
     // if history = 0, 0.0, 0.00 etc
     if(state.history.numFirst==0){
       // keep result the same, refresh history
@@ -1285,7 +1285,7 @@ function vis(state, stateVis){ // (new state, old state)
   // Visualize the addition of non-zero numbers with the opposite sign
   function visAddOppSign(state,stateVis,timeAnimate){
     console.log("Adding opposite sign!"); // DEBUG
-    timeAnimate=100; // This fixes the timing to better match additino animations
+    // timeAnimate = 300; // DEBUG - This fixes the timing to better match additino animations
     // if history has any units visualized still...
     if($("#visHistory .collection div").length>0){
       // if result has whole units visualized still...
@@ -1295,10 +1295,12 @@ function vis(state, stateVis){ // (new state, old state)
           $('#visHistory .collection div:first-child').stop(true).animate({opacity: "0", left: "100%"},timeAnimate,function(){
             // console.log("Sending history to result..."); // DEBUG
             $("#visHistory .collection div:first-child").remove();
-            $("#visResult .collection div:first-child").remove();
-            if($('#visHistory .collection div').length>0){
-              visAddOppSign(state,stateVis,timeAnimate);
-            }
+            $('#visResult .collection div:first-child').animate({opacity: "0"},timeAnimate,function(){
+              $("#visResult .collection div:first-child").remove();
+              if($('#visHistory .collection div').length>0){
+                visAddOppSign(state,stateVis,timeAnimate);
+              }
+            });
           });
         }
         // if the last unit in the history is a fraction...
@@ -1390,7 +1392,7 @@ function vis(state, stateVis){ // (new state, old state)
         if($("#visResult .collection .fraction").length===0){
           // console.log("No fraction detected in results."); // DEBUG
           // add remaining units from history to result
-          sendRemainingHistory(50);
+          sendRemainingHistory(timeAnimate);
         }
         // else a decimal/fraction is present in result...
         else if($("#visResult .collection .fraction").length>0){
@@ -1423,7 +1425,7 @@ function vis(state, stateVis){ // (new state, old state)
                   }
                   styleUnits(resultNew,unit);
                   // send&remove remaining whole units from history; prepend to results
-                  sendRemainingHistory(50);
+                  sendRemainingHistory(timeAnimate);
                 });
               });
             }
@@ -1463,7 +1465,7 @@ function vis(state, stateVis){ // (new state, old state)
                   }
                   styleUnits(resultNew,unit);
                   // send&remove remaining whole units from history; prepend to results
-                  sendRemainingHistory(50);
+                  sendRemainingHistory(timeAnimate);
                 });
               });
             }
@@ -1493,7 +1495,7 @@ function vis(state, stateVis){ // (new state, old state)
                     }
                     styleUnits(resultNew,unit);
                     // send&remove remaining whole units from history; prepend to results
-                    sendRemainingHistory(50);
+                    sendRemainingHistory(timeAnimate);
                   });
                 });
               }
@@ -1527,7 +1529,7 @@ function vis(state, stateVis){ // (new state, old state)
                 $("#visResult .collection .fraction").animate({opacity: "0"},timeAnimate,function(){
                   $("#visResult .collection .fraction").remove();
                   // send&remove remaining whole units from history; prepend to results
-                  sendRemainingHistory(50);
+                  sendRemainingHistory(timeAnimate);
                 });
               });
             }
