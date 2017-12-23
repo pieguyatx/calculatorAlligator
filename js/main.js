@@ -564,12 +564,12 @@ function squared(state,stateVis){
         }
         state.history.text = "(" + state.history.numFirst + " " + symbol + " " + secondNumber + ")&sup2; =" ;
         $("#history").html(state.history.text);
+        state.history.numFirst = state.result; // update history
         // now square the new result of the first operation
         var calc = Math.pow(parseFloat(state.result),2);
         state.result = reduceErrors(calc).toString();
         $("#result").html(state.result);
         // update internal history for future calculations
-        state.history.numFirst = state.result;
         state.history.operator = "squared";
         state.history.numSecond = undefined;
         state.operatorExists = true;
@@ -585,11 +585,11 @@ function squared(state,stateVis){
           state.history.text = state.result + "&sup2; =" ;
         }
         $("#history").html(state.history.text);
+        state.history.numFirst = state.result; // update history
         // square the result; update everything appropriately
         var calc = Math.pow(parseFloat(state.result),2);
         state.result = reduceErrors(calc).toString();
         $("#result").html(state.result);
-        state.history.numFirst = state.result;
         state.history.operator = "squared";
         state.history.numSecond = undefined;
         state.operatorExists = true;
@@ -932,6 +932,11 @@ function vis(state, stateVis){ // (new state, old state)
           visDivide(state,stateVis);
           stateVis.result.orientation = "divide";
         }
+        else if(state.history.operator==="squared"){
+          console.log("TEST Squared w/ history present"); // debug
+          visSquare(state,stateVis);
+          stateVis.result.orientation = "squared";
+        }
       }
       else if( state.history.operator==="squared" && (parseFloat(state.result)!=stateVis.result.value) ){
         visSquare(state,stateVis);
@@ -948,17 +953,18 @@ function vis(state, stateVis){ // (new state, old state)
   console.log("StateVis (end): ", stateVis); // DEBUG
   console.log("State (end): ", state); // DEBUG
 
-  // Visualize the squaring of a number
-  function visSquare(state,stateVis){
-    console.log(determineUnit(resultNew));
+  // Visualize the division of two numbers
+  function visDivide(state,stateVis){
     $(".collection div").remove(); // DEBUG placeholder code TBD!
     let unit = (Math.abs(resultNew)>0.1&&Math.abs(resultNew)<100) ? 1 : determineUnit(resultNew);
     revisualizeResult(resultNew,unit,timeAnimate);
     stateVis.history.value = undefined;
   }
 
-  // Visualize the division of two numbers
-  function visDivide(state,stateVis){
+  // Visualize the squaring of a number
+  function visSquare(state,stateVis){
+//    if( (Math.abs(numFirst)<=10 && Math.abs(numSecond)<=10) && (Math.abs(numFirst)>0 && Math.abs(numSecond)>0)  && (Number.isInteger(numFirst)&&Number.isInteger(numSecond)) ){
+    console.log(determineUnit(resultNew));
     $(".collection div").remove(); // DEBUG placeholder code TBD!
     let unit = (Math.abs(resultNew)>0.1&&Math.abs(resultNew)<100) ? 1 : determineUnit(resultNew);
     revisualizeResult(resultNew,unit,timeAnimate);
