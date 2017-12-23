@@ -1110,7 +1110,7 @@ function vis(state, stateVis){ // (new state, old state)
   // Method A: Treat it like addition of the appropriate +/- numbers
   function visSubtract(state,stateVis){
     // determine animation time (more units animate faster)
-    var timeAnimate = 100; // default times for unit to animate in ms
+    var timeAnimate = 200; // default times for unit to animate in ms
     // if history = 0, 0.0, 0.00 etc
     if(state.history.numFirst==0){
       // flip sign appearance of result
@@ -1174,7 +1174,7 @@ function vis(state, stateVis){ // (new state, old state)
   // Visualize the addition of two numbers
   function visAdd(state,stateVis){
     // determine animation time (more units animate faster)
-    let timeAnimate = 100; // default times for unit to animate in ms
+    let timeAnimate = 200; // default times for unit to animate in ms
     // if history = 0, 0.0, 0.00 etc
     if(state.history.numFirst==0){
       // keep result the same, refresh history
