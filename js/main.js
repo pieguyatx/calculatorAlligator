@@ -1103,7 +1103,7 @@ function vis(state, stateVis){ // (new state, old state)
     // set delay to emphasize first rows
     var timeDelay = 200;
     if(unitToHighlight===1){
-      timeDelay = 800;
+      timeDelay = 200;  // Can change this value to emphasize first row
     }
     // interrupt this if animations are ending
     if($.fx.off === true){
