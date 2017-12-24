@@ -972,6 +972,47 @@ function vis(state, stateVis){ // (new state, old state)
       let unit = (Math.abs(resultNew)>0.1&&Math.abs(resultNew)<100) ? 1 : determineUnit(resultNew);
       revisualizeResult(resultNew,unit,timeAnimate);
     }
+    // Do stylized animation for simple cases
+    else {
+      // save multiplicand (results) codes
+      var tempRow = $("#visResult .collection").html();
+      // Duplicate results into history for reference
+      $("#visHistory .collection").html(tempRow);
+      // Arrange history units into a column
+      $("#visHistory .collection").css({width: "9.5%", opacity: "0"});
+      $("#visHistory .collection>div").css({width: "80%", margin:"9.5%"});
+      // make the results "ghost" or start to fade out
+      $("#visHistory .collection>div").addClass("ghost");
+      let hheight = $("#visHistory").css("height");
+      $("#visResult .collection").css("height",hheight);
+      $("#visResult").css("height",hheight); // set height to allow relative positioning of child elements
+      // Move ghost results and history into position
+      $("#visResult").addClass("multiplyAnimate");
+      // Make dummy row to duplicate
+      $("#visResult .collection").css("position","relative").animate({"opacity":0,"top":"-20%"},300,function(e){
+        $("#visResult .collection").addClass("multiplyRow");
+        $(".multiplyRow").css("top","0px"); //position multiplicand row on top
+        // Create new result section, sized appropriately
+        $("#visResult").append("<div class='collection multiplyResult'></div>");
+        // Set the height
+        $(".multiplyResult").css("height","auto");
+        let rheight = parseInt($("#visHistory .collection").css("height"));
+        let offset = (-Math.floor(parseInt(hheight)/2 + rheight/2)).toString() + "px";
+        $(".multiplyResult").css("top",offset);
+        // Set the width
+        let rwidth = (9.5*Math.abs(numFirst)).toString() + "%";
+        $(".multiplyResult").css("width",rwidth); // container
+        // Set horizontal position
+        let rHoriz = (( parseFloat($(".multiplyRow").css("width")) - parseFloat($(".multiplyResult").css("width")) )/2).toString() + "px";
+        $(".multiplyResult").css("margin-left",rHoriz);
+        // Deal with negative multiplier/multiplicand
+        tempRow = adjustRowSign(tempRow,numFirst,numFirst);
+        // Populate result section, while highlighting multiplier
+        let rUnitWidth = (0.8*100/Math.abs(numFirst)).toString() + "%";
+        let rUnitMargin = (0.095*100/Math.abs(numFirst)).toString() + "%";
+        displayProductRow(tempRow,Math.abs(numFirst),Math.abs(numFirst),1,rUnitWidth,rUnitMargin,stateVis);
+      });
+    }
     stateVis.history.value = undefined;
   }
 
@@ -1036,77 +1077,78 @@ function vis(state, stateVis){ // (new state, old state)
       stateVis.history.value = undefined;
       stateVis.result.orientation = "add";
     }
-    // Adjust the sign of the product row
-    function adjustRowSign(tempRow,numFirst,numSecond){
-      // If + x + --> + // Do nothing; input row is already positive
-      // If + x - --> - // Do nothing; input row is already negative
-      if(numFirst<0){
-        // If - x + --> -
-        if(numSecond>0){
-          tempRow = tempRow.replace(/positive/g, "negative");
-          tempRow = tempRow.replace(/1/g, "-1");
-        }
-        // If - x - --> +
-        else if(numSecond<0){
-          tempRow = tempRow.replace(/negative/g,"positive");
-          tempRow = tempRow.replace(/-1/g, "1");
-        }
+  }
+
+  // Adjust the sign of the product row
+  function adjustRowSign(tempRow,numFirst,numSecond){
+    // If + x + --> + // Do nothing; input row is already positive
+    // If + x - --> - // Do nothing; input row is already negative
+    if(numFirst<0){
+      // If - x + --> -
+      if(numSecond>0){
+        tempRow = tempRow.replace(/positive/g, "negative");
+        tempRow = tempRow.replace(/1/g, "-1");
       }
-      return tempRow;
+      // If - x - --> +
+      else if(numSecond<0){
+        tempRow = tempRow.replace(/negative/g,"positive");
+        tempRow = tempRow.replace(/-1/g, "1");
+      }
     }
-    // Recursive function to display products "row by row"
-    function displayProductRow(tempRow,rowsRemaining,unitsPerRow,unitToHighlight,rUnitWidth,rUnitMargin,stateVis){
-      console.log("Displaying product row...", rowsRemaining, unitToHighlight); // DEBUG
-      // set delay to emphasize first rows
-      var timeDelay = 200;
-      if(unitToHighlight===1){
-        timeDelay = 800;
+    return tempRow;
+  }
+  // Recursive function to display products "row by row"
+  function displayProductRow(tempRow,rowsRemaining,unitsPerRow,unitToHighlight,rUnitWidth,rUnitMargin,stateVis){
+    console.log("Displaying product row...", rowsRemaining, unitToHighlight); // DEBUG
+    // set delay to emphasize first rows
+    var timeDelay = 200;
+    if(unitToHighlight===1){
+      timeDelay = 800;
+    }
+    // interrupt this if animations are ending
+    if($.fx.off === true){
+      timeDelay = 0;
+      $("#visHistory").html("<div class='collection'></div>");
+      $("#visResult").html("<div class='collection'></div>");
+      $("#visResult").removeClass("multiplyAnimate");
+      $('#visResult').css("height","");
+      $("#visualization, #visResult, #visHistory, .collection, .collection>div").finish().finish().finish();
+      revisualizeResult(stateVis.result.value,1,300);
+      stateVis.history.orientation = "add";
+      return;
+    }
+    // add row
+    $(".multiplyResult").append(tempRow);
+    $(".multiplyResult>div").addClass("bloopIn");
+    rowsRemaining--;
+    // Set the appropriate unit size
+    $(".multiplyResult>div").css({"width": rUnitWidth, "margin":rUnitMargin});
+    // highlight column unit
+    var tempSelector = "#visHistory .collection div:nth-child(" + parseInt(unitToHighlight) + ")";
+    $(tempSelector).removeClass("ghost").addClass("spotlight");
+    unitToHighlight++;
+    // add more rows?
+    $("#visResult").animate({color: "white"},timeDelay,function(){ // delay
+      $(tempSelector).removeClass("spotlight").addClass("ghost");
+      if(rowsRemaining>0){
+        displayProductRow(tempRow,rowsRemaining,unitsPerRow,unitToHighlight,rUnitWidth,rUnitMargin,stateVis);
       }
-      // interrupt this if animations are ending
-      if($.fx.off === true){
-        timeDelay = 0;
+    });
+    // Do final cleanup if it's the last rows
+    if(rowsRemaining===0){
+      // Remove extra elements (ghosts)
+      $("#visHistory .collection>div").animate({"opacity": "0"},timeDelay*7,function(){
         $("#visHistory").html("<div class='collection'></div>");
+      });
+      $("#visResult").animate({color: "white"},timeDelay*7,function(){
+        // reshape results to standard "addition" orientation
         $("#visResult").html("<div class='collection'></div>");
         $("#visResult").removeClass("multiplyAnimate");
         $('#visResult').css("height","");
-        $("#visualization, #visResult, #visHistory, .collection, .collection>div").finish().finish().finish();
         revisualizeResult(stateVis.result.value,1,300);
-        stateVis.history.orientation = "add";
-        return;
-      }
-      // add row
-      $(".multiplyResult").append(tempRow);
-      $(".multiplyResult>div").addClass("bloopIn");
-      rowsRemaining--;
-      // Set the appropriate unit size
-      $(".multiplyResult>div").css({"width": rUnitWidth, "margin":rUnitMargin});
-      // highlight column unit
-      var tempSelector = "#visHistory .collection div:nth-child(" + parseInt(unitToHighlight) + ")";
-      $(tempSelector).removeClass("ghost").addClass("spotlight");
-      unitToHighlight++;
-      // add more rows?
-      $("#visResult").animate({color: "white"},timeDelay,function(){ // delay
-        $(tempSelector).removeClass("spotlight").addClass("ghost");
-        if(rowsRemaining>0){
-          displayProductRow(tempRow,rowsRemaining,unitsPerRow,unitToHighlight,rUnitWidth,rUnitMargin,stateVis);
-        }
       });
-      // Do final cleanup if it's the last rows
-      if(rowsRemaining===0){
-        // Remove extra elements (ghosts)
-        $("#visHistory .collection>div").animate({"opacity": "0"},timeDelay*7,function(){
-          $("#visHistory").html("<div class='collection'></div>");
-        });
-        $("#visResult").animate({color: "white"},timeDelay*7,function(){
-          // reshape results to standard "addition" orientation
-          $("#visResult").html("<div class='collection'></div>");
-          $("#visResult").removeClass("multiplyAnimate");
-          $('#visResult').css("height","");
-          revisualizeResult(stateVis.result.value,1,300);
-        });
-        // update visState
-        stateVis.history.orientation = "add";
-      }
+      // update visState
+      stateVis.history.orientation = "add";
     }
   }
 
