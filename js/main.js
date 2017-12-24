@@ -963,11 +963,15 @@ function vis(state, stateVis){ // (new state, old state)
 
   // Visualize the squaring of a number
   function visSquare(state,stateVis){
-//    if( (Math.abs(numFirst)<=10 && Math.abs(numSecond)<=10) && (Math.abs(numFirst)>0 && Math.abs(numSecond)>0)  && (Number.isInteger(numFirst)&&Number.isInteger(numSecond)) ){
-    console.log(determineUnit(resultNew));
-    $(".collection div").remove(); // DEBUG placeholder code TBD!
-    let unit = (Math.abs(resultNew)>0.1&&Math.abs(resultNew)<100) ? 1 : determineUnit(resultNew);
-    revisualizeResult(resultNew,unit,timeAnimate);
+    var numFirst = parseFloat(state.history.numFirst);
+    // Do simple squaring if number>10, =0, is fraction, or continuation of multi-operator functions
+    if( (Math.abs(numFirst)>10) || (numFirst==0) || !(Number.isInteger(numFirst)) ||
+        (state.history.text.indexOf("&times;")>=0) || (state.history.text.indexOf("&minus;")>=0) || (state.history.text.indexOf("+")>=0) || (state.history.text.indexOf("&divide;")>=0) ){
+      console.log(determineUnit(resultNew));
+      $(".collection div").remove(); // DEBUG placeholder code TBD!
+      let unit = (Math.abs(resultNew)>0.1&&Math.abs(resultNew)<100) ? 1 : determineUnit(resultNew);
+      revisualizeResult(resultNew,unit,timeAnimate);
+    }
     stateVis.history.value = undefined;
   }
 
@@ -976,7 +980,7 @@ function vis(state, stateVis){ // (new state, old state)
     var numFirst = parseFloat(state.history.numFirst);
     var numSecond = parseFloat(state.history.numSecond);
     // if both multipliers have abs value <=10 and whole numbers
-    if( (Math.abs(numFirst)<=10 && Math.abs(numSecond)<=10) && (Math.abs(numFirst)>0 && Math.abs(numSecond)>0)  && (Number.isInteger(numFirst)&&Number.isInteger(numSecond)) ){
+    if( (Math.abs(numFirst)<=10 && Math.abs(numSecond)<=10) && (numFirst!==0) && (numSecond!==0) && (Number.isInteger(numFirst) && Number.isInteger(numSecond)) ){
       console.log("Special multiplication case will be animated!"); // DEBUG
       // Arrange history units into a column
       $("#visHistory .collection").animate({width: "9.5%"},500,function(){
