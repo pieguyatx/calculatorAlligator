@@ -955,9 +955,15 @@ function vis(state, stateVis){ // (new state, old state)
 
   // Visualize the division of two numbers
   function visDivide(state,stateVis){
-    $(".collection div").remove(); // DEBUG placeholder code TBD!
-    let unit = (Math.abs(resultNew)>0.1&&Math.abs(resultNew)<100) ? 1 : determineUnit(resultNew);
-    revisualizeResult(resultNew,unit,timeAnimate);
+    var numFirst = parseFloat(state.history.numFirst);
+    var numSecond = parseFloat(state.history.numSecond);
+    // Do simple division if numbers>100, dividend=0, is fraction, or continuation of multi-operator functions
+    if( (Math.abs(numFirst)>100) || (Math.abs(numSecond)>100) || (numFirst==0) ||
+        !(Number.isInteger(numFirst)) || !(Number.isInteger(numSecond)) ) {
+      $(".collection div").remove(); // debug placeholder code TBD!
+      let unit = (Math.abs(resultNew)>0.1&&Math.abs(resultNew)<100) ? 1 : determineUnit(resultNew);
+      revisualizeResult(resultNew,unit,timeAnimate);
+    }
     stateVis.history.value = undefined;
   }
 
@@ -967,7 +973,6 @@ function vis(state, stateVis){ // (new state, old state)
     // Do simple squaring if number>10, =0, is fraction, or continuation of multi-operator functions
     if( (Math.abs(numFirst)>10) || (numFirst==0) || !(Number.isInteger(numFirst)) ||
         (state.history.text.indexOf("&times;")>=0) || (state.history.text.indexOf("&minus;")>=0) || (state.history.text.indexOf("+")>=0) || (state.history.text.indexOf("&divide;")>=0) ){
-      console.log(determineUnit(resultNew));
       $(".collection div").remove(); // DEBUG placeholder code TBD!
       let unit = (Math.abs(resultNew)>0.1&&Math.abs(resultNew)<100) ? 1 : determineUnit(resultNew);
       revisualizeResult(resultNew,unit,timeAnimate);
