@@ -1142,15 +1142,15 @@ function vis(state, stateVis){ // (new state, old state)
     // Do final cleanup if it's the last rows
     if(rowsRemaining===0){
       // Remove extra elements (ghosts)
-      $("#visHistory .collection>div").animate({"opacity": "0"},timeDelay*7,function(){
+      $("#visHistory .collection").animate({"opacity": "0"},timeDelay*7,function(){
         $("#visHistory").html("<div class='collection'></div>");
       });
-      $("#visResult").animate({color: "white"},timeDelay*7,function(){
-        // reshape results to standard "addition" orientation
+      $("#visResult .collection").animate({"color": "white"},10000,function(){
+        // reshape results to standard "addition" orientation after a delay
         $("#visResult").html("<div class='collection'></div>");
         $("#visResult").removeClass("multiplyAnimate");
         $('#visResult').css("height","");
-        revisualizeResult(stateVis.result.value,1,300);
+        revisualizeResult(stateVis.result.value,1,2000);
       });
       // update visState
       stateVis.history.orientation = "add";
@@ -1751,39 +1751,38 @@ function vis(state, stateVis){ // (new state, old state)
 
   // This function is for redrawing whatever's shown in the results
   function revisualizeResult(resultVis,unit,timeAnimate){
-    $("#visResult .collection").animate({opacity: "0"},timeAnimate,function(){
-      // redraw result completely
-      $("#visResult").html("<div class='collection'></div>");
-      // if new Result is zero...
-      if(resultVis===0){
-        $("#visResult .collection").append("<div class='circle zero'></div>");
-      }
-      // otherwise add units
-      else{
-        var resultVisReduced = parseFloat((resultVis/unit).toFixed(12)); // converts to number >0,<=100
-        if(Math.abs(resultVisReduced)>=1){
-          // display the "whole/round number" units
-          for(var i=0; i<Math.floor(Math.abs(resultVisReduced)); i++){
-            $("#visResult .collection").append("<div class='circle bloopIn'>"+unit+"</div>");
-          }
-        }
-        // Then visualize the "fractional" part last if needed
-        // set the leftover fractional part of new result aside
-        var wholeNum = Math.floor(Math.abs(resultVisReduced));
-        var fraction = Math.abs(resultVisReduced)-wholeNum;
-        // if fraction exists
-        if(fraction>0){
-          var fxString = Math.round((1-fraction)*100).toString();
-          var x = "inset(" + fxString + "% 0px 0px 0px)";
-          $("#visResult .collection").append("<div class='square fraction bloopIn'></div>");
-          $("#visResult .fraction").css("clip-path", x);
-          // and change all the shapes to fractional shapes
-          $("#visResult .collection>div").removeClass("circle").addClass("square");
+    // console.log("Redrawing result... Delay:", timeAnimate); //debug
+    // redraw result completely
+    $("#visResult").html("<div class='collection'></div>");
+    // if new Result is zero...
+    if(resultVis===0){
+      $("#visResult .collection").append("<div class='circle zero'></div>");
+    }
+    // otherwise add units
+    else{
+      var resultVisReduced = parseFloat((resultVis/unit).toFixed(12)); // converts to number >0,<=100
+      if(Math.abs(resultVisReduced)>=1){
+        // display the "whole/round number" units
+        for(var i=0; i<Math.floor(Math.abs(resultVisReduced)); i++){
+          $("#visResult .collection").append("<div class='circle bloopIn'>"+unit+"</div>");
         }
       }
-      // style history
-      styleUnits(resultVis,unit);
-    });
+      // Then visualize the "fractional" part last if needed
+      // set the leftover fractional part of new result aside
+      var wholeNum = Math.floor(Math.abs(resultVisReduced));
+      var fraction = Math.abs(resultVisReduced)-wholeNum;
+      // if fraction exists
+      if(fraction>0){
+        var fxString = Math.round((1-fraction)*100).toString();
+        var x = "inset(" + fxString + "% 0px 0px 0px)";
+        $("#visResult .collection").append("<div class='square fraction bloopIn'></div>");
+        $("#visResult .fraction").css("clip-path", x);
+        // and change all the shapes to fractional shapes
+        $("#visResult .collection>div").removeClass("circle").addClass("square");
+      }
+    }
+    // style history
+    styleUnits(resultVis,unit);
   }
 
   // This function is for redrawing whatever's shown in the history
