@@ -957,12 +957,26 @@ function vis(state, stateVis){ // (new state, old state)
   function visDivide(state,stateVis){
     var numFirst = parseFloat(state.history.numFirst);
     var numSecond = parseFloat(state.history.numSecond);
+    var result = parseFloat(state.result);
     // Do simple division if numbers>100, dividend=0, is fraction, or continuation of multi-operator functions
     if( (Math.abs(numFirst)>100) || (Math.abs(numSecond)>100) || (numFirst==0) ||
         !(Number.isInteger(numFirst)) || !(Number.isInteger(numSecond)) ) {
       $(".collection div").remove(); // debug placeholder code TBD!
       let unit = (Math.abs(resultNew)>0.1&&Math.abs(resultNew)<100) ? 1 : determineUnit(resultNew);
       revisualizeResult(resultNew,unit,timeAnimate);
+    }
+    else{
+      // if result is simple integer...
+      if( Number.isInteger(result) ){
+        console.log("Simple division animation underway."); // debug
+      }
+      // if result is a fraction...
+      else{
+        console.log("to be animated in more complex way later..."); // debug
+        $(".collection div").remove(); // debug placeholder code TBD!
+        let unit = (Math.abs(resultNew)>0.1&&Math.abs(resultNew)<100) ? 1 : determineUnit(resultNew);
+        revisualizeResult(resultNew,unit,timeAnimate);
+      }
     }
     stateVis.history.value = undefined;
   }
