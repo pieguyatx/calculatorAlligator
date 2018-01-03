@@ -1154,6 +1154,7 @@ function vis(state, stateVis){ // (new state, old state)
       });
       // update visState
       stateVis.history.orientation = "add";
+      stateVis.result.orientation = "add";
     }
   }
 
