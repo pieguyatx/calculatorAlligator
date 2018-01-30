@@ -225,7 +225,7 @@ section#visualization>div{
   background: white;
   border-radius: 50%;
 }
-.circle:after {
+.circle::after {
   display: block;
   content: "";
   padding-bottom: 100%;
@@ -241,7 +241,7 @@ section#visualization>div{
   -webkit-transition: border-radius 0.2s;
   transition: border-radius 0.2s;
 }
-.square:after {
+.square::after {
   display: block;
   content: "";
   padding-bottom: 100%;
@@ -732,5 +732,58 @@ section#visualization .multiplyAnimate{
   }
   section#calculator button#clear{
     width: 136px;
+  }
+}
+
+/* Browser-specific fixes below...*/
+
+/*Fixing units for Firefox*/
+@-moz-document url-prefix(){
+    .collection>div{
+      width: 2vw;
+      margin-bottom: 0.5vw;
+    }
+    .circle::after,.square::after{
+      height: 2vw;
+    }
+    footer div:last-child::after{
+      content: "Note: This tool works best in Chrome. Animations may not show correctly on your your browser.";
+      color: red;
+      font-weight: bold;
+      border: solid 2px red;
+      border-radius: 4px;
+      padding: 2px;
+      background-color: #ffedf0;
+    }
+}
+/* IE Edge 12+ CSS */
+@supports (-ms-ime-align:auto){
+  .collection>div{
+    width: 2vw;
+    margin-bottom: 0.5vw;
+  }
+  .circle::after,.square::after{
+    height: 2vw;
+  }
+  footer div:last-child::after{
+    content: "Note: This tool works best in Chrome. Animations may not show correctly on your browser.";
+    color: red;
+    font-weight: bold;
+    border: solid 2px red;
+    border-radius: 4px;
+    padding: 2px;
+    background-color: #ffedf0;
+  }
+}
+/* IE10+ CSS */
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+  footer div:last-child::after{
+    content: "Note: This tool works best in Chrome. Animations may not show correctly on your browser.";
+    color: red;
+    font-weight: bold;
+    border: solid 2px red;
+    border-radius: 4px;
+    padding: 2px;
+    background-color: #ffedf0;
   }
 }

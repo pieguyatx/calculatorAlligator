@@ -13,7 +13,14 @@ This web app is meant to be a basic visual calculator that allows users to add, 
 ## Known Bugs
 These are known bugs that should be fixed over time. They haven't been fixed yet due to being lower priorities:
 * Division animations not yet completed
-* Firefox, Edge compatibility: animations don't show up (units don't have height). Chrome & IE are OK (1/29/18)
+* Browser compatibility:
+  * Firefox, Edge (1/30/18):
+    * Fractions/decimals don't show up correctly.
+    * Multiplication/squaring has squashed units during animation.
+  * IE (1/30/18):
+    * Multiplication/squaring doesn't appear at all.
+  * Chrome is OK (1/29/18).
+  * Is Safari OK?
 
 ## Desired Additional Features
 * Choice of color scheme for positive and negative numbers
