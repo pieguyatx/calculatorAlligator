@@ -958,9 +958,9 @@ function vis(state, stateVis){ // (new state, old state)
     var numFirst = parseFloat(state.history.numFirst);
     var numSecond = parseFloat(state.history.numSecond);
     var result = parseFloat(state.result);
-    // Do simple division if numbers>100, dividend=0, is fraction, or continuation of multi-operator functions
+    // Do simple division if numbers>100, dividend=0, is fraction, div by 1, or continuation of multi-operator functions
     if( (Math.abs(numFirst)>100) || (Math.abs(numSecond)>100) || (numFirst==0) ||
-        !(Number.isInteger(numFirst)) || !(Number.isInteger(numSecond)) ) {
+        !(Number.isInteger(numFirst)) || !(Number.isInteger(numSecond)) || (Math.abs(numSecond)==1) ) {
       $(".collection div").remove(); // debug placeholder code TBD!
       let unit = (Math.abs(resultNew)>0.1&&Math.abs(resultNew)<100) ? 1 : determineUnit(resultNew);
       revisualizeResult(resultNew,unit,timeAnimate);
@@ -969,6 +969,14 @@ function vis(state, stateVis){ // (new state, old state)
       // if result is simple integer...
       if( Number.isInteger(result) ){
         console.log("Simple division animation underway."); // debug
+        // slide divisor to history (dividend) and fade out...
+        // ...while highlighting 1 group of [divisor value] in history (outline?)
+        // ...and moving the units in the 1 group closer together to show that it's a group
+        // pause a bit
+        // continue highlighting groups of [divisor value] in the history (dividend) (put in parent element?)
+        // when you run out of units in the dividend, morph groups into a single unitToHighlight
+        // slide morphed history into the result section; hold shape for a time
+        // (like in the multiply animation) rearrange the units after some delay
       }
       // if result is a fraction...
       else{
@@ -976,6 +984,10 @@ function vis(state, stateVis){ // (new state, old state)
         $(".collection div").remove(); // debug placeholder code TBD!
         let unit = (Math.abs(resultNew)>0.1&&Math.abs(resultNew)<100) ? 1 : determineUnit(resultNew);
         revisualizeResult(resultNew,unit,timeAnimate);
+        // find whole number dividend (numerator) that is evenly divided by divisor (denominator)
+        // split into groups
+        // split the remaining units one at a time to get fractional groups
+
       }
     }
     stateVis.history.value = undefined;
