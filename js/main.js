@@ -973,14 +973,35 @@ function vis(state, stateVis){ // (new state, old state)
         $("#visResult .collection").addClass("sendLeft").on("webkitAnimationEnd mozAnimationEnd oAnimationEnd oanimationend animationend",function(e){
           $("#visResult").html("<div class='collection'></div>").animate({opacity: "1"},0);
           // ...while highlighting 1 group of [divisor value] in history (outline?)
-          for(var i=1; i<=numSecond; i++){
-            let divide_selector = "#visHistory .collection > div:nth-child(" + i + ")";
+          function highlightUnit(dividend,divisor,currentUnit) {
+            let divide_selector = "#visHistory .collection > div:nth-child(" + currentUnit + ")";
+            // pause a bit for each unit and each group
+            var timeDelay = 50;
+            var endGroup = 0;
+            if(currentUnit % Math.abs(divisor)==0){
+              timeDelay = 1200;
+              endGroup = 1;
+            }
             $(divide_selector).addClass("highlight-divide zoomIn");
+            // continue highlighting groups of [divisor value] in the history (dividend)
+            $("#visResult").animate({"opacity": "1"},timeDelay,function(){
+              // fade out the old units if end of group;
+              if(endGroup){
+                for(let i=0; i<Math.abs(divisor); i++){
+                  let divide_selector = "#visHistory .collection > div:nth-child(" + (currentUnit-i) + ")";
+                  $(divide_selector).animate({opacity: "0"},400);
+                }
+              }
+              // highlight next units
+              currentUnit++;
+              if(currentUnit<=Math.abs(dividend)){
+                highlightUnit(dividend,divisor,currentUnit);
+              }
+            });
           }
+          highlightUnit(numFirst,numSecond,1);
         });
-        // ...and moving the units in the 1 group closer together to show that it's a group
-        // pause a bit
-        // continue highlighting groups of [divisor value] in the history (dividend) (put in parent element?)
+
         // when you run out of units in the dividend, morph groups into a single unitToHighlight
         // slide morphed history into the result section; hold shape for a time
         // (like in the multiply animation) rearrange the units after some delay

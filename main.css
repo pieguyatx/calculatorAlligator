@@ -250,11 +250,12 @@ section#visualization>div{
     display: block;
     content: "";
     position: absolute;
-    background: yellow;
+    background: rgba(244, 241, 66, 0.8);
     height: 150%;
     width: 150%;
     z-index: -1;
     border-radius: 5px;
+    border: dashed 1px rgba(0,0,0,0.2);
 }
 .fraction{
   -webkit-clip-path: inset(50% 0px 0px 0px);
