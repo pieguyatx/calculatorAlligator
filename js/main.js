@@ -979,17 +979,25 @@ function vis(state, stateVis){ // (new state, old state)
             var timeDelay = 50;
             var endGroup = 0;
             if(currentUnit % Math.abs(divisor)==0){
-              timeDelay = 1200;
+              timeDelay = 1000;
               endGroup = 1;
             }
             $(divide_selector).addClass("highlight-divide zoomIn");
             // continue highlighting groups of [divisor value] in the history (dividend)
             $("#visResult").animate({"opacity": "1"},timeDelay,function(){
-              // fade out the old units if end of group;
+              // if end of group, fade out old units and add unit to result
               if(endGroup){
+                console.log("Divisor group detected..."); //debug
                 for(let i=0; i<Math.abs(divisor); i++){
                   let divide_selector = "#visHistory .collection > div:nth-child(" + (currentUnit-i) + ")";
                   $(divide_selector).animate({opacity: "0"},400);
+                }
+                // add the appropriate unit to the result section
+                if(result>0){
+                  $("#visResult .collection").append("<div class='circle positive bloopIn'>1</div>");
+                }
+                else if(result<0){
+                  $("#visResult .collection").append("<div class='circle negative bloopIn'>-1</div>");
                 }
               }
               // highlight next units
