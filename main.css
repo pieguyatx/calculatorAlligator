@@ -246,6 +246,16 @@ section#visualization>div{
   content: "";
   padding-bottom: 100%;
 }
+.highlight-divide::before  {
+    display: block;
+    content: "";
+    position: absolute;
+    background: yellow;
+    height: 150%;
+    width: 150%;
+    z-index: -1;
+    border-radius: 5px;
+}
 .fraction{
   -webkit-clip-path: inset(50% 0px 0px 0px);
   clip-path: inset(50% 0px 0px 0px);

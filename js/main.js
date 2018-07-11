@@ -970,7 +970,12 @@ function vis(state, stateVis){ // (new state, old state)
       if( Number.isInteger(result) ){
         console.log("Simple division animation underway."); // debug
         // slide divisor to history (dividend) and fade out...
+        $("#visResult .collection").addClass("sendLeft");
         // ...while highlighting 1 group of [divisor value] in history (outline?)
+        for(var i=1; i<=numSecond; i++){
+          let divide_selector = "#visHistory .collection > div:nth-child(" + i + ")";
+          $(divide_selector).addClass("highlight-divide");
+        }
         // ...and moving the units in the 1 group closer together to show that it's a group
         // pause a bit
         // continue highlighting groups of [divisor value] in the history (dividend) (put in parent element?)
