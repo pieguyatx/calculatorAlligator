@@ -309,15 +309,18 @@ section#visualization>div{
 
 .custom-colors.bb .positive{
   background: radial-gradient(circle at 18px 18px, #e56b00, #440000);
+  border-color: #b34c00 !important;
 }
 .custom-colors.bb .negative{
   background: radial-gradient(circle at 18px 18px, #686868, #000);
 }
 .custom-colors.br .positive{
   background: radial-gradient(circle at 18px 18px, #686868, #000);
+  border-color: #1C2833 !important;
 }
 .custom-colors.br .negative{
   background: radial-gradient(circle at 18px 18px, #e50000, #440000);
+  border-color: #e50000 !important;
 }
 .custom-colors.wb .positive{
   background: radial-gradient(circle at 18px 18px, #ffffff, #ddd);
@@ -327,7 +330,6 @@ section#visualization>div{
 }
 .custom-colors.wb .negative{
   background: radial-gradient(circle at 18px 18px, #686868, #000);
-  border-color: #111 !important;
 }
 .custom-colors.wb{
   background: #c3f0ff;
