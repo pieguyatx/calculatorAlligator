@@ -2162,13 +2162,13 @@ function vis(state, stateVis){ // (new state, old state)
 function listenForColor(){
   document.getElementById("colors").onchange = function(){
     if(this.value == "rb"){ // default coloring
-      $("#visualization").removeClass("custom-colors bb br wb");
+      $("body").removeClass("custom-colors bb br wb");
     } else if(this.value == "bb"){
-      $("#visualization").removeClass("br wb").addClass("custom-colors bb");
+      $("body").removeClass("br wb").addClass("custom-colors bb");
     } else if(this.value == "br"){
-      $("#visualization").removeClass("bb wb").addClass("custom-colors br");
+      $("body").removeClass("bb wb").addClass("custom-colors br");
     } else if(this.value == "wb"){
-      $("#visualization").removeClass("bb br").addClass("custom-colors wb");
+      $("body").removeClass("bb br").addClass("custom-colors wb");
     };
   }
 }

@@ -303,6 +303,10 @@ section#visualization>div{
 .negative{
   background: radial-gradient(circle at 18px 18px, #686868, #000);
 }
+.zero{
+  background: radial-gradient(circle at 18px 18px, #eaeaea, #fff);
+}
+
 .custom-colors.bb .positive{
   background: radial-gradient(circle at 18px 18px, #e56b00, #440000);
 }
@@ -317,15 +321,21 @@ section#visualization>div{
 }
 .custom-colors.wb .positive{
   background: radial-gradient(circle at 18px 18px, #ffffff, #ddd);
-    border: solid #333 1px;
-    color: #000;
+  border: solid #333 1px;
+  color: #000;
+  border-color: #333 !important;
 }
 .custom-colors.wb .negative{
   background: radial-gradient(circle at 18px 18px, #686868, #000);
+  border-color: #111 !important;
 }
-.zero{
-  background: radial-gradient(circle at 18px 18px, #eaeaea, #fff);
+.custom-colors.wb{
+  background: #c3f0ff;
 }
+.custom-colors.wb .zero{
+  background: radial-gradient(circle at 18px 18px, #c3f0ff, #fff);
+}
+
 section#visualization .multiplyAnimate{
   display: block;
 }
