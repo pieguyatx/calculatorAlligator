@@ -1,6 +1,5 @@
 /* General CSS */
 * {
-  -webkit-box-sizing: border-box;
   -mox-box-sizing: border-box;
   -ms-box-sizing: border-box;
   box-sizing: border-box;
@@ -39,9 +38,12 @@ header h2{
 }
 header #mainChar{
   position: relative;
+  display: -webkit-box;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  -webkit-box-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+          justify-content: center;
   margin-top: 10px;
 }
 header svg{
@@ -62,8 +64,10 @@ header svg path:hover{
   padding: 0;
   margin: 0;
   color: #555;
+  display: -webkit-box;
   display: flex;
-  align-items: center;
+  -webkit-box-align: center;
+          align-items: center;
 }
 #help div:first-child{
   color: rgba(0,0,0,0);
@@ -107,9 +111,12 @@ main{
 }
 section{
   margin: 30px 0 30px 0;
+  display: -webkit-box;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  -webkit-box-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+          justify-content: center;
 }
 section#calculator .container{
   padding: 10px;
@@ -117,8 +124,6 @@ section#calculator .container{
   background-color: lightgray;
   border-radius: 10px;
   border-style: outset;
-  -webkit-box-shadow: 10px 10px 36px -3px rgba(0,0,0,0.47);
-  -moz-box-shadow: 10px 10px 36px -3px rgba(0,0,0,0.47);
   box-shadow: 10px 10px 36px -3px rgba(0,0,0,0.47);
   z-index: 1;
 }
@@ -155,22 +160,14 @@ section#calculator button{
   border: outset 1px gray;
   border-radius: 5px;
   background: rgba(226,226,226,1);
-  background: -moz-linear-gradient(45deg, rgba(226,226,226,1) 0%, rgba(219,219,219,1) 0%, rgba(254,254,254,1) 100%);
   background: -webkit-gradient(left bottom, right top, color-stop(0%, rgba(226,226,226,1)), color-stop(0%, rgba(219,219,219,1)), color-stop(100%, rgba(254,254,254,1)));
-  background: -webkit-linear-gradient(45deg, rgba(226,226,226,1) 0%, rgba(219,219,219,1) 0%, rgba(254,254,254,1) 100%);
-  background: -o-linear-gradient(45deg, rgba(226,226,226,1) 0%, rgba(219,219,219,1) 0%, rgba(254,254,254,1) 100%);
-  background: -ms-linear-gradient(45deg, rgba(226,226,226,1) 0%, rgba(219,219,219,1) 0%, rgba(254,254,254,1) 100%);
   background: linear-gradient(45deg, rgba(226,226,226,1) 0%, rgba(219,219,219,1) 0%, rgba(254,254,254,1) 100%);
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e2e2e2', endColorstr='#fefefe', GradientType=1 );
 }
 section#calculator button:active{
   color: #02cc0e; /* light green */
   background: rgba(209,209,209,1);
-  background: -moz-linear-gradient(-45deg, rgba(209,209,209,1) 0%, rgba(219,219,219,1) 0%, rgba(254,254,254,1) 100%);
   background: -webkit-gradient(left top, right bottom, color-stop(0%, rgba(209,209,209,1)), color-stop(0%, rgba(219,219,219,1)), color-stop(100%, rgba(254,254,254,1)));
-  background: -webkit-linear-gradient(-45deg, rgba(209,209,209,1) 0%, rgba(219,219,219,1) 0%, rgba(254,254,254,1) 100%);
-  background: -o-linear-gradient(-45deg, rgba(209,209,209,1) 0%, rgba(219,219,219,1) 0%, rgba(254,254,254,1) 100%);
-  background: -ms-linear-gradient(-45deg, rgba(209,209,209,1) 0%, rgba(219,219,219,1) 0%, rgba(254,254,254,1) 100%);
   background: linear-gradient(135deg, rgba(209,209,209,1) 0%, rgba(219,219,219,1) 0%, rgba(254,254,254,1) 100%);
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d1d1d1', endColorstr='#fefefe', GradientType=1 );
 }
@@ -188,14 +185,19 @@ section#visualization{
   margin: 10px;
   position: relative;
   top: -470px;
+  display: -webkit-box;
   display: flex;
-  align-items: center;
+  -webkit-box-align: center;
+          align-items: center;
 }
 section#visualization>div{
   width: 50%;
+  display: -webkit-box;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  -webkit-box-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+          align-items: center;
   min-height: 450px;
 }
 #visHistory{
@@ -205,10 +207,13 @@ section#visualization>div{
   padding-left: 200px; /* half off calc width */
 }
 .collection{
+  display: -webkit-box;
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
+  -webkit-box-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+          align-items: center;
   width: 95%;
   z-index: 2;
 }
@@ -220,9 +225,12 @@ section#visualization>div{
   width: 8%;
 }
 .circle{
+  display: -webkit-box;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  -webkit-box-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+          align-items: center;
   line-height: 0;
   color: white;
   background: white;
@@ -234,9 +242,12 @@ section#visualization>div{
   padding-bottom: 100%;
 }
 .square{
+  display: -webkit-box;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  -webkit-box-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+          align-items: center;
   line-height: 0;
   color: white;
   background: white;
@@ -264,7 +275,10 @@ section#visualization>div{
   -webkit-clip-path: inset(50% 0px 0px 0px);
   clip-path: inset(50% 0px 0px 0px);
   -webkit-transition: clip-path 0.2s;
+  -webkit-transition: -webkit-clip-path 0.2s;
+  transition: -webkit-clip-path 0.2s;
   transition: clip-path 0.2s;
+  transition: clip-path 0.2s, -webkit-clip-path 0.2s;
   content: "";
 }
 .positive{
@@ -284,8 +298,8 @@ section#visualization>div{
 .custom-chip-red{
   background: radial-gradient(circle at 18px 18px, #e50000, #440000);
 }
-.custom-chip-blue{
-  background: radial-gradient(circle at 18px 18px, #2146ff, #000144);git 
+.custom-chip-brown{
+  background: radial-gradient(circle at 18px 18px, #e56b00, #440000);
 }
 .zero{
   background: radial-gradient(circle at 18px 18px, #eaeaea, #fff);
@@ -294,12 +308,14 @@ section#visualization .multiplyAnimate{
   display: block;
 }
 .multiplyRow{
-  align-items: flex-start;
+  -webkit-box-align: start;
+          align-items: flex-start;
   position: relative;
 }
 .multiplyResult{
   position: relative;
   left: 0;
+  display: -webkit-box;
   display: flex;
 }
 
@@ -312,12 +328,12 @@ section#visualization .multiplyAnimate{
 	animation-duration: 0.5s;
 }
 @-webkit-keyframes getEatenUpLeft {
-	0%   {opacity: 1; transform: translate(0%,0%) scale(1);}
-	100% {opacity: 0; transform: translate(-500px,-400px) scale(0.05);}
+	0%   {opacity: 1; -webkit-transform: translate(0%,0%) scale(1); transform: translate(0%,0%) scale(1);}
+	100% {opacity: 0; -webkit-transform: translate(-500px,-400px) scale(0.05); transform: translate(-500px,-400px) scale(0.05);}
 }
 @keyframes getEatenUpLeft {
-  0%   {opacity: 1; transform: translate(0%,0%) scale(1);}
-	100% {opacity: 0; transform: translate(-500px,-400px) scale(0.05);}
+  0%   {opacity: 1; -webkit-transform: translate(0%,0%) scale(1); transform: translate(0%,0%) scale(1);}
+	100% {opacity: 0; -webkit-transform: translate(-500px,-400px) scale(0.05); transform: translate(-500px,-400px) scale(0.05);}
 }
 .bloopIn{
 	-webkit-animation-name: bloopIn;
@@ -346,18 +362,22 @@ section#visualization .multiplyAnimate{
 }
 @keyframes bloopIn {
 	0% {
-		transform: scale(0);
+		-webkit-transform: scale(0);
+		        transform: scale(0);
 		opacity: 0.0;
 	}
 	60% {
-		transform: scale(1.1);
+		-webkit-transform: scale(1.1);
+		        transform: scale(1.1);
 	}
 	80% {
-		transform: scale(0.9);
+		-webkit-transform: scale(0.9);
+		        transform: scale(0.9);
 		opacity: 1;
 	}
 	100% {
-		transform: scale(1);
+		-webkit-transform: scale(1);
+		        transform: scale(1);
 		opacity: 1;
 	}
 }
@@ -369,46 +389,58 @@ section#visualization .multiplyAnimate{
 }
 @-webkit-keyframes shake {
   0% {
-		transform: translate(0%, 0%);
+		-webkit-transform: translate(0%, 0%);
+		        transform: translate(0%, 0%);
 		opacity: 0.0;
 	}
 	20% {
-    transform: translate(-8%, 0%);
+    -webkit-transform: translate(-8%, 0%);
+            transform: translate(-8%, 0%);
 	}
 	40% {
-    transform: translate(10%, 9%);
+    -webkit-transform: translate(10%, 9%);
+            transform: translate(10%, 9%);
 	}
   60% {
-    transform: translate(-10%, 10%);
+    -webkit-transform: translate(-10%, 10%);
+            transform: translate(-10%, 10%);
 		opacity: 1;
 	}
   80% {
-    transform: translate(80%, 9%);
+    -webkit-transform: translate(80%, 9%);
+            transform: translate(80%, 9%);
 	}
   100% {
-    transform: translate(0%, 0%);
+    -webkit-transform: translate(0%, 0%);
+            transform: translate(0%, 0%);
 	}
 }
 @keyframes shake {
 	0% {
-		transform: translate(0%, 0%);
+		-webkit-transform: translate(0%, 0%);
+		        transform: translate(0%, 0%);
 		opacity: 0.0;
 	}
 	20% {
-    transform: translate(-8%, -5%);
+    -webkit-transform: translate(-8%, -5%);
+            transform: translate(-8%, -5%);
 	}
 	40% {
-    transform: translate(10%, 5%);
+    -webkit-transform: translate(10%, 5%);
+            transform: translate(10%, 5%);
 	}
   60% {
-    transform: translate(-10%, -5%);
+    -webkit-transform: translate(-10%, -5%);
+            transform: translate(-10%, -5%);
 		opacity: 1;
 	}
   80% {
-    transform: translate(8%, 4%);
+    -webkit-transform: translate(8%, 4%);
+            transform: translate(8%, 4%);
 	}
   100% {
-    transform: translate(0%, 0%);
+    -webkit-transform: translate(0%, 0%);
+            transform: translate(0%, 0%);
 	}
 }
 .sendLeft{
@@ -418,14 +450,14 @@ section#visualization .multiplyAnimate{
 	animation-duration: 0.15s;
 }
 @-webkit-keyframes sendLeft {
-	0%   {opacity: 1; transform: translate(0%,0%) scale(1);}
-	50%  {opacity: 0.5; transform: translate(-50%,-7%);}
-	100% {opacity: 0; transform: translate(-100%,-10%) scale(1.1);}
+	0%   {opacity: 1; -webkit-transform: translate(0%,0%) scale(1); transform: translate(0%,0%) scale(1);}
+	50%  {opacity: 0.5; -webkit-transform: translate(-50%,-7%); transform: translate(-50%,-7%);}
+	100% {opacity: 0; -webkit-transform: translate(-100%,-10%) scale(1.1); transform: translate(-100%,-10%) scale(1.1);}
 }
 @keyframes sendLeft {
-  0%   {opacity: 1; transform: translate(0%,0%) scale(1);}
-	50%  {opacity: 0.5; transform: translate(-50%,-7%);}
-	100% {opacity: 0; transform: translate(-100%,-10%) scale(1.1);}
+  0%   {opacity: 1; -webkit-transform: translate(0%,0%) scale(1); transform: translate(0%,0%) scale(1);}
+	50%  {opacity: 0.5; -webkit-transform: translate(-50%,-7%); transform: translate(-50%,-7%);}
+	100% {opacity: 0; -webkit-transform: translate(-100%,-10%) scale(1.1); transform: translate(-100%,-10%) scale(1.1);}
 }
 .sendRight{
   -webkit-animation-name: sendRight;
@@ -434,14 +466,14 @@ section#visualization .multiplyAnimate{
 	animation-duration: 0.15s;
 }
 @-webkit-keyframes sendRight {
-	0%   {opacity: 1; transform: translate(0%,0%) scale(1);}
-	50%  {opacity: 0.5; transform: translate(50%,-7%);}
-	100% {opacity: 0; transform: translate(100%,-10%) scale(1.1);}
+	0%   {opacity: 1; -webkit-transform: translate(0%,0%) scale(1); transform: translate(0%,0%) scale(1);}
+	50%  {opacity: 0.5; -webkit-transform: translate(50%,-7%); transform: translate(50%,-7%);}
+	100% {opacity: 0; -webkit-transform: translate(100%,-10%) scale(1.1); transform: translate(100%,-10%) scale(1.1);}
 }
 @keyframes sendRight {
-  0%   {opacity: 1; transform: translate(0%,0%) scale(1);}
-	50%  {opacity: 0.5; transform: translate(50%,-7%);}
-	100% {opacity: 0; transform: translate(100%,-10%) scale(1.1);}
+  0%   {opacity: 1; -webkit-transform: translate(0%,0%) scale(1); transform: translate(0%,0%) scale(1);}
+	50%  {opacity: 0.5; -webkit-transform: translate(50%,-7%); transform: translate(50%,-7%);}
+	100% {opacity: 0; -webkit-transform: translate(100%,-10%) scale(1.1); transform: translate(100%,-10%) scale(1.1);}
 }
 .receiveRight{
   -webkit-animation-name: receiveRight;
@@ -450,14 +482,14 @@ section#visualization .multiplyAnimate{
 	animation-duration: 0.15s;
 }
 @-webkit-keyframes receiveRight {
-	0%   {opacity: 0; transform: translate(100%,-10%) scale(1.1);}
-	50%  {opacity: 0.5; transform: translate(50%,-7%);}
-	100% {opacity: 1; transform: translate(0%,0%) scale(1);}
+	0%   {opacity: 0; -webkit-transform: translate(100%,-10%) scale(1.1); transform: translate(100%,-10%) scale(1.1);}
+	50%  {opacity: 0.5; -webkit-transform: translate(50%,-7%); transform: translate(50%,-7%);}
+	100% {opacity: 1; -webkit-transform: translate(0%,0%) scale(1); transform: translate(0%,0%) scale(1);}
 }
 @keyframes receiveRight {
-  0%   {opacity: 0; transform: translate(100%,-10%) scale(1.1);}
-	50%  {opacity: 0.5; transform: translate(50%,-7%);}
-	100% {opacity: 1; transform: translate(0%,0%) scale(1);}
+  0%   {opacity: 0; -webkit-transform: translate(100%,-10%) scale(1.1); transform: translate(100%,-10%) scale(1.1);}
+	50%  {opacity: 0.5; -webkit-transform: translate(50%,-7%); transform: translate(50%,-7%);}
+	100% {opacity: 1; -webkit-transform: translate(0%,0%) scale(1); transform: translate(0%,0%) scale(1);}
 }
 .receiveLeft{
   -webkit-animation-name: receiveLeft;
@@ -466,19 +498,20 @@ section#visualization .multiplyAnimate{
 	animation-duration: 0.15s;
 }
 @-webkit-keyframes receiveLeft {
-	0%   {opacity: 0; transform: translate(-100%,-10%) scale(1.1);}
-	50%  {opacity: 0.5; transform: translate(-50%,-7%);}
-	100% {opacity: 1; transform: translate(0%,0%) scale(1);}
+	0%   {opacity: 0; -webkit-transform: translate(-100%,-10%) scale(1.1); transform: translate(-100%,-10%) scale(1.1);}
+	50%  {opacity: 0.5; -webkit-transform: translate(-50%,-7%); transform: translate(-50%,-7%);}
+	100% {opacity: 1; -webkit-transform: translate(0%,0%) scale(1); transform: translate(0%,0%) scale(1);}
 }
 @keyframes receiveLeft {
-  0%   {opacity: 0; transform: translate(-100%,-10%) scale(1.1);}
-	50%  {opacity: 0.5; transform: translate(-50%,-7%);}
-	100% {opacity: 1; transform: translate(0%,0%) scale(1);}
+  0%   {opacity: 0; -webkit-transform: translate(-100%,-10%) scale(1.1); transform: translate(-100%,-10%) scale(1.1);}
+	50%  {opacity: 0.5; -webkit-transform: translate(-50%,-7%); transform: translate(-50%,-7%);}
+	100% {opacity: 1; -webkit-transform: translate(0%,0%) scale(1); transform: translate(0%,0%) scale(1);}
 }
 .rotate90cw{
   -webkit-transition: all 0.5s ease-in;
   transition: all 0.5s ease-in;
-  transform: rotate(90deg);
+  -webkit-transform: rotate(90deg);
+          transform: rotate(90deg);
 }
 .ghost{
   opacity: 0.3;
@@ -492,14 +525,14 @@ section#visualization .multiplyAnimate{
   animation-iteration-count: infinite;
 }
 @keyframes pulse {
-	0% {transform: scale(0.9);}
-	50% {transform: scale(1);}
-	100% {transform: scale(0.9);}
+	0% {-webkit-transform: scale(0.9);transform: scale(0.9);}
+	50% {-webkit-transform: scale(1);transform: scale(1);}
+	100% {-webkit-transform: scale(0.9);transform: scale(0.9);}
 }
 @-webkit-keyframes pulse {
-	0% {transform: scale(0.9);}
-	50% {transform: scale(1);}
-	100% {transform: scale(0.9);}
+	0% {-webkit-transform: scale(0.9);transform: scale(0.9);}
+	50% {-webkit-transform: scale(1);transform: scale(1);}
+	100% {-webkit-transform: scale(0.9);transform: scale(0.9);}
 }
 .spotlight{
   -webkit-animation-name: spotlight;
@@ -508,14 +541,14 @@ section#visualization .multiplyAnimate{
 	animation-duration: 0.3s;
 }
 @-webkit-keyframes spotlight {
-	0% {opacity: 0.3; transform: scale(1);}
-	50% {opacity: 1; transform: scale(1.5);}
-	100% {opacity: 0.3; transform: scale(1);}
+	0% {opacity: 0.3; -webkit-transform: scale(1); transform: scale(1);}
+	50% {opacity: 1; -webkit-transform: scale(1.5); transform: scale(1.5);}
+	100% {opacity: 0.3; -webkit-transform: scale(1); transform: scale(1);}
 }
 @keyframes spotlight {
-	0% {opacity: 0.3; transform: scale(1);}
-	50% {opacity: 1; transform: scale(1.5);}
-	100% {opacity: 0.3; transform: scale(1);}
+	0% {opacity: 0.3; -webkit-transform: scale(1); transform: scale(1);}
+	50% {opacity: 1; -webkit-transform: scale(1.5); transform: scale(1.5);}
+	100% {opacity: 0.3; -webkit-transform: scale(1); transform: scale(1);}
 }
 .sendRightSlow{
   -webkit-animation-name: sendRight;
@@ -524,12 +557,12 @@ section#visualization .multiplyAnimate{
 	animation-duration: 0.5s;
 }
 @-webkit-keyframes sendRightSlow {
-	0%   {opacity: 1; transform: translate(0%,0%) scale(1);}
-	100% {opacity: 0; transform: translate(50%,-10%) scale(1.1);}
+	0%   {opacity: 1; -webkit-transform: translate(0%,0%) scale(1); transform: translate(0%,0%) scale(1);}
+	100% {opacity: 0; -webkit-transform: translate(50%,-10%) scale(1.1); transform: translate(50%,-10%) scale(1.1);}
 }
 @keyframes sendRightSlow {
-  0%   {opacity: 1; transform: translate(0%,0%) scale(1);}
-	100% {opacity: 0; transform: translate(50%,-10%) scale(1.1);}
+  0%   {opacity: 1; -webkit-transform: translate(0%,0%) scale(1); transform: translate(0%,0%) scale(1);}
+	100% {opacity: 0; -webkit-transform: translate(50%,-10%) scale(1.1); transform: translate(50%,-10%) scale(1.1);}
 }
 .receiveLeftSlow{
   -webkit-animation-name: receiveLeft;
@@ -538,12 +571,12 @@ section#visualization .multiplyAnimate{
 	animation-duration: 0.5s;
 }
 @-webkit-keyframes receiveLeftSlow {
-	0%   {opacity: 0; transform: translate(-50%,-10%) scale(1.1);}
-	100% {opacity: 1; transform: translate(0%,0%) scale(1);}
+	0%   {opacity: 0; -webkit-transform: translate(-50%,-10%) scale(1.1); transform: translate(-50%,-10%) scale(1.1);}
+	100% {opacity: 1; -webkit-transform: translate(0%,0%) scale(1); transform: translate(0%,0%) scale(1);}
 }
 @keyframes receiveLeftSlow {
-  0%   {opacity: 0; transform: translate(-50%,-10%) scale(1.1);}
-	100% {opacity: 1; transform: translate(0%,0%) scale(1);}
+  0%   {opacity: 0; -webkit-transform: translate(-50%,-10%) scale(1.1); transform: translate(-50%,-10%) scale(1.1);}
+	100% {opacity: 1; -webkit-transform: translate(0%,0%) scale(1); transform: translate(0%,0%) scale(1);}
 }
 .shrink{  /*EXTRA?*/
   -webkit-animation-name: shrink;
@@ -552,14 +585,14 @@ section#visualization .multiplyAnimate{
 	animation-duration: 0.2s;
 }
 @-webkit-keyframes shrink {
-	0%   {transform: scale(1);}
-	20%   {transform: scale(1.1);}
-	100% {transform: scale(.2);}
+	0%   {-webkit-transform: scale(1);transform: scale(1);}
+	20%   {-webkit-transform: scale(1.1);transform: scale(1.1);}
+	100% {-webkit-transform: scale(.2);transform: scale(.2);}
 }
 @keyframes shrink {
-  0%   {transform: scale(1);}
-	20%   {transform: scale(1.1);}
-	100% {transform: scale(.2);}
+  0%   {-webkit-transform: scale(1);transform: scale(1);}
+	20%   {-webkit-transform: scale(1.1);transform: scale(1.1);}
+	100% {-webkit-transform: scale(.2);transform: scale(.2);}
 }
 .zoomIn{  /*EXTRA?*/
   -webkit-animation-name: zoomIn;
@@ -568,14 +601,14 @@ section#visualization .multiplyAnimate{
 	animation-duration: 0.2s;
 }
 @-webkit-keyframes zoomIn {
-	0%   {transform: scale(3); opacity: 0}
-	80%   {transform: scale(0.9);}
-	100% {transform: scale(1); opacity: 1}
+	0%   {-webkit-transform: scale(3);transform: scale(3); opacity: 0}
+	80%   {-webkit-transform: scale(0.9);transform: scale(0.9);}
+	100% {-webkit-transform: scale(1);transform: scale(1); opacity: 1}
 }
 @keyframes zoomIn {
-  0%   {transform: scale(3); opacity: 0}
-	80%   {transform: scale(0.9);}
-	100% {transform: scale(1); opacity: 1}
+  0%   {-webkit-transform: scale(3);transform: scale(3); opacity: 0}
+	80%   {-webkit-transform: scale(0.9);transform: scale(0.9);}
+	100% {-webkit-transform: scale(1);transform: scale(1); opacity: 1}
 }
 
 /* Mobile responsiveness */
@@ -607,7 +640,8 @@ section#visualization .multiplyAnimate{
     text-align: left;
   }
   header #mainChar{
-    justify-content: left;
+    -webkit-box-pack: left;
+            justify-content: left;
     margin-top: 0;
   }
   header svg{
@@ -634,7 +668,8 @@ section#visualization .multiplyAnimate{
   section#visualization{
     margin: 10px;
     top: 0;
-    justify-content: left;
+    -webkit-box-pack: left;
+            justify-content: left;
     padding-left: 400px;
   }
   section#visualization>div {
@@ -686,7 +721,8 @@ section#visualization .multiplyAnimate{
     font-size: 32px;
   }
   header #mainChar{
-    justify-content: center;
+    -webkit-box-pack: center;
+            justify-content: center;
   }
   #help{
     top: -22px;
