@@ -851,6 +851,9 @@ section#visualization .multiplyAnimate{
   #visResult{
     padding-left: 10px;
   }
+  .control-panel{
+    position: relative;
+  }
 }
 @media only screen and (max-width: 320px){
   section#calculator #display{
