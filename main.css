@@ -102,6 +102,9 @@ aside table tr td:nth-child(2){
   font-weight: bold;
   padding-right: 4px;
 }
+main{
+  max-height: 450px;
+}
 section{
   margin: 30px 0 30px 0;
   display: flex;
@@ -269,6 +272,20 @@ section#visualization>div{
 }
 .negative{
   background: radial-gradient(circle at 18px 18px, #686868, #000);
+}
+.custom-chip-white{
+  background: radial-gradient(circle at 18px 18px, #ffffff, #ddd);
+    border: solid #676767 1px;
+    color: #000;
+}
+.custom-chip-black{
+  background: radial-gradient(circle at 18px 18px, #686868, #000);
+}
+.custom-chip-red{
+  background: radial-gradient(circle at 18px 18px, #e50000, #440000);
+}
+.custom-chip-blue{
+  background: radial-gradient(circle at 18px 18px, #2146ff, #000144);git 
 }
 .zero{
   background: radial-gradient(circle at 18px 18px, #eaeaea, #fff);
@@ -562,6 +579,28 @@ section#visualization .multiplyAnimate{
 }
 
 /* Mobile responsiveness */
+@media only screen and (max-width: 1400px) and (min-width: 1281px){
+  header{
+    padding: 5px 0 5px 0px;
+  }
+  header h1 {
+    font-size: 35px;
+  }
+  header h2 {
+    font-size: 16px;
+  }
+  header svg{
+    width: 280px;
+    height: 160px;
+  }
+  aside{
+    top: 10px;
+    right: 10px;
+  }
+  section{
+    margin-top: 10px;
+  }
+}
 @media only screen and (max-width: 1280px) and (min-width: 765px){
   header{
     padding: 10px 0 10px 450px;
@@ -694,6 +733,9 @@ section#visualization .multiplyAnimate{
   aside{
     display: none; /* Small screens less likely to have keyboard*/
   }
+  main{
+    max-height: unset;
+  }  
   section{
     margin: 10px 0 10px 0;
   }
