@@ -34,6 +34,10 @@ $(document).ready(function(){
   listenForEquals(state,stateVis);
   // Listen for signal: SQUARED
   listenForSquared(state,stateVis);
+
+  // Control panel
+  // Listen for color selection
+  listenForColor();
 });
 
 // note: key codes reference: https://www.cambiaresearch.com/articles/15/javascript-char-codes-key-codes
@@ -2150,4 +2154,21 @@ function vis(state, stateVis){ // (new state, old state)
     }
   }
 
+}
+
+// CONTROL PANEL ======================================================================
+
+// Colors ======================================================================
+function listenForColor(){
+  document.getElementById("colors").onchange = function(){
+    if(this.value == "rb"){ // default coloring
+      $("#visualization").removeClass("custom-colors bb br wb");
+    } else if(this.value == "bb"){
+      $("#visualization").removeClass("br wb").addClass("custom-colors bb");
+    } else if(this.value == "br"){
+      $("#visualization").removeClass("bb wb").addClass("custom-colors br");
+    } else if(this.value == "wb"){
+      $("#visualization").removeClass("bb br").addClass("custom-colors wb");
+    };
+  }
 }

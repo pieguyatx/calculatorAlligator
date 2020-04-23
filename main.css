@@ -174,6 +174,22 @@ section#calculator button:active{
 section#calculator button#clear{
   width: 172px;
 }
+.control-panel{
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  padding: 10px 20px;
+  z-index: 999;
+  background: rgba(225,225,225,.75);
+  border-radius: 5px 0 0 0;
+}
+.control-panel .select-colors{
+  font-weight: bold;
+}
+.control-panel .select-colors #colors{
+  font-family: 'Abel', sans-serif;
+  font-size: medium;
+}
 footer{
   margin: 10px;
   font-family: 'Oxygen', sans-serif;
@@ -287,19 +303,25 @@ section#visualization>div{
 .negative{
   background: radial-gradient(circle at 18px 18px, #686868, #000);
 }
-.custom-chip-white{
-  background: radial-gradient(circle at 18px 18px, #ffffff, #ddd);
-    border: solid #676767 1px;
-    color: #000;
+.custom-colors.bb .positive{
+  background: radial-gradient(circle at 18px 18px, #e56b00, #440000);
 }
-.custom-chip-black{
+.custom-colors.bb .negative{
   background: radial-gradient(circle at 18px 18px, #686868, #000);
 }
-.custom-chip-red{
+.custom-colors.br .positive{
+  background: radial-gradient(circle at 18px 18px, #686868, #000);
+}
+.custom-colors.br .negative{
   background: radial-gradient(circle at 18px 18px, #e50000, #440000);
 }
-.custom-chip-brown{
-  background: radial-gradient(circle at 18px 18px, #e56b00, #440000);
+.custom-colors.wb .positive{
+  background: radial-gradient(circle at 18px 18px, #ffffff, #ddd);
+    border: solid #333 1px;
+    color: #000;
+}
+.custom-colors.wb .negative{
+  background: radial-gradient(circle at 18px 18px, #686868, #000);
 }
 .zero{
   background: radial-gradient(circle at 18px 18px, #eaeaea, #fff);

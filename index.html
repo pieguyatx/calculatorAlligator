@@ -264,12 +264,15 @@
     </main>
 
     <div class="control-panel">
-      <ul>
-        <li>Red+ and Black- (DC electrical, USA)</li>
-        <li>Brown+ and Black- (DC electrical, Europe)</li>
-        <li>Black+ and Red- (accounting)</li>
-        <li>White+ and Black-</li>
-      </ul>
+      <div class="select-colors">
+        <label for="colors">Color scheme:</label>
+        <select id="colors">
+          <option value="rb" selected>Red+ and Black- (electrical, USA)</option>
+          <option value="bb">Brown+ and Black- (electrical, EU)</option>
+          <option value="br">Black+ and Red- (accounting)</option>
+          <option value="wb">White+ and Black-</option>
+        </select>
+      </div>
     </div>
 
     <footer>
