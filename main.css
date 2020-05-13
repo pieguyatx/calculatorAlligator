@@ -10,6 +10,7 @@ body{
   font-family: 'Abel', sans-serif;
   background: white;
   margin: 0;
+  min-width: 300px;
 }
 a {
   text-decoration: none;
@@ -38,12 +39,9 @@ header h2{
 }
 header #mainChar{
   position: relative;
-  display: -webkit-box;
   display: flex;
-  -webkit-box-align: center;
-          align-items: center;
-  -webkit-box-pack: center;
-          justify-content: center;
+  align-items: center;
+  justify-content: center;
   margin-top: 10px;
 }
 header svg{
@@ -64,10 +62,8 @@ header svg path:hover{
   padding: 0;
   margin: 0;
   color: #555;
-  display: -webkit-box;
   display: flex;
-  -webkit-box-align: center;
-          align-items: center;
+  align-items: center;
 }
 #help div:first-child{
   color: rgba(0,0,0,0);
@@ -111,12 +107,9 @@ main{
 }
 section{
   margin: 30px 0 30px 0;
-  display: -webkit-box;
   display: flex;
-  -webkit-box-align: center;
-          align-items: center;
-  -webkit-box-pack: center;
-          justify-content: center;
+  align-items: center;
+  justify-content: center;
 }
 section#calculator .container{
   padding: 10px;
@@ -159,6 +152,7 @@ section#calculator button{
   font-size: 30px;
   border: outset 1px gray;
   border-radius: 5px;
+  cursor: pointer;
   background: rgba(226,226,226,1);
   background: -webkit-gradient(left bottom, right top, color-stop(0%, rgba(226,226,226,1)), color-stop(0%, rgba(219,219,219,1)), color-stop(100%, rgba(254,254,254,1)));
   background: linear-gradient(45deg, rgba(226,226,226,1) 0%, rgba(219,219,219,1) 0%, rgba(254,254,254,1) 100%);
@@ -183,12 +177,49 @@ section#calculator button#clear{
   background: rgba(225,225,225,.75);
   border-radius: 5px 0 0 0;
 }
-.control-panel .select-colors{
+.control-panel label{
   font-weight: bold;
+}
+.control-panel .select-speed{
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-bottom: 10px;
+}
+.control-panel .select-speed label{
+  min-width: 105px;
+  margin-right: 8px;
+}
+.control-panel .slider {
+  -webkit-appearance: none;
+  height: 6px;
+  width: 100%;
+  background: #676767;
+  outline: none;
+  opacity: 0.7;
+  transition: opacity .1s;
+}
+.control-panel .slider:hover {
+  opacity: 1;
+}
+.control-panel .slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 15px;
+  height: 20px;
+  background: #007207;
+  cursor: pointer;
+}
+.control-panel .slider::-moz-range-thumb {
+  width: 15px;
+  height: 20px;
+  background: #007207;
+  cursor: pointer;
 }
 .control-panel .select-colors #colors{
   font-family: 'Abel', sans-serif;
   font-size: medium;
+  cursor: pointer;
 }
 footer{
   margin: 10px;
@@ -201,19 +232,14 @@ section#visualization{
   margin: 10px;
   position: relative;
   top: -470px;
-  display: -webkit-box;
   display: flex;
-  -webkit-box-align: center;
-          align-items: center;
+  align-items: center;
 }
 section#visualization>div{
   width: 50%;
-  display: -webkit-box;
   display: flex;
-  -webkit-box-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-          align-items: center;
+  justify-content: center;
+  align-items: center;
   min-height: 450px;
 }
 #visHistory{
@@ -223,30 +249,23 @@ section#visualization>div{
   padding-left: 200px; /* half off calc width */
 }
 .collection{
-  display: -webkit-box;
   display: flex;
   flex-wrap: wrap;
-  -webkit-box-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-          align-items: center;
+  justify-content: center;
+  align-items: center;
   width: 95%;
   z-index: 2;
 }
 .collection>div{
   margin:0.95%;
-  -webkit-transition: margin 0.2s;
   transition: margin 0.2s;
   position: relative;
   width: 8%;
 }
 .circle{
-  display: -webkit-box;
   display: flex;
-  -webkit-box-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-          align-items: center;
+  justify-content: center;
+  align-items: center;
   line-height: 0;
   color: white;
   background: white;
@@ -258,17 +277,13 @@ section#visualization>div{
   padding-bottom: 100%;
 }
 .square{
-  display: -webkit-box;
   display: flex;
-  -webkit-box-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-          align-items: center;
+  justify-content: center;
+  align-items: center;
   line-height: 0;
   color: white;
   background: white;
   border-radius: 4px;
-  -webkit-transition: border-radius 0.2s;
   transition: border-radius 0.2s;
 }
 .square::after {
@@ -290,8 +305,6 @@ section#visualization>div{
 .fraction{
   -webkit-clip-path: inset(50% 0px 0px 0px);
   clip-path: inset(50% 0px 0px 0px);
-  -webkit-transition: clip-path 0.2s;
-  -webkit-transition: -webkit-clip-path 0.2s;
   transition: -webkit-clip-path 0.2s;
   transition: clip-path 0.2s;
   transition: clip-path 0.2s, -webkit-clip-path 0.2s;
@@ -342,14 +355,12 @@ section#visualization .multiplyAnimate{
   display: block;
 }
 .multiplyRow{
-  -webkit-box-align: start;
-          align-items: flex-start;
+  align-items: flex-start;
   position: relative;
 }
 .multiplyResult{
   position: relative;
   left: 0;
-  display: -webkit-box;
   display: flex;
 }
 
@@ -362,12 +373,12 @@ section#visualization .multiplyAnimate{
 	animation-duration: 0.5s;
 }
 @-webkit-keyframes getEatenUpLeft {
-	0%   {opacity: 1; -webkit-transform: translate(0%,0%) scale(1); transform: translate(0%,0%) scale(1);}
-	100% {opacity: 0; -webkit-transform: translate(-500px,-400px) scale(0.05); transform: translate(-500px,-400px) scale(0.05);}
+	0%   {opacity: 1; transform: translate(0%,0%) scale(1);}
+	100% {opacity: 0; transform: translate(-500px,-400px) scale(0.05);}
 }
 @keyframes getEatenUpLeft {
-  0%   {opacity: 1; -webkit-transform: translate(0%,0%) scale(1); transform: translate(0%,0%) scale(1);}
-	100% {opacity: 0; -webkit-transform: translate(-500px,-400px) scale(0.05); transform: translate(-500px,-400px) scale(0.05);}
+  0%   {opacity: 1; transform: translate(0%,0%) scale(1);}
+	100% {opacity: 0; transform: translate(-500px,-400px) scale(0.05);}
 }
 .bloopIn{
 	-webkit-animation-name: bloopIn;
@@ -396,22 +407,18 @@ section#visualization .multiplyAnimate{
 }
 @keyframes bloopIn {
 	0% {
-		-webkit-transform: scale(0);
-		        transform: scale(0);
+		transform: scale(0);
 		opacity: 0.0;
 	}
 	60% {
-		-webkit-transform: scale(1.1);
-		        transform: scale(1.1);
+		transform: scale(1.1);
 	}
 	80% {
-		-webkit-transform: scale(0.9);
-		        transform: scale(0.9);
+		transform: scale(0.9);
 		opacity: 1;
 	}
 	100% {
-		-webkit-transform: scale(1);
-		        transform: scale(1);
+		transform: scale(1);
 		opacity: 1;
 	}
 }
@@ -423,58 +430,46 @@ section#visualization .multiplyAnimate{
 }
 @-webkit-keyframes shake {
   0% {
-		-webkit-transform: translate(0%, 0%);
-		        transform: translate(0%, 0%);
+		transform: translate(0%, 0%);
 		opacity: 0.0;
 	}
 	20% {
-    -webkit-transform: translate(-8%, 0%);
-            transform: translate(-8%, 0%);
+    transform: translate(-8%, 0%);
 	}
 	40% {
-    -webkit-transform: translate(10%, 9%);
-            transform: translate(10%, 9%);
+    transform: translate(10%, 9%);
 	}
   60% {
-    -webkit-transform: translate(-10%, 10%);
-            transform: translate(-10%, 10%);
+    transform: translate(-10%, 10%);
 		opacity: 1;
 	}
   80% {
-    -webkit-transform: translate(80%, 9%);
-            transform: translate(80%, 9%);
+    transform: translate(80%, 9%);
 	}
   100% {
-    -webkit-transform: translate(0%, 0%);
-            transform: translate(0%, 0%);
+    transform: translate(0%, 0%);
 	}
 }
 @keyframes shake {
 	0% {
-		-webkit-transform: translate(0%, 0%);
-		        transform: translate(0%, 0%);
+		transform: translate(0%, 0%);
 		opacity: 0.0;
 	}
 	20% {
-    -webkit-transform: translate(-8%, -5%);
-            transform: translate(-8%, -5%);
+    transform: translate(-8%, -5%);
 	}
 	40% {
-    -webkit-transform: translate(10%, 5%);
-            transform: translate(10%, 5%);
+    transform: translate(10%, 5%);
 	}
   60% {
-    -webkit-transform: translate(-10%, -5%);
-            transform: translate(-10%, -5%);
+    transform: translate(-10%, -5%);
 		opacity: 1;
 	}
   80% {
-    -webkit-transform: translate(8%, 4%);
-            transform: translate(8%, 4%);
+    transform: translate(8%, 4%);
 	}
   100% {
-    -webkit-transform: translate(0%, 0%);
-            transform: translate(0%, 0%);
+    transform: translate(0%, 0%);
 	}
 }
 .sendLeft{
@@ -484,14 +479,14 @@ section#visualization .multiplyAnimate{
 	animation-duration: 0.15s;
 }
 @-webkit-keyframes sendLeft {
-	0%   {opacity: 1; -webkit-transform: translate(0%,0%) scale(1); transform: translate(0%,0%) scale(1);}
-	50%  {opacity: 0.5; -webkit-transform: translate(-50%,-7%); transform: translate(-50%,-7%);}
-	100% {opacity: 0; -webkit-transform: translate(-100%,-10%) scale(1.1); transform: translate(-100%,-10%) scale(1.1);}
+	0%   {opacity: 1; transform: translate(0%,0%) scale(1);}
+	50%  {opacity: 0.5; transform: translate(-50%,-7%);}
+	100% {opacity: 0; transform: translate(-100%,-10%) scale(1.1);}
 }
 @keyframes sendLeft {
-  0%   {opacity: 1; -webkit-transform: translate(0%,0%) scale(1); transform: translate(0%,0%) scale(1);}
-	50%  {opacity: 0.5; -webkit-transform: translate(-50%,-7%); transform: translate(-50%,-7%);}
-	100% {opacity: 0; -webkit-transform: translate(-100%,-10%) scale(1.1); transform: translate(-100%,-10%) scale(1.1);}
+  0%   {opacity: 1; transform: translate(0%,0%) scale(1);}
+	50%  {opacity: 0.5; transform: translate(-50%,-7%);}
+	100% {opacity: 0; transform: translate(-100%,-10%) scale(1.1);}
 }
 .sendRight{
   -webkit-animation-name: sendRight;
@@ -500,14 +495,14 @@ section#visualization .multiplyAnimate{
 	animation-duration: 0.15s;
 }
 @-webkit-keyframes sendRight {
-	0%   {opacity: 1; -webkit-transform: translate(0%,0%) scale(1); transform: translate(0%,0%) scale(1);}
-	50%  {opacity: 0.5; -webkit-transform: translate(50%,-7%); transform: translate(50%,-7%);}
-	100% {opacity: 0; -webkit-transform: translate(100%,-10%) scale(1.1); transform: translate(100%,-10%) scale(1.1);}
+	0%   {opacity: 1; transform: translate(0%,0%) scale(1);}
+	50%  {opacity: 0.5; transform: translate(50%,-7%);}
+	100% {opacity: 0; transform: translate(100%,-10%) scale(1.1);}
 }
 @keyframes sendRight {
-  0%   {opacity: 1; -webkit-transform: translate(0%,0%) scale(1); transform: translate(0%,0%) scale(1);}
-	50%  {opacity: 0.5; -webkit-transform: translate(50%,-7%); transform: translate(50%,-7%);}
-	100% {opacity: 0; -webkit-transform: translate(100%,-10%) scale(1.1); transform: translate(100%,-10%) scale(1.1);}
+  0%   {opacity: 1; transform: translate(0%,0%) scale(1);}
+	50%  {opacity: 0.5; transform: translate(50%,-7%);}
+	100% {opacity: 0; transform: translate(100%,-10%) scale(1.1);}
 }
 .receiveRight{
   -webkit-animation-name: receiveRight;
@@ -516,14 +511,14 @@ section#visualization .multiplyAnimate{
 	animation-duration: 0.15s;
 }
 @-webkit-keyframes receiveRight {
-	0%   {opacity: 0; -webkit-transform: translate(100%,-10%) scale(1.1); transform: translate(100%,-10%) scale(1.1);}
-	50%  {opacity: 0.5; -webkit-transform: translate(50%,-7%); transform: translate(50%,-7%);}
-	100% {opacity: 1; -webkit-transform: translate(0%,0%) scale(1); transform: translate(0%,0%) scale(1);}
+	0%   {opacity: 0; transform: translate(100%,-10%) scale(1.1);}
+	50%  {opacity: 0.5; transform: translate(50%,-7%);}
+	100% {opacity: 1; transform: translate(0%,0%) scale(1);}
 }
 @keyframes receiveRight {
-  0%   {opacity: 0; -webkit-transform: translate(100%,-10%) scale(1.1); transform: translate(100%,-10%) scale(1.1);}
-	50%  {opacity: 0.5; -webkit-transform: translate(50%,-7%); transform: translate(50%,-7%);}
-	100% {opacity: 1; -webkit-transform: translate(0%,0%) scale(1); transform: translate(0%,0%) scale(1);}
+  0%   {opacity: 0; transform: translate(100%,-10%) scale(1.1);}
+	50%  {opacity: 0.5; transform: translate(50%,-7%);}
+	100% {opacity: 1; transform: translate(0%,0%) scale(1);}
 }
 .receiveLeft{
   -webkit-animation-name: receiveLeft;
@@ -532,24 +527,21 @@ section#visualization .multiplyAnimate{
 	animation-duration: 0.15s;
 }
 @-webkit-keyframes receiveLeft {
-	0%   {opacity: 0; -webkit-transform: translate(-100%,-10%) scale(1.1); transform: translate(-100%,-10%) scale(1.1);}
-	50%  {opacity: 0.5; -webkit-transform: translate(-50%,-7%); transform: translate(-50%,-7%);}
-	100% {opacity: 1; -webkit-transform: translate(0%,0%) scale(1); transform: translate(0%,0%) scale(1);}
+	0%   {opacity: 0; transform: translate(-100%,-10%) scale(1.1);}
+	50%  {opacity: 0.5; transform: translate(-50%,-7%);}
+	100% {opacity: 1; transform: translate(0%,0%) scale(1);}
 }
 @keyframes receiveLeft {
-  0%   {opacity: 0; -webkit-transform: translate(-100%,-10%) scale(1.1); transform: translate(-100%,-10%) scale(1.1);}
-	50%  {opacity: 0.5; -webkit-transform: translate(-50%,-7%); transform: translate(-50%,-7%);}
-	100% {opacity: 1; -webkit-transform: translate(0%,0%) scale(1); transform: translate(0%,0%) scale(1);}
+  0%   {opacity: 0; transform: translate(-100%,-10%) scale(1.1);}
+	50%  {opacity: 0.5; transform: translate(-50%,-7%);}
+	100% {opacity: 1; transform: translate(0%,0%) scale(1);}
 }
 .rotate90cw{
-  -webkit-transition: all 0.5s ease-in;
   transition: all 0.5s ease-in;
-  -webkit-transform: rotate(90deg);
-          transform: rotate(90deg);
+  transform: rotate(90deg);
 }
 .ghost{
   opacity: 0.3;
-  -webkit-transition: opacity 0.5s ease-in;
   transition: opacity 0.5s ease-in;
   -webkit-animation-name: pulse;
   animation-name: pulse;
@@ -559,14 +551,14 @@ section#visualization .multiplyAnimate{
   animation-iteration-count: infinite;
 }
 @keyframes pulse {
-	0% {-webkit-transform: scale(0.9);transform: scale(0.9);}
-	50% {-webkit-transform: scale(1);transform: scale(1);}
-	100% {-webkit-transform: scale(0.9);transform: scale(0.9);}
+	0% {transform: scale(0.9);}
+	50% {transform: scale(1);}
+	100% {transform: scale(0.9);}
 }
 @-webkit-keyframes pulse {
-	0% {-webkit-transform: scale(0.9);transform: scale(0.9);}
-	50% {-webkit-transform: scale(1);transform: scale(1);}
-	100% {-webkit-transform: scale(0.9);transform: scale(0.9);}
+	0% {transform: scale(0.9);}
+	50% {transform: scale(1);}
+	100% {transform: scale(0.9);}
 }
 .spotlight{
   -webkit-animation-name: spotlight;
@@ -575,14 +567,14 @@ section#visualization .multiplyAnimate{
 	animation-duration: 0.3s;
 }
 @-webkit-keyframes spotlight {
-	0% {opacity: 0.3; -webkit-transform: scale(1); transform: scale(1);}
-	50% {opacity: 1; -webkit-transform: scale(1.5); transform: scale(1.5);}
-	100% {opacity: 0.3; -webkit-transform: scale(1); transform: scale(1);}
+	0% {opacity: 0.3; transform: scale(1);}
+	50% {opacity: 1; transform: scale(1.5);}
+	100% {opacity: 0.3; transform: scale(1);}
 }
 @keyframes spotlight {
-	0% {opacity: 0.3; -webkit-transform: scale(1); transform: scale(1);}
-	50% {opacity: 1; -webkit-transform: scale(1.5); transform: scale(1.5);}
-	100% {opacity: 0.3; -webkit-transform: scale(1); transform: scale(1);}
+	0% {opacity: 0.3; transform: scale(1);}
+	50% {opacity: 1; transform: scale(1.5);}
+	100% {opacity: 0.3; transform: scale(1);}
 }
 .sendRightSlow{
   -webkit-animation-name: sendRight;
@@ -591,12 +583,12 @@ section#visualization .multiplyAnimate{
 	animation-duration: 0.5s;
 }
 @-webkit-keyframes sendRightSlow {
-	0%   {opacity: 1; -webkit-transform: translate(0%,0%) scale(1); transform: translate(0%,0%) scale(1);}
-	100% {opacity: 0; -webkit-transform: translate(50%,-10%) scale(1.1); transform: translate(50%,-10%) scale(1.1);}
+	0%   {opacity: 1; transform: translate(0%,0%) scale(1);}
+	100% {opacity: 0; transform: translate(50%,-10%) scale(1.1);}
 }
 @keyframes sendRightSlow {
-  0%   {opacity: 1; -webkit-transform: translate(0%,0%) scale(1); transform: translate(0%,0%) scale(1);}
-	100% {opacity: 0; -webkit-transform: translate(50%,-10%) scale(1.1); transform: translate(50%,-10%) scale(1.1);}
+  0%   {opacity: 1; transform: translate(0%,0%) scale(1);}
+	100% {opacity: 0; transform: translate(50%,-10%) scale(1.1);}
 }
 .receiveLeftSlow{
   -webkit-animation-name: receiveLeft;
@@ -605,12 +597,12 @@ section#visualization .multiplyAnimate{
 	animation-duration: 0.5s;
 }
 @-webkit-keyframes receiveLeftSlow {
-	0%   {opacity: 0; -webkit-transform: translate(-50%,-10%) scale(1.1); transform: translate(-50%,-10%) scale(1.1);}
-	100% {opacity: 1; -webkit-transform: translate(0%,0%) scale(1); transform: translate(0%,0%) scale(1);}
+	0%   {opacity: 0; transform: translate(-50%,-10%) scale(1.1);}
+	100% {opacity: 1; transform: translate(0%,0%) scale(1);}
 }
 @keyframes receiveLeftSlow {
-  0%   {opacity: 0; -webkit-transform: translate(-50%,-10%) scale(1.1); transform: translate(-50%,-10%) scale(1.1);}
-	100% {opacity: 1; -webkit-transform: translate(0%,0%) scale(1); transform: translate(0%,0%) scale(1);}
+  0%   {opacity: 0; transform: translate(-50%,-10%) scale(1.1);}
+	100% {opacity: 1; transform: translate(0%,0%) scale(1);}
 }
 .shrink{  /*EXTRA?*/
   -webkit-animation-name: shrink;
@@ -619,14 +611,14 @@ section#visualization .multiplyAnimate{
 	animation-duration: 0.2s;
 }
 @-webkit-keyframes shrink {
-	0%   {-webkit-transform: scale(1);transform: scale(1);}
-	20%   {-webkit-transform: scale(1.1);transform: scale(1.1);}
-	100% {-webkit-transform: scale(.2);transform: scale(.2);}
+	0%   {transform: scale(1);}
+	20%   {transform: scale(1.1);}
+	100% {transform: scale(.2);}
 }
 @keyframes shrink {
-  0%   {-webkit-transform: scale(1);transform: scale(1);}
-	20%   {-webkit-transform: scale(1.1);transform: scale(1.1);}
-	100% {-webkit-transform: scale(.2);transform: scale(.2);}
+  0%   {transform: scale(1);}
+	20%   {transform: scale(1.1);}
+	100% {transform: scale(.2);}
 }
 .zoomIn{  /*EXTRA?*/
   -webkit-animation-name: zoomIn;
@@ -635,14 +627,14 @@ section#visualization .multiplyAnimate{
 	animation-duration: 0.2s;
 }
 @-webkit-keyframes zoomIn {
-	0%   {-webkit-transform: scale(3);transform: scale(3); opacity: 0}
-	80%   {-webkit-transform: scale(0.9);transform: scale(0.9);}
-	100% {-webkit-transform: scale(1);transform: scale(1); opacity: 1}
+	0%   {transform: scale(3); opacity: 0}
+	80%   {transform: scale(0.9);}
+	100% {transform: scale(1); opacity: 1}
 }
 @keyframes zoomIn {
-  0%   {-webkit-transform: scale(3);transform: scale(3); opacity: 0}
-	80%   {-webkit-transform: scale(0.9);transform: scale(0.9);}
-	100% {-webkit-transform: scale(1);transform: scale(1); opacity: 1}
+  0%   {transform: scale(3); opacity: 0}
+	80%   {transform: scale(0.9);}
+	100% {transform: scale(1); opacity: 1}
 }
 
 /* Mobile responsiveness */
@@ -674,8 +666,7 @@ section#visualization .multiplyAnimate{
     text-align: left;
   }
   header #mainChar{
-    -webkit-box-pack: left;
-            justify-content: left;
+    justify-content: left;
     margin-top: 0;
   }
   header svg{
@@ -702,8 +693,7 @@ section#visualization .multiplyAnimate{
   section#visualization{
     margin: 10px;
     top: 0;
-    -webkit-box-pack: left;
-            justify-content: left;
+    justify-content: left;
     padding-left: 400px;
   }
   section#visualization>div {
@@ -755,8 +745,7 @@ section#visualization .multiplyAnimate{
     font-size: 32px;
   }
   header #mainChar{
-    -webkit-box-pack: center;
-            justify-content: center;
+    justify-content: center;
   }
   #help{
     top: -22px;
@@ -854,6 +843,14 @@ section#visualization .multiplyAnimate{
   .control-panel{
     position: relative;
   }
+  .control-panel .select-speed{
+    display: block;
+  }
+  .control-panel .select-speed .slider {
+    margin: 8px;
+    max-width: 300px;
+  }
+  
 }
 @media only screen and (max-width: 320px){
   section#calculator #display{
