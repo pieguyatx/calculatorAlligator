@@ -54,6 +54,11 @@ function listenToKeyboard(state,stateVis){
       console.log("Key pressed (ESC): CLEAR"); // debug
       clear(state,stateVis,true);
     }
+    // EQUALS
+    else if (charCode===187 && event.shiftKey===false){
+      console.log("Key pressed (=): EQUALS"); // debug
+      equals(state,stateVis);
+    }    
     // DIGITS
     else if (charCode>=48 && charCode<=57 && event.shiftKey===false){
       var digit = (charCode-48).toString();
@@ -416,14 +421,6 @@ function sign(state,stateVis){
 
 // EQUALS ======================================================================
 function listenForEquals(state,stateVis){
-  // keyboard: = keyboard
-  $(document).on('keyup', function(event){
-    var charCode = (typeof event.which == "number") ? event.which : event.keyCode;
-    if (charCode===187 && event.shiftKey===false){
-      console.log("Key pressed (=): EQUALS"); // debug
-      equals(state,stateVis);
-    }
-  });
   // mouse click
   $("#equals").on('click', function(){
     console.log("Button pressed: EQUALS"); // debug

@@ -20,7 +20,6 @@ These are known bugs that should be fixed over time. They haven't been fixed yet
     * Multiplication/squaring doesn't appear at all.
   * Chrome is OK (1/29/18).
   * Is Safari OK?
-* Keyboard "enter" key functions do not work consistently.
 
 ## Desired Additional Features
 * Remove debug comments/code in JS
