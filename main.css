@@ -179,6 +179,7 @@ section#calculator button#clear{
 }
 .control-panel label{
   font-weight: bold;
+  margin-right: 8px;
 }
 .control-panel .select-speed{
   display: flex;
@@ -188,7 +189,15 @@ section#calculator button#clear{
 }
 .control-panel .select-speed label{
   min-width: 105px;
-  margin-right: 8px;
+}
+.control-panel .slider-container{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+.control-panel .slider-container .slider-ends{
+  margin: 0 5px;
 }
 .control-panel .slider {
   -webkit-appearance: none;
@@ -846,10 +855,13 @@ section#visualization .multiplyAnimate{
   .control-panel .select-speed{
     display: block;
   }
-  .control-panel .select-speed .slider {
-    margin: 8px;
-    max-width: 300px;
+  .control-panel .slider-container{
+    justify-content: center;
   }
+  .control-panel .select-speed .slider {
+    margin: 14px;
+    max-width: 300px;
+  }  
   
 }
 @media only screen and (max-width: 320px){

@@ -2176,5 +2176,10 @@ function listenForColor(){
 }
 
 // Colors ======================================================================
+var speedInput = 3; // default user input (3 out of 10)
 function listenForSpeed(){
+  document.getElementById("speed").onchange = function(){
+    speedInput = document.getElementById("speed").value;
+    console.log(speedInput);  
+  };
 }

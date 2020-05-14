@@ -266,7 +266,11 @@
     <div class="control-panel">
       <div class="select-speed">
         <label for="speed">Animation speed:</label>
-        <input type="range" min="200" max="1200" value="500" class="slider" id="speed">
+        <div class="slider-container">
+          <div class="slider-min slider-ends">&minus;</div>
+          <input type="range" min="0" max="10" value="3" class="slider" id="speed">
+          <div class="slider-max slider-ends">+</div>
+        </div>
       </div>
       <div class="select-colors">
         <label for="colors">Color scheme:</label>
