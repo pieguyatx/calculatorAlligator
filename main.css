@@ -489,12 +489,12 @@ section#visualization .multiplyAnimate{
 }
 @-webkit-keyframes sendLeft {
 	0%   {opacity: 1; transform: translate(0%,0%) scale(1);}
-	50%  {opacity: 0.5; transform: translate(-50%,-7%);}
+	50%  {opacity: 0.5; transform: translate(-40%,-7%);}
 	100% {opacity: 0; transform: translate(-100%,-10%) scale(1.1);}
 }
 @keyframes sendLeft {
   0%   {opacity: 1; transform: translate(0%,0%) scale(1);}
-	50%  {opacity: 0.5; transform: translate(-50%,-7%);}
+	50%  {opacity: 0.5; transform: translate(-40%,-7%);}
 	100% {opacity: 0; transform: translate(-100%,-10%) scale(1.1);}
 }
 .sendRight{
@@ -505,12 +505,12 @@ section#visualization .multiplyAnimate{
 }
 @-webkit-keyframes sendRight {
 	0%   {opacity: 1; transform: translate(0%,0%) scale(1);}
-	50%  {opacity: 0.5; transform: translate(50%,-7%);}
+	50%  {opacity: 0.5; transform: translate(40%,-7%);}
 	100% {opacity: 0; transform: translate(100%,-10%) scale(1.1);}
 }
 @keyframes sendRight {
   0%   {opacity: 1; transform: translate(0%,0%) scale(1);}
-	50%  {opacity: 0.5; transform: translate(50%,-7%);}
+	50%  {opacity: 0.5; transform: translate(40%,-7%);}
 	100% {opacity: 0; transform: translate(100%,-10%) scale(1.1);}
 }
 .receiveRight{
@@ -521,12 +521,12 @@ section#visualization .multiplyAnimate{
 }
 @-webkit-keyframes receiveRight {
 	0%   {opacity: 0; transform: translate(100%,-10%) scale(1.1);}
-	50%  {opacity: 0.5; transform: translate(50%,-7%);}
+	50%  {opacity: 0.5; transform: translate(40%,-7%);}
 	100% {opacity: 1; transform: translate(0%,0%) scale(1);}
 }
 @keyframes receiveRight {
   0%   {opacity: 0; transform: translate(100%,-10%) scale(1.1);}
-	50%  {opacity: 0.5; transform: translate(50%,-7%);}
+	50%  {opacity: 0.5; transform: translate(40%,-7%);}
 	100% {opacity: 1; transform: translate(0%,0%) scale(1);}
 }
 .receiveLeft{
@@ -537,12 +537,12 @@ section#visualization .multiplyAnimate{
 }
 @-webkit-keyframes receiveLeft {
 	0%   {opacity: 0; transform: translate(-100%,-10%) scale(1.1);}
-	50%  {opacity: 0.5; transform: translate(-50%,-7%);}
+	50%  {opacity: 0.5; transform: translate(-40%,-7%);}
 	100% {opacity: 1; transform: translate(0%,0%) scale(1);}
 }
 @keyframes receiveLeft {
   0%   {opacity: 0; transform: translate(-100%,-10%) scale(1.1);}
-	50%  {opacity: 0.5; transform: translate(-50%,-7%);}
+	50%  {opacity: 0.5; transform: translate(-40%,-7%);}
 	100% {opacity: 1; transform: translate(0%,0%) scale(1);}
 }
 .rotate90cw{
@@ -593,11 +593,11 @@ section#visualization .multiplyAnimate{
 }
 @-webkit-keyframes sendRightSlow {
 	0%   {opacity: 1; transform: translate(0%,0%) scale(1);}
-	100% {opacity: 0; transform: translate(50%,-10%) scale(1.1);}
+	100% {opacity: 0; transform: translate(40%,-10%) scale(1.1);}
 }
 @keyframes sendRightSlow {
   0%   {opacity: 1; transform: translate(0%,0%) scale(1);}
-	100% {opacity: 0; transform: translate(50%,-10%) scale(1.1);}
+	100% {opacity: 0; transform: translate(40%,-10%) scale(1.1);}
 }
 .receiveLeftSlow{
   -webkit-animation-name: receiveLeft;
@@ -606,11 +606,11 @@ section#visualization .multiplyAnimate{
 	animation-duration: 0.5s;
 }
 @-webkit-keyframes receiveLeftSlow {
-	0%   {opacity: 0; transform: translate(-50%,-10%) scale(1.1);}
+	0%   {opacity: 0; transform: translate(-40%,-10%) scale(1.1);}
 	100% {opacity: 1; transform: translate(0%,0%) scale(1);}
 }
 @keyframes receiveLeftSlow {
-  0%   {opacity: 0; transform: translate(-50%,-10%) scale(1.1);}
+  0%   {opacity: 0; transform: translate(-40%,-10%) scale(1.1);}
 	100% {opacity: 1; transform: translate(0%,0%) scale(1);}
 }
 .shrink{  /*EXTRA?*/

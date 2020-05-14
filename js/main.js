@@ -43,9 +43,6 @@ $(document).ready(function(){
 });
 
 // note: key codes reference: https://www.cambiaresearch.com/articles/15/javascript-char-codes-key-codes
-// TO DO: Add visualizations.. (in progress 10/5/17)
-// TO DO: will need to visually denote button presses somehow when keyboard is used
-// TO DO: Remove debug comments/code
 
 // KEYBOARD ====================================================================
 function listenToKeyboard(state,stateVis){
@@ -672,7 +669,7 @@ function randomStatement(statements){  // statements must be an array of strings
 
 // Display Help Text ===========================================================
 function displayHelp(statement){
-  var timeAnimate = 300; // time in ms
+  var timeAnimate = timeDelayGlobal; // time in ms
   $("#helpText").html(statement);
   $("#help").stop(true).animate({opacity: "0"},0).animate({opacity: "1"},timeAnimate);
   $("header svg path").css({fill: getRandomColor(), transition: "0.2s"});
@@ -703,7 +700,7 @@ function vis(state, stateVis){ // (new state, old state)
     state.history = {"numFirst": undefined, "operator": undefined, "numSecond": undefined, "text": ""};
     $("#history").html(state.history.text);   // clear history
     state.result = "0";  */
-  var timeAnimate = 500; // default animation time
+  var timeAnimate = timeDelayGlobal; // default animation time
   var resultNew = parseFloat(state.result);
   var resultVis = stateVis.result.value;
   var historyVis = stateVis.history.value;
@@ -982,10 +979,10 @@ function vis(state, stateVis){ // (new state, old state)
           function highlightUnit(dividend,divisor,currentUnit) {
             let divide_selector = "#visHistory .collection > div:nth-child(" + currentUnit + ")";
             // pause a bit for each unit and each group
-            var timeDelay = 100;
+            var timeDelay = timeDelayGlobal/5;
             var endGroup = 0;
             if(currentUnit % Math.abs(divisor)==0){
-              timeDelay = 1000;
+              timeDelay = timeDelayGlobal*2;
               endGroup = 1;
             }
             $(divide_selector).addClass("highlight-divide zoomIn");
@@ -1174,9 +1171,9 @@ function vis(state, stateVis){ // (new state, old state)
   function displayProductRow(tempRow,rowsRemaining,unitsPerRow,unitToHighlight,rUnitWidth,rUnitMargin,stateVis){
     console.log("Displaying product row...", rowsRemaining, unitToHighlight); // DEBUG
     // set delay to emphasize first rows
-    var timeDelay = 500;
+    var timeDelay = timeDelayGlobal;
     if(unitToHighlight===1){
-      timeDelay = 500;  // Can change this value to emphasize first row
+      timeDelay = timeDelayGlobal;  // Can change this value to emphasize first row
     }
     // interrupt this if animations are ending
     if($.fx.off === true){
@@ -1230,7 +1227,7 @@ function vis(state, stateVis){ // (new state, old state)
   // Method A: Treat it like addition of the appropriate +/- numbers
   function visSubtract(state,stateVis){
     // determine animation time (more units animate faster)
-    var timeAnimate = 500; // default times for unit to animate in ms
+    var timeAnimate = timeDelayGlobal; // default times for unit to animate in ms
     // if history = 0, 0.0, 0.00 etc
     if(state.history.numFirst==0){
       // flip sign appearance of result
@@ -1294,7 +1291,7 @@ function vis(state, stateVis){ // (new state, old state)
   // Visualize the addition of two numbers
   function visAdd(state,stateVis){
     // determine animation time (more units animate faster)
-    let timeAnimate = 500; // default times for unit to animate in ms
+    let timeAnimate = timeDelayGlobal; // default times for unit to animate in ms
     // if history = 0, 0.0, 0.00 etc
     if(state.history.numFirst==0){
       // keep result the same, refresh history
@@ -2175,11 +2172,16 @@ function listenForColor(){
   }
 }
 
-// Colors ======================================================================
-var speedInput = 3; // default user input (3 out of 10)
+// Speed ======================================================================
+var timeDelayGlobal = 500; // default delay in milliseconds, global;
 function listenForSpeed(){
+  var speedInput = 8; // default user input (3 out of 10)
+  timeDelayMin = 50;
+  timeDelayMax = 1500;
   document.getElementById("speed").onchange = function(){
     speedInput = document.getElementById("speed").value;
-    console.log(speedInput);  
+    timeDelayGlobal = -(timeDelayMax-timeDelayMin)*speedInput/10 + timeDelayMax;
+    timeDelayGlobal = (timeDelayGlobal>0)? timeDelayGlobal : 100;
+    console.log(timeDelayGlobal);  
   };
 }
