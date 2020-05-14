@@ -22,7 +22,6 @@ These are known bugs that should be fixed over time. They haven't been fixed yet
   * Is Safari OK?
 
 ## Desired Additional Features
-* Remove debug comments/code in JS
 * Negative sign should be applicable before number presses (this may require large coding changes)
 * Alternate subtraction animation? If both numbers are the same sign, just take units them away. (Maybe give option)
 * Additional color schemes matching standards in different fields?

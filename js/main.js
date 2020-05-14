@@ -51,41 +51,41 @@ function listenToKeyboard(state,stateVis){
     var operator;
     var charCode = (typeof event.which == "number") ? event.which : event.keyCode;
     if (charCode===27){
-      console.log("Key pressed (ESC): CLEAR"); // debug
+      // console.log("Key pressed (ESC): CLEAR"); // debug
       clear(state,stateVis,true);
     }
     // EQUALS
     else if (charCode===187 && event.shiftKey===false){
-      console.log("Key pressed (=): EQUALS"); // debug
+      // console.log("Key pressed (=): EQUALS"); // debug
       equals(state,stateVis);
     }    
     // DIGITS
     else if (charCode>=48 && charCode<=57 && event.shiftKey===false){
       var digit = (charCode-48).toString();
-      console.log("Keyboard pressed (digit): " + digit); // debug
+      // console.log("Keyboard pressed (digit): " + digit); // debug
       numberPressed(digit,state,stateVis);
       digit = NaN;
     } else if(charCode>=96 && charCode<=105){ // numpad
       var digit = (charCode-96).toString();
-      console.log("Keyboard pressed (digit, numpad): " + digit); // debug
+      // console.log("Keyboard pressed (digit, numpad): " + digit); // debug
       numberPressed(digit,state,stateVis);
       digit = NaN;
     }
     // DECIMAL
     else if ((charCode===190 && event.shiftKey===false) || charCode===110){
-      console.log("Key pressed (.): DECIMAL POINT"); // debug
+      // console.log("Key pressed (.): DECIMAL POINT"); // debug
       if(state.result!="error"){
         decimalPoint(state,stateVis);
       }
     }
     // SIGN
     else if (charCode===192 && event.shiftKey===true){
-      console.log("Key pressed (~): SIGN"); // debug
+      // console.log("Key pressed (~): SIGN"); // debug
       sign(state,stateVis);
     }
     // SQUARED (^)
     else if (charCode===54 && event.shiftKey===true){
-      console.log("Key pressed (^): SQUARED"); // debug
+      // console.log("Key pressed (^): SQUARED"); // debug
       squared(state,stateVis);
     }
     // OPERATORS
@@ -99,7 +99,7 @@ function listenToKeyboard(state,stateVis){
       operator = "divide"
     }
     if(operator){ // if operator exists, go on...
-      console.log("Keyboard pressed (operator): " + operator); // debug
+      // console.log("Keyboard pressed (operator): " + operator); // debug
       operatorPressed(operator,state,stateVis);
       operator = NaN; // clear var so as not to trigger anything later
     }
@@ -114,7 +114,7 @@ function listenToKeyboard(state,stateVis){
 function listenForClear(state,stateVis){
   // mouse click
   $("#clear").on('click', function(){
-    console.log("Button pressed: CLEAR"); // debug
+    // console.log("Button pressed: CLEAR"); // debug
     clear(state,stateVis,true);
   });
 }
@@ -139,7 +139,7 @@ function listenForNumber(state,stateVis){
   // mouse click
   $(".digit").on('click', function(){
     var digit = this.value.toString();
-    console.log("Button pressed (digit): " + digit); // debug
+    // console.log("Button pressed (digit): " + digit); // debug
     numberPressed(digit,state,stateVis);
     digit = NaN;
     // Stop any related animations, during fast multiple clicks
@@ -199,7 +199,7 @@ function numberPressed(digit,state,stateVis){
 function listenForDecimal(state,stateVis){
   // mouse click
   $("#decimal").on('click', function(){
-    console.log("Button pressed: DECIMAL POINT"); // debug
+    // console.log("Button pressed: DECIMAL POINT"); // debug
     if(state.result!="error"){
       decimalPoint(state,stateVis);
     }
@@ -240,7 +240,7 @@ function decimalPoint(state,stateVis){
     displayHelp("Making a small number, eh?");
   }
   // visualize
-  console.log("After decimal added... State.result: ", state.result); // DEBUG
+  // console.log("After decimal added... State.result: ", state.result); // DEBUG
   vis(state,stateVis);
 }
 
@@ -250,7 +250,7 @@ function listenForOperator(state,stateVis){
   // mouse click
   $(".operator").on('click', function(){
     operator = this.value;
-    console.log("Button pressed (operator): " + operator); // debug
+    // console.log("Button pressed (operator): " + operator); // debug
     operatorPressed(operator,state,stateVis);
     operator = NaN; // clear var so as not to trigger anything later
   });
@@ -377,7 +377,7 @@ function getSymbol(operator,noDisplay){
 function listenForSign(state,stateVis){
   // mouse click
   $("#sign").on('click', function(){
-    console.log("Button pressed: SIGN"); // debug
+    // console.log("Button pressed: SIGN"); // debug
     sign(state,stateVis);
   });
 }
@@ -423,7 +423,7 @@ function sign(state,stateVis){
 function listenForEquals(state,stateVis){
   // mouse click
   $("#equals").on('click', function(){
-    console.log("Button pressed: EQUALS"); // debug
+    // console.log("Button pressed: EQUALS"); // debug
     equals(state,stateVis);
   });
 }
@@ -534,7 +534,7 @@ function equals(state,stateVis,noDisplay){
 function listenForSquared(state,stateVis){
   // mouse click
   $("#squared").on('click', function(){
-    console.log("Button pressed: SQUARED"); // debug
+    // console.log("Button pressed: SQUARED"); // debug
     squared(state,stateVis);
   });
 }
@@ -619,7 +619,7 @@ function reduceErrors(number){
         var indexZeros = numStr.indexOf("0000000000",indexDecimal);
       }
       if(indexZeros>0){
-        console.log("Found lots of 0's; cutting it out..."); // DEBUG
+        // console.log("Found lots of 0's; cutting it out..."); // DEBUG
         // if scientific notation present, keep it
         var indexE = numStr.indexOf("e",indexDecimal);
         if(indexE>0){
@@ -635,7 +635,7 @@ function reduceErrors(number){
         if(Math.abs(number)<1000000){
           var indexNines = numStr.indexOf("9999999999999",indexDecimal);
           if(indexNines>0){
-            console.log("Found lots of 9's; cutting it out..."); // DEBUG
+            // console.log("Found lots of 9's; cutting it out..."); // DEBUG
             numStr = numStr.slice(0,indexNines); // cut off nines
             // what's the last character before the nines?
             // if last character is a decimal, round the number up
@@ -689,7 +689,7 @@ function vis(state, stateVis){ // (new state, old state)
   $.fx.off = true;
   $("#visualization, #visResult, #visHistory, .collection, .collection>div").finish();
   $.fx.off = false;
-  console.log("Running vis() function now...");  // DEBUG
+  // console.log("Running vis() function now...");  // DEBUG
   // This function takes in the state of the calculator and compares it to the
   // old state (global obj). Depending on the changes, animations are performed.
   /* DEFAULT STATE:
@@ -704,7 +704,7 @@ function vis(state, stateVis){ // (new state, old state)
   // CLEAR
   // If current history in the numbers is clear, or there's an error....
   if((state.operatorExists===false && state.equalsExists===false) || state.result==="error"){
-    console.log("Running vis() function now; history is clear."); // DEBUG
+    // console.log("Running vis() function now; history is clear."); // DEBUG
     // if result is 0, 0., 0.000, "error", etc AND it's new
     if(state.result==="0" || state.result==="error"){
       // if there's not already a zero displayed...
@@ -718,7 +718,7 @@ function vis(state, stateVis){ // (new state, old state)
         $("#visResult .collection div").stop(true);
         $("#visResult .collection").addClass("getEatenUpLeft").on("webkitAnimationEnd mozAnimationEnd oAnimationEnd oanimationend animationend",function(){
           $("#visResult").html("<div class='collection'><div class='circle zero'></div></div>");
-          console.log("Cleared!");
+          // console.log("Cleared!"); // DEBUG
         });
         // update vis state
         stateVis.result.value = 0;
@@ -731,7 +731,7 @@ function vis(state, stateVis){ // (new state, old state)
     else{
       // if there was no equals sign pressed in the last calculation, it's a new number
       if(stateVis.equalPressed===0){
-        console.log("Assuming equals sign NOT pressed. resultVis:", resultVis); // DEBUG
+        // console.log("Assuming equals sign NOT pressed. resultVis:", resultVis); // DEBUG
         // if current visualized result is 0, clear the display, then display result
         if(resultVis===0 || resultVis===undefined){
           // clear visualized history
@@ -760,7 +760,7 @@ function vis(state, stateVis){ // (new state, old state)
       }
       // if there was an equals sign pressed in the previous calculation, reset everything
       else if(stateVis.equalPressed===1){
-        console.log("Assuming equals sign pressed. resultNew:", resultNew); // DEBUG
+        // console.log("Assuming equals sign pressed. resultNew:", resultNew); // DEBUG
         // if it's a sign change after the equals, then show it
         if(detectSignChange(resultNew,resultVis)){
           visResult(resultNew,resultVis,timeAnimate);
@@ -795,12 +795,12 @@ function vis(state, stateVis){ // (new state, old state)
   // OPERATIONS
   // If there is a history now... if operator OR equals exists
   else{
-    console.log("Running vis() function now; there is a history."); // DEBUG
-    console.log("visualized history value, operatorExists, equalsExists ",stateVis.history.value, state.operatorExists, state.equalsExists); // DEBUG
+    // console.log("Running vis() function now; there is a history."); // DEBUG
+    // console.log("visualized history value, operatorExists, equalsExists ",stateVis.history.value, state.operatorExists, state.equalsExists); // DEBUG
     // If first number & operator exists, but no equals...
     if(state.operatorExists===true && state.equalsExists===false){
       // and there isn't any number visualized in the history
-      console.log("visualized history value ",stateVis.history.value); // DEBUG
+      // console.log("visualized history value ",stateVis.history.value); // DEBUG
       if(stateVis.history.value===undefined || stateVis.history.value===""){
         // move units in results to the history
         var temp = $("#visResult .collection").html();
@@ -817,7 +817,7 @@ function vis(state, stateVis){ // (new state, old state)
             }
             if( ($("#visHistory .collection div:first-child").html()!=unitVisHistory) ||
               ($("#visHistory .collection div").length===1&&$("#visHistory .collection .fraction").length===1) ){
-              console.log("Redisplaying the history...", stateVis.history.value); // DEBUG
+              // console.log("Redisplaying the history...", stateVis.history.value); // DEBUG
               // clear result & redisplay it
               revisualizeHistory(historyVisTarget,unitVisHistory,timeAnimate);
             }
@@ -826,7 +826,7 @@ function vis(state, stateVis){ // (new state, old state)
       }
       // otherwise if there is a number visualized in the history already...
       else if(!isNaN(historyVis)){
-        console.log("History visualization has something: ",historyVis, parseFloat(state.history.numFirst)); // DEBUG
+        // console.log("History visualization has something: ",historyVis, parseFloat(state.history.numFirst)); // DEBUG
         // and the visualized history is the right number (1st time pressing operator)
         if(historyVis===parseFloat(state.history.numFirst)){
           // console.log("visualized history is :",historyVis); // DEBUG
@@ -842,11 +842,11 @@ function vis(state, stateVis){ // (new state, old state)
               unitNew = unitHistory;
             }
           }
-          console.log("Units for history, new: ", unitHistory,unitNew); // DEBUG
+          // console.log("Units for history, new: ", unitHistory,unitNew); // DEBUG
           if(unitHistory===unitNew){
             // and there is nothing visualized in the results now
             if(stateVis.result.value===undefined || isNaN(stateVis.result.value)){
-              console.log("Current visualized result is undefined; will update."); // DEBUG
+              // console.log("Current visualized result is undefined; will update."); // DEBUG
               // add digits
               visResult(resultNew,0,timeAnimate);
               // if history has fractions, though, then make it look like fractions
@@ -856,7 +856,7 @@ function vis(state, stateVis){ // (new state, old state)
             }
             // and there is something in the results now
             else if(stateVis.result.value || stateVis.result.value===0){
-              console.log("Current visualized result is defined; will update."); // DEBUG
+              // console.log("Current visualized result is defined; will update."); // DEBUG
               if(isNaN(resultNew)){ resultNew = 0; } // Fixing errors if newResult is NaN
               // add digits, recognizing that some units are already visualized
               visResult(resultNew,resultVis,timeAnimate);
@@ -870,13 +870,13 @@ function vis(state, stateVis){ // (new state, old state)
           else{
             // and there is nothing visualized in the results now
             if(stateVis.result.value===undefined || isNaN(stateVis.result.value)){
-              console.log("Current visualized result is undefined; will update. History & result units different"); // DEBUG
+              // console.log("Current visualized result is undefined; will update. History & result units different"); // DEBUG
               // add digits
               visHistoryAndResult(resultNew,0,timeAnimate,historyVis,unitHistory,unitNew);
             }
             // and there is something in the results now
             else if(stateVis.result.value || stateVis.result.value===0){
-              console.log("Current visualized result is defined; will update. History & result units different"); // DEBUG
+              // console.log("Current visualized result is defined; will update. History & result units different"); // DEBUG
               // add digits, recognizing that some units are already visualized
               visHistoryAndResult(resultNew,resultVis,timeAnimate,historyVis,unitHistory,unitNew);
             }
@@ -884,7 +884,7 @@ function vis(state, stateVis){ // (new state, old state)
         }
         // otherwise the history is NOT the right number (i.e. digit-operator-digit-operator)
         else{
-          console.log("Seems like an operator was pressed before pressing equals..."); // DEBUG
+          // console.log("Seems like an operator was pressed before pressing equals..."); // DEBUG
           // Clear both history and result visualizations
           let unitVisHistory = 1;
           let historyVisTarget = parseFloat(state.history.numFirst);
@@ -913,7 +913,7 @@ function vis(state, stateVis){ // (new state, old state)
     // If there is an operator and equals in the history...
     else if(state.operatorExists===true && state.equalsExists===true){
       // only run these if the visualizations don't match what they should be; avoids extra processing
-      console.log(parseFloat(state.result),stateVis.result.value,stateVis.history.value); // DEBUG
+      // console.log(parseFloat(state.result),stateVis.result.value,stateVis.history.value); // DEBUG
       if( stateVis.history.value!=undefined ){
         // special animations according to operator types
         if(state.history.operator==="add"){
@@ -933,7 +933,7 @@ function vis(state, stateVis){ // (new state, old state)
           stateVis.result.orientation = "divide";
         }
         else if(state.history.operator==="squared"){
-          console.log("TEST Squared w/ history present"); // debug
+          // console.log("TEST Squared w/ history present"); // debug
           visSquare(state,stateVis);
           stateVis.result.orientation = "squared";
         }
@@ -950,8 +950,8 @@ function vis(state, stateVis){ // (new state, old state)
   }
 
   // After new state has been analyzed, update the visualization state
-  console.log("StateVis (end): ", stateVis); // DEBUG
-  console.log("State (end): ", state); // DEBUG
+  // console.log("StateVis (end): ", stateVis); // DEBUG
+  // console.log("State (end): ", state); // DEBUG
 
   // Visualize the division of two numbers
   function visDivide(state,stateVis){
@@ -968,7 +968,7 @@ function vis(state, stateVis){ // (new state, old state)
     else{
       // if result is simple integer...
       if( Number.isInteger(result) ){
-        console.log("Simple division animation underway."); // debug
+        // console.log("Simple division animation underway."); // debug
         // slide divisor to history (dividend) and fade out...
         $("#visResult .collection").addClass("sendLeft").on("webkitAnimationEnd mozAnimationEnd oAnimationEnd oanimationend animationend",function(e){
           $("#visResult").html("<div class='collection'></div>").animate({opacity: "1"},0);
@@ -987,7 +987,7 @@ function vis(state, stateVis){ // (new state, old state)
             $("#visResult").animate({"opacity": "1"},timeDelay,function(){
               // if end of group, fade out old units and add unit to result
               if(endGroup){
-                console.log("Divisor group detected..."); //debug
+                // console.log("Divisor group detected..."); //debug
                 for(let i=0; i<Math.abs(divisor); i++){
                   let divide_selector = "#visHistory .collection > div:nth-child(" + (currentUnit-i) + ")";
                   $(divide_selector).animate({opacity: "0"},400);
@@ -1016,7 +1016,7 @@ function vis(state, stateVis){ // (new state, old state)
       }
       // if result is a fraction...
       else{
-        console.log("to be animated in more complex way later..."); // debug
+        // console.log("to be animated in more complex way later..."); // debug
         $(".collection div").remove(); // debug placeholder code TBD!
         let unit = (Math.abs(resultNew)>0.1&&Math.abs(resultNew)<100) ? 1 : determineUnit(resultNew);
         revisualizeResult(resultNew,unit,timeAnimate);
@@ -1089,7 +1089,6 @@ function vis(state, stateVis){ // (new state, old state)
     var numSecond = parseFloat(state.history.numSecond);
     // if both multipliers have abs value <=10 and whole numbers
     if( (Math.abs(numFirst)<=10 && Math.abs(numSecond)<=10) && (numFirst!==0) && (numSecond!==0) && (Number.isInteger(numFirst) && Number.isInteger(numSecond)) ){
-      console.log("Special multiplication case will be animated!"); // DEBUG
       // Arrange history units into a column
       $("#visHistory .collection").animate({width: "9.5%"},500,function(){
         $("#visHistory .collection>div").animate({width: "80%", margin:"9.5%"},timeAnimate,function(){
@@ -1166,7 +1165,7 @@ function vis(state, stateVis){ // (new state, old state)
   }
   // Recursive function to display products "row by row"
   function displayProductRow(tempRow,rowsRemaining,unitsPerRow,unitToHighlight,rUnitWidth,rUnitMargin,stateVis){
-    console.log("Displaying product row...", rowsRemaining, unitToHighlight); // DEBUG
+    // console.log("Displaying product row...", rowsRemaining, unitToHighlight); // DEBUG
     // set delay to emphasize first rows
     var timeDelay = timeDelayGlobal;
     if(unitToHighlight===1){
@@ -1268,13 +1267,13 @@ function vis(state, stateVis){ // (new state, old state)
         // console.log(compareHistory,compareResult); // DEBUG
         // if history numbers now have the same signs...
         if( (compareHistory>0&&compareResult>0) || (compareHistory<0&&compareResult<0) ){
-          console.log("Subtraction: Like adding numbers with the same sign."); //debug
+          // console.log("Subtraction: Like adding numbers with the same sign."); //debug
           // add units together using addition function
           visAddSameSign(state,stateVis,timeAnimate);
         }
         // if history numbers now have opposite signs... (subtract animation)
         else if( (compareHistory>0&&compareResult<0) || (compareHistory<0&&compareResult>0) ){
-          console.log("Subtraction: Like adding numbers with opposite signs."); //debug
+          // console.log("Subtraction: Like adding numbers with opposite signs."); //debug
           // add units together using addition function
           visAddOppSign(state,stateVis,timeAnimate);
         }
@@ -1313,7 +1312,7 @@ function vis(state, stateVis){ // (new state, old state)
     }
     // otherwise if numbers are !=0
     else{
-      console.log("Time to animate: ", timeAnimate); // DEBUG
+      // console.log("Time to animate: ", timeAnimate); // DEBUG
       if( (stateVis.history.value>0 && stateVis.result.value>0)||(stateVis.history.value<0 && stateVis.result.value<0) ){
         // same sign (function)
         visAddSameSign(state,stateVis,timeAnimate);
@@ -1331,7 +1330,7 @@ function vis(state, stateVis){ // (new state, old state)
 
   // Visualize the addition of non-zero numbers with the same sign
   function visAddSameSign(state,stateVis,timeAnimate){
-    console.log("Adding same sign!"); // DEBUG
+    // console.log("Adding same sign!"); // DEBUG
     // handle whole units one at a time - slide history right, prepend to result
     if($('#visHistory .collection div:first-child').hasClass("fraction")===false){ // if not a fraction unit...
       $('#visHistory .collection div:first-child').stop(true).animate({opacity: "0", left: "100%"},timeAnimate,function(){
@@ -1348,7 +1347,7 @@ function vis(state, stateVis){ // (new state, old state)
     }
     // if decimal/fraction present in history...
     else if($('#visHistory .collection div:first-child').hasClass("fraction")===true){
-      console.log("Moving the fractional part over!"); // DEBUG
+      // console.log("Moving the fractional part over!"); // DEBUG
       // if there is NO fraction in the result, just move the fraction over
       if($("#visResult .collection .fraction").length===0){
         $('#visHistory .collection .fraction').stop(true).animate({opacity: "0", left: "100%"},timeAnimate,function(){
@@ -1365,7 +1364,7 @@ function vis(state, stateVis){ // (new state, old state)
         fractionHistory = 100 - fractionHistory;
         fractionResult = 100 - fractionResult;
         var fractionNew = fractionHistory + fractionResult; // Says how much 1 unit should be %full
-        console.log("Fraction history, fraction result: ", fractionHistory, fractionResult); // DEBUG
+        // console.log("Fraction history, fraction result: ", fractionHistory, fractionResult); // DEBUG
         // remove fractional parts from history
         $("#visHistory .collection .fraction").stop(true).animate({opacity: "0", left: "100%"},timeAnimate,function(){
           $("#visHistory .collection .fraction").remove();
@@ -1380,7 +1379,7 @@ function vis(state, stateVis){ // (new state, old state)
             }
             // fractional remainder = sum - 1
             fractionNew-=100;
-            console.log("New fraction value after subtracting whole number: ", fractionNew); // DEBUG
+            // console.log("New fraction value after subtracting whole number: ", fractionNew); // DEBUG
             // change fractional remainder to result visualization, if appropriate
             if(fractionNew>0){
               let fxString = 100-fractionNew;
@@ -1404,7 +1403,7 @@ function vis(state, stateVis){ // (new state, old state)
 
   // Visualize the addition of non-zero numbers with the opposite sign
   function visAddOppSign(state,stateVis,timeAnimate){
-    console.log("Adding opposite sign!"); // DEBUG
+    // console.log("Adding opposite sign!"); // DEBUG
     // timeAnimate = 300; // DEBUG - This fixes the timing to better match additino animations
     // if history has any units visualized still...
     if($("#visHistory .collection div").length>0){
@@ -1425,7 +1424,7 @@ function vis(state, stateVis){ // (new state, old state)
         }
         // if the last unit in the history is a fraction...
         else if($("#visHistory .collection .fraction").length>0){
-          console.log("Down to the last fraction in the history...");  // DEBUG
+          // console.log("Down to the last fraction in the history...");  // DEBUG
           // if result has a fraction, in addition to a whole unit...
           if($("#visResult .collection .fraction").length>0){
             // get fraction clip sizes for history and result; then get %full
@@ -1507,7 +1506,7 @@ function vis(state, stateVis){ // (new state, old state)
       }
       // else if result has NO whole units visualized anymore...
       else{
-        console.log("No more whole units detected in results."); // DEBUG
+        // console.log("No more whole units detected in results."); // DEBUG
         // and decimal/fraction is NOT present in result, either
         if($("#visResult .collection .fraction").length===0){
           // console.log("No fraction detected in results."); // DEBUG
@@ -1701,7 +1700,7 @@ function vis(state, stateVis){ // (new state, old state)
   // It assumes resultVis is the number of units already displayed in the results
   // while resultNew is the new number to show in the results
   function visResult(resultNew, resultVis, timeAnimate){
-    console.log("Running visResult function... resultNew, resultVis:", resultNew, resultVis);
+    // console.log("Running visResult function... resultNew, resultVis:", resultNew, resultVis); // DEBUG
     if(resultNew===undefined){
       resultNew = 0;
     }
@@ -1712,12 +1711,12 @@ function vis(state, stateVis){ // (new state, old state)
     if(Math.abs(resultNew)<=100 && Math.abs(resultNew)>=0.1 || resultNew===0){
       // check if decimals present in result...
       if(resultNew.toString().indexOf(".")>0 || resultVis.toString().indexOf(".")>0){
-        console.log("Running visualizeFraction() function from visResult()"); // DEBUG
+        // console.log("Running visualizeFraction() function from visResult()"); // DEBUG
         visualizeFraction(resultNew,resultVis);
       }
       // if no decimals present (just whole numbers)
       else{
-        console.log("Running visualizeBasic() function from visResult()"); // DEBUG
+        // console.log("Running visualizeBasic() function from visResult()"); // DEBUG
         visResultBasic(resultNew,resultVis,timeAnimate);
       }
     }
@@ -1759,16 +1758,16 @@ function vis(state, stateVis){ // (new state, old state)
     }
     // get the common visualization units
     var unitLargest = (unitNew>unitHistory) ? unitNew : unitHistory;
-    console.log("Largest unit: ",unitLargest, " unitNew, unitHistory: ", unitNew, unitHistory); // DEBUG
+    // console.log("Largest unit: ",unitLargest, " unitNew, unitHistory: ", unitNew, unitHistory); // DEBUG
     // if history unit is bigger...
     if(unitHistory===unitLargest){
-      console.log("History unit is larger or equal."); // DEBUG
+      // console.log("History unit is larger or equal."); // DEBUG
       // if it's not just a sign change in the result, and it's not just a decimal added...
       showResults(resultNew,resultVis,timeAnimate,unitLargest);
     }
     // else if result unit is bigger...
     else if(unitNew===unitLargest){
-      console.log("Result unit is larger."); // DEBUG
+      // console.log("Result unit is larger."); // DEBUG
       // redraw results completely
       // if it's not just a sign change in the result AND not the same number...
       showResults(resultNew,resultVis,timeAnimate,unitLargest);
@@ -1887,7 +1886,7 @@ function vis(state, stateVis){ // (new state, old state)
 
   // Deal w/ fractions
   function visualizeFraction(resultNew,resultVis){
-    console.log("Running the visualizeFraction() function now: ", resultNew, resultVis); // DEBUG
+    // console.log("Running the visualizeFraction() function now: ", resultNew, resultVis); // DEBUG
     var unit = 1;
     if(Math.abs(resultNew)<0.1 || Math.abs(resultNew)>100){
       unit = determineUnit(resultNew); // get unit for later
@@ -1897,7 +1896,7 @@ function vis(state, stateVis){ // (new state, old state)
     var fraction = Math.abs(resultNew)-wholeNum;
     // if fraction is 0, or if fraction is equal to what it was (trailing zeroes), then do nothing
     if(fraction===0 || Math.abs(resultNew)===Math.abs(resultVis)){
-      console.log("Assuming number is the same value as before, or no fraction exists.");
+      // console.log("Assuming number is the same value as before, or no fraction exists."); // DEBUG
       // check for sign change
       if(detectSignChange(resultNew,resultVis)){
         // if units displayed are different from what they should be, OR if it's just a fraction displayed...
@@ -1909,7 +1908,7 @@ function vis(state, stateVis){ // (new state, old state)
         console.log(unitVisResult,resultVisTarget);
         if( ($("#visResult .collection div:first-child").html()!=unitVisResult) ||
           ($("#visResult .collection div").length===1&&$("#visHistory .collection .fraction").length===1) ){
-          console.log("Redisplaying the results...", resultVisTarget); // DEBUG
+          // console.log("Redisplaying the results...", resultVisTarget); // DEBUG
           // clear result & redisplay it
           revisualizeResult(resultVisTarget,unitVisResult,timeAnimate);
         }
@@ -1918,7 +1917,7 @@ function vis(state, stateVis){ // (new state, old state)
     }
     // if fraction exists, and the new Result is different from what's displayed
     else{
-      console.log("Fraction exists that is different from before.");
+      // console.log("Fraction exists that is different from before."); // DEBUG
       // Find string to represent fraction
       var fxString = Math.round((1-fraction)*100).toString();
       var x = "inset(" + fxString + "% 0px 0px 0px)";
@@ -1953,10 +1952,10 @@ function vis(state, stateVis){ // (new state, old state)
       if( Math.abs(resultVisTarget)<0.1 || Math.abs(resultVisTarget)>100){
         unitVisResult = determineUnit(resultVisTarget);
       }
-      console.log(unitVisResult,resultVisTarget);
+      // console.log(unitVisResult,resultVisTarget); // DEBUG
       if( ($("#visResult .collection div:first-child").html()!=unitVisResult) ||
         ($("#visResult .collection div").length===1&&$("#visHistory .collection .fraction").length===1) ){
-        console.log("Redisplaying the results...", resultVisTarget); // DEBUG
+        // console.log("Redisplaying the results...", resultVisTarget); // DEBUG
         revisualizeResult(resultVisTarget,unitVisResult,timeAnimate);
       }
     }
@@ -1998,7 +1997,7 @@ function vis(state, stateVis){ // (new state, old state)
         }
       }
       // Then visualize the "fractional" part last
-      console.log("Running visualizeFraction() function from visResultComplex()");
+      // console.log("Running visualizeFraction() function from visResultComplex()"); // DEBUG
       visualizeFraction(resultNew,resultVis);
     }
     else{
@@ -2008,10 +2007,10 @@ function vis(state, stateVis){ // (new state, old state)
       if( Math.abs(resultVisTarget)<0.1 || Math.abs(resultVisTarget)>100){
         unitVisResult = determineUnit(resultVisTarget);
       }
-      console.log(resultVisTarget,unitVisResult);
+      // console.log(resultVisTarget,unitVisResult); // DEBUG
       if( ($("#visResult .collection div:first-child").html()!=unitVisResult) ||
         ($("#visResult .collection div").length===1&&$("#visHistory .collection .fraction").length===1) ){
-        console.log("Redisplaying the results...", resultVisTarget); // DEBUG
+        // console.log("Redisplaying the results...", resultVisTarget); // DEBUG
         revisualizeResult(resultVisTarget,unitVisResult,timeAnimate);
       }
     }
@@ -2179,6 +2178,6 @@ function listenForSpeed(){
     speedInput = document.getElementById("speed").value;
     timeDelayGlobal = -(timeDelayMax-timeDelayMin)*speedInput/10 + timeDelayMax;
     timeDelayGlobal = (timeDelayGlobal>0)? timeDelayGlobal : 100;
-    console.log(timeDelayGlobal);  
+    // console.log(timeDelayGlobal);  // DEBUG
   };
 }
